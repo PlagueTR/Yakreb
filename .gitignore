@@ -1,0 +1,25 @@
+# Binaries
+
+bin/
+bin-int/
+**.h.gch
+
+# Cache cleanup
+
+Scripts/Utility/Python/__pycache__
+
+# Visual Studio files and folders
+
+.vs/
+**.sln
+**.vcxproj
+**.vcxproj.filters
+**.vcxproj.user
+
+# Codeblocks files
+
+**.workspace
+**.workspace.layout
+**.cbp
+**.depend
+**.layout
