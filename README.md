@@ -1,6 +1,6 @@
 # Yakreb Game Engine
 
-[![GitHub license: Apache-2.0](https://img.shields.io/badge/license-Apache%202.0-green)](https://raw.githubusercontent.com/PlagueTR/Yakreb/main/LICENSE)
+[![GitHub license: MIT](https://img.shields.io/badge/license-MIT%20License-green)](https://raw.githubusercontent.com/PlagueTR/Yakreb/main/LICENSE)
 
 **I do not plan on accepting other contributions to the main repository as I want to learn how everything works.**
 
