@@ -7,8 +7,6 @@ PythonRequirements.Validate()
 
 from SetupPremake import PremakeRequirements
 
-os.chdir("./../")
-
 premakeInstalled = PremakeRequirements.Validate()
 
 print ("Updating submodules...")

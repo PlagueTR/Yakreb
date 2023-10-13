@@ -15,6 +15,11 @@ project "Yakreb"
         "src/**.cpp"
     }
 
+    removefiles {
+        "src/Platform/Windows/**",
+        "src/Platform/Linux/**"
+    }
+
     defines {
         "_CRT_SECURE_NO_WARNINGS",
     }
@@ -31,7 +36,7 @@ project "Yakreb"
         systemversion "latest"
 
         files {
-
+            "src/Platform/Windows/**"
         }
 
         defines {
@@ -46,7 +51,7 @@ project "Yakreb"
         pic "on"
 
         files {
-
+            "src/Platform/Linux/**"
         }
 
         defines {

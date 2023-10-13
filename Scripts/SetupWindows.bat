@@ -1,5 +1,9 @@
 @echo off
 
-python Utility/Python/Setup.py
+pushd %~dp0\..\
+
+python Scripts/Utility/Python/Setup.py
+
+popd
 
 PAUSE

@@ -8,6 +8,10 @@ bin-int/
 
 Scripts/Utility/Python/__pycache__
 
+# Version header should be generated when Generate...Project script is run
+
+Yakreb/src/Yakreb/Core/Version.h
+
 # Visual Studio files and folders
 
 .vs/
