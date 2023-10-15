@@ -6,9 +6,11 @@ namespace Yakreb {
 	void InitializeCore() {
 
 		PlatformInfo::Init();
+		FilesystemHelper::Init();
+		Log::Init();
 
-		std::cout << "Yakreb Engine " << YGE_VERSION << "\n";
-		std::cout << "Platform: " << PlatformInfo::GetPlatformString() << "\n";
+		Log::GetCoreLogger().get()->trace("Yakreb Engine " + std::string(YGE_VERSION));
+		Log::GetCoreLogger().get()->trace("Platform: " + PlatformInfo::GetPlatformString());
 
 	}
 

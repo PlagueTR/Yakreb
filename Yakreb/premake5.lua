@@ -25,7 +25,8 @@ project "Yakreb"
     }
 
     includedirs{
-        "src"
+        "src",
+        "%{IncludeDir.spdlog}"
     }
 
     links {

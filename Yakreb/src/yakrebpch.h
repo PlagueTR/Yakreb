@@ -1,4 +1,5 @@
-#pragma once
+#ifndef YAKREB_PCH_H
+#define YAKREB_PCH_H
 
 #include "Yakreb/Core/PlatformDetection.h"
 
@@ -21,9 +22,14 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#include "Yakreb/Core/Core.h"
-#include "Yakreb/Core/PlatformInfo.h"
 
 #ifdef YGE_PLATFORM_WINDOWS
 	#include <Windows.h>
+#endif
+
+#include "Yakreb/Core/Core.h"
+#include "Yakreb/Core/PlatformInfo.h"
+#include "Yakreb/Core/Util/FilesystemHelper.h"
+#include "Yakreb/Core/Log.h"
+
 #endif

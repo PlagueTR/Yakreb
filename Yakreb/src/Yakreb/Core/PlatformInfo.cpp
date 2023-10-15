@@ -8,10 +8,10 @@
 
 namespace Yakreb {
 
-	std::string PlatformInfo::s_PlatformString = "";
-	std::string PlatformInfo::s_OSShortName = "";
-	std::string PlatformInfo::s_OSName = "";
-	std::string PlatformInfo::s_OSVersion = "";
+	std::string PlatformInfo::s_PlatformString;
+	std::string PlatformInfo::s_OSShortName;
+	std::string PlatformInfo::s_OSName;
+	std::string PlatformInfo::s_OSVersion;
 
 	void PlatformInfo::Init() {
 

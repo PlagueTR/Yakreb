@@ -1,3 +1,3 @@
 
-yakrebMajorVersion = "0"
-yakrebMinorVersion = "1"
+yakrebVersionMajor = "0"
+yakrebVersionMinor = "1"

@@ -1,3 +1,6 @@
 [submodule "vendor/premake/ext/codeblocks"]
 	path = vendor/premake/ext/codeblocks
 	url = https://github.com/chris-be/premake-codeblocks
+[submodule "Yakreb/vendor/spdlog"]
+	path = Yakreb/vendor/spdlog
+	url = https://github.com/PlagueTR/spdlog
