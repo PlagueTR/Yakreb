@@ -19,6 +19,10 @@ namespace Yakreb {
 
 			static std::filesystem::file_time_type GetFileCreationTime(const std::filesystem::path& path);
 
+			// This is mostly for Windows systems
+			//   Windows has "filesystem tunneling" feature, which is basically caching files' creation times
+			//   because many applications would delete and recreate configuration files when an option was changed
+			//   rather than updating/altering the file
 			static void SetFileCreationTime(const std::filesystem::path& path, const std::filesystem::file_time_type& creationTime);
 
 		protected:

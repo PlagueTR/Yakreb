@@ -26,7 +26,7 @@ namespace Yakreb {
     class WindowsPlatformInfo : public PlatformInfo {
 
         private:
-            enum class WindowsBuildThreshold
+            enum WindowsBuildThreshold
             {
                 Build_RS0 = 10586,
                 Build_RS1 = 14393,

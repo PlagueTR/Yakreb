@@ -26,27 +26,27 @@ namespace Yakreb {
             switch (fullver)
             {
             case _WIN32_WINNT_WIN10:
-                if (native.dwBuildNumber >= (int)WindowsBuildThreshold::Build_22H2)
+                if (native.dwBuildNumber >= WindowsBuildThreshold::Build_22H2)
                     s_OSName = "Windows 11 22H2";
-                else if (native.dwBuildNumber >= (int)WindowsBuildThreshold::Build_21H2)
+                else if (native.dwBuildNumber >= WindowsBuildThreshold::Build_21H2)
                     s_OSName = "Windows 11 21H2";
-                else if (native.dwBuildNumber >= (int)WindowsBuildThreshold::Build_20H1)
+                else if (native.dwBuildNumber >= WindowsBuildThreshold::Build_20H1)
                     s_OSName = "Windows 10 20H1";
-                else if (native.dwBuildNumber >= (int)WindowsBuildThreshold::Build_19H2)
+                else if (native.dwBuildNumber >= WindowsBuildThreshold::Build_19H2)
                     s_OSName = "Windows 10 19H2";
-                else if (native.dwBuildNumber >= (int)WindowsBuildThreshold::Build_19H1)
+                else if (native.dwBuildNumber >= WindowsBuildThreshold::Build_19H1)
                     s_OSName = "Windows 10 19H1";
-                else if (native.dwBuildNumber >= (int)WindowsBuildThreshold::Build_RS5)
+                else if (native.dwBuildNumber >= WindowsBuildThreshold::Build_RS5)
                     s_OSName = "Windows 10 RS5";
-                else if (native.dwBuildNumber >= (int)WindowsBuildThreshold::Build_RS4)
+                else if (native.dwBuildNumber >= WindowsBuildThreshold::Build_RS4)
                     s_OSName = "Windows 10 RS4";
-                else if (native.dwBuildNumber >= (int)WindowsBuildThreshold::Build_RS3)
+                else if (native.dwBuildNumber >= WindowsBuildThreshold::Build_RS3)
                     s_OSName = "Windows 10 RS3";
-                else if (native.dwBuildNumber >= (int)WindowsBuildThreshold::Build_RS2)
+                else if (native.dwBuildNumber >= WindowsBuildThreshold::Build_RS2)
                     s_OSName = "Windows 10 RS2";
-                else if (native.dwBuildNumber >= (int)WindowsBuildThreshold::Build_RS1)
+                else if (native.dwBuildNumber >= WindowsBuildThreshold::Build_RS1)
                     s_OSName = "Windows 10 RS1";
-                else if (native.dwBuildNumber >= (int)WindowsBuildThreshold::Build_RS0)
+                else if (native.dwBuildNumber >= WindowsBuildThreshold::Build_RS0)
                     s_OSName = "Windows 10 TH2";
                 else
                     s_OSName = "Windows 10";

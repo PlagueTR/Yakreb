@@ -11,13 +11,15 @@ namespace Yakreb {
 				#endif
 				return false;
 			}
+
 			static bool IsLinux() {
 				#ifdef YGE_PLATFORM_LINUX
 					return true;
 				#endif
 				return false;
-			};
+			}
 
+			// Usually OS Name + OS Version
 			static std::string GetPlatformString() {
 				return s_PlatformString;
 			}
@@ -30,6 +32,7 @@ namespace Yakreb {
 				return s_OSName;
 			}
 
+			// Build number for Windows - Kernel for Linux
 			static std::string GetOSVersion() {
 				return s_OSVersion;
 			}

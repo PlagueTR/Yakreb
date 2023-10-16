@@ -16,12 +16,13 @@ namespace Yakreb {
 				Core = 0,
 				Client = 1
 			};
+
 			enum class Level : uint8_t {
-				Trace = 1,
-				Info = 2,
-				Warn = 4,
-				Error = 8,
-				Fatal = 16
+				Trace = BIT(0),
+				Info = BIT(1),
+				Warn = BIT(2),
+				Error = BIT(3),
+				Fatal = BIT(4)
 			};
 
 			static void Init();

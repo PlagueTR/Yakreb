@@ -70,6 +70,11 @@ namespace Yakreb {
 		s_ClientLogger->set_level(spdlog::level::trace);
 		s_ClientLogger->flush_on(spdlog::level::trace);
 
+		// This is mostly for Windows systems
+		//   Windows has "filesystem tunneling" feature, which is basically caching files' creation times
+		//   because many applications would delete and recreate configuration files when an option was changed
+		//   rather than updating/altering the file
+		// If we do not use this, the latest.log file keep it's original creation date and will override the older log
 		FilesystemHelper::SetFileCreationTime(latestLogPath, std::filesystem::file_time_type(std::chrono::system_clock::now().time_since_epoch()));
 
 	}

@@ -1,8 +1,6 @@
 #include "yakrebpch.h"
 #include "LinuxPlatformInfo.h"
 
-#include <iostream>
-#include <string>
 #include <cstring>
 #include <sys/utsname.h>
 
@@ -19,6 +17,7 @@ namespace Yakreb {
             s_OSVersion = "unknown";
         }
 
+        // most modern Linux distros have /etc/os-release
         FILE* pipe = popen("cat /etc/os-release", "r");
         if (!pipe)
             s_OSName = "Unrecognized Linux";

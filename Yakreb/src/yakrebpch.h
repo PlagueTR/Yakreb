@@ -22,9 +22,10 @@
 #include <unordered_map>
 #include <unordered_set>
 
-
 #ifdef YGE_PLATFORM_WINDOWS
 	#include <Windows.h>
+#elif defined(YGE_PLATFORM_LINUX)
+	#include <unistd.h>
 #endif
 
 #include "Yakreb/Core/Log.h"
