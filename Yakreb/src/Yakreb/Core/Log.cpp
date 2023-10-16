@@ -1,6 +1,8 @@
 #include "yakrebpch.h"
 #include "Log.h"
 
+#include "Yakreb/Core/Util/FilesystemHelper.h"
+
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/sinks/basic_file_sink.h>
 
@@ -70,6 +72,12 @@ namespace Yakreb {
 
 		FilesystemHelper::SetFileCreationTime(latestLogPath, std::filesystem::file_time_type(std::chrono::system_clock::now().time_since_epoch()));
 
+	}
+
+	void Log::Shutdown() {
+		s_ClientLogger.reset();
+		s_CoreLogger.reset();
+		spdlog::drop_all();
 	}
 
 }

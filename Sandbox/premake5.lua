@@ -13,7 +13,8 @@ project "Sandbox"
     }
 
     includedirs {
-        "%{wks.location}/Yakreb/src"
+        "%{wks.location}/Yakreb/src",
+        "%{IncludeDir.spdlog}"
     }
 
     links {

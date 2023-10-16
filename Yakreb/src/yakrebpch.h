@@ -1,7 +1,7 @@
 #ifndef YAKREB_PCH_H
 #define YAKREB_PCH_H
 
-#include "Yakreb/Core/PlatformDetection.h"
+#include "Yakreb/Core/Core.h"
 
 #ifdef YGE_PLATFORM_WINDOWS
 	#ifndef NOMINMAX
@@ -27,9 +27,6 @@
 	#include <Windows.h>
 #endif
 
-#include "Yakreb/Core/Core.h"
-#include "Yakreb/Core/PlatformInfo.h"
-#include "Yakreb/Core/Util/FilesystemHelper.h"
 #include "Yakreb/Core/Log.h"
 
 #endif
