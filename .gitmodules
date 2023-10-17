@@ -7,3 +7,6 @@
 [submodule "Yakreb/vendor/GLFW"]
 	path = Yakreb/vendor/GLFW
 	url = https://github.com/PlagueTR/GLFW
+[submodule "Yakreb/vendor/glad"]
+	path = Yakreb/vendor/glad
+	url = https://github.com/PlagueTR/GL-Loader

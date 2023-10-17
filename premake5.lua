@@ -21,6 +21,7 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 group "Dependencies"
     include "Yakreb/vendor/GLFW"
+    include "Yakreb/vendor/glad"
 group ""
 
 group "YakrebCore"

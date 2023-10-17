@@ -48,6 +48,7 @@ project "Sandbox"
 
         links {
             "GLFW",
+            "glad",
             "X11",
             "Xrandr",
             "Xi",

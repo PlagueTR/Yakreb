@@ -5,6 +5,9 @@
 #include "Yakreb/Events/KeyEvent.h"
 #include "Yakreb/Events/MouseEvent.h"
 
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
 namespace Yakreb {
 
 	LinuxWindow::LinuxWindow(const WindowProperties& properties) {
@@ -34,6 +37,11 @@ namespace Yakreb {
 		m_Window = glfwCreateWindow((int)m_Data.Width, (int)m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
 		s_GLFWWindowCount++;
 		glfwMakeContextCurrent(m_Window);
+
+		YGE_CORE_INFO("{}", "Initializing glad");
+		int success = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+		YGE_CORE_ASSERT(success, "Could not initialize glad!");
+
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(true);
 

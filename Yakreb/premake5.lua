@@ -22,16 +22,19 @@ project "Yakreb"
 
     defines {
         "_CRT_SECURE_NO_WARNINGS",
+        "GLFW_INCLUDE_NONE"
     }
 
     includedirs{
         "src",
         "%{IncludeDir.spdlog}",
-        "%{IncludeDir.GLFW}"
+        "%{IncludeDir.GLFW}",
+        "%{IncludeDir.glad}"
     }
 
     links {
-        "GLFW"
+        "GLFW",
+        "glad"
     }
 
     filter "system:windows"
