@@ -17,7 +17,7 @@ namespace Yakreb {
 				Client = 1
 			};
 
-			enum class Level : uint8_t {
+			enum Level : uint8_t {
 				Trace = BIT(0),
 				Info = BIT(1),
 				Warn = BIT(2),
@@ -52,32 +52,44 @@ namespace Yakreb {
 
 }
 
+#define YGE_CORE_TRACE(logFormat, ...) ::Yakreb::Log::PrintMessage(::Yakreb::Log::Type::Core, ::Yakreb::Log::Level::Trace, logFormat, __VA_ARGS__)
+#define YGE_CORE_INFO(logFormat, ...) ::Yakreb::Log::PrintMessage(::Yakreb::Log::Type::Core, ::Yakreb::Log::Level::Info, logFormat, __VA_ARGS__)
+#define YGE_CORE_WARN(logFormat, ...) ::Yakreb::Log::PrintMessage(::Yakreb::Log::Type::Core, ::Yakreb::Log::Level::Warn, logFormat, __VA_ARGS__)
+#define YGE_CORE_ERROR(logFormat, ...) ::Yakreb::Log::PrintMessage(::Yakreb::Log::Type::Core, ::Yakreb::Log::Level::Error, logFormat, __VA_ARGS__)
+#define YGE_CORE_FATAL(logFormat, ...) ::Yakreb::Log::PrintMessage(::Yakreb::Log::Type::Core, ::Yakreb::Log::Level::Fatal, logFormat, __VA_ARGS__)
+
+#define YGE_TRACE(logFormat, ...) ::Yakreb::Log::PrintMessage(::Yakreb::Log::Type::Client, ::Yakreb::Log::Level::Trace, logFormat, __VA_ARGS__)
+#define YGE_INFO(logFormat, ...) ::Yakreb::Log::PrintMessage(::Yakreb::Log::Type::Client, ::Yakreb::Log::Level::Info, logFormat, __VA_ARGS__)
+#define YGE_WARN(logFormat, ...) ::Yakreb::Log::PrintMessage(::Yakreb::Log::Type::Client, ::Yakreb::Log::Level::Warn, logFormat, __VA_ARGS__)
+#define YGE_ERROR(logFormat, ...) ::Yakreb::Log::PrintMessage(::Yakreb::Log::Type::Client, ::Yakreb::Log::Level::Error, logFormat, __VA_ARGS__)
+#define YGE_FATAL(logFormat, ...) ::Yakreb::Log::PrintMessage(::Yakreb::Log::Type::Client, ::Yakreb::Log::Level::Fatal, logFormat, __VA_ARGS__)
+
 #ifdef YGE_ENABLE_CORE_LOGS
-	#define YGE_CORE_TRACE(logFormat, ...) ::Yakreb::Log::PrintMessage(::Yakreb::Log::Type::Core, ::Yakreb::Log::Level::Trace, logFormat, __VA_ARGS__)
-	#define YGE_CORE_INFO(logFormat, ...) ::Yakreb::Log::PrintMessage(::Yakreb::Log::Type::Core, ::Yakreb::Log::Level::Info, logFormat, __VA_ARGS__)
-	#define YGE_CORE_WARN(logFormat, ...) ::Yakreb::Log::PrintMessage(::Yakreb::Log::Type::Core, ::Yakreb::Log::Level::Warn, logFormat, __VA_ARGS__)
-	#define YGE_CORE_ERROR(logFormat, ...) ::Yakreb::Log::PrintMessage(::Yakreb::Log::Type::Core, ::Yakreb::Log::Level::Error, logFormat, __VA_ARGS__)
-	#define YGE_CORE_FATAL(logFormat, ...) ::Yakreb::Log::PrintMessage(::Yakreb::Log::Type::Core, ::Yakreb::Log::Level::Fatal, logFormat, __VA_ARGS__)
+	#define YGE_CORE_DEBUG_TRACE(logFormat, ...) ::Yakreb::Log::PrintMessage(::Yakreb::Log::Type::Core, ::Yakreb::Log::Level::Trace, logFormat, __VA_ARGS__)
+	#define YGE_CORE_DEBUG_INFO(logFormat, ...) ::Yakreb::Log::PrintMessage(::Yakreb::Log::Type::Core, ::Yakreb::Log::Level::Info, logFormat, __VA_ARGS__)
+	#define YGE_CORE_DEBUG_WARN(logFormat, ...) ::Yakreb::Log::PrintMessage(::Yakreb::Log::Type::Core, ::Yakreb::Log::Level::Warn, logFormat, __VA_ARGS__)
+	#define YGE_CORE_DEBUG_ERROR(logFormat, ...) ::Yakreb::Log::PrintMessage(::Yakreb::Log::Type::Core, ::Yakreb::Log::Level::Error, logFormat, __VA_ARGS__)
+	#define YGE_CORE_DEBUG_FATAL(logFormat, ...) ::Yakreb::Log::PrintMessage(::Yakreb::Log::Type::Core, ::Yakreb::Log::Level::Fatal, logFormat, __VA_ARGS__)
 #else
-	#define YGE_CORE_TRACE(logFormat, ...)
-	#define YGE_CORE_INFO(logFormat, ...) 
-	#define YGE_CORE_WARN(logFormat, ...) 
-	#define YGE_CORE_ERROR(logFormat, ...)
-	#define YGE_CORE_FATAL(logFormat, ...)
+	#define YGE_CORE_DEBUG_TRACE(logFormat, ...)
+	#define YGE_CORE_DEBUG_INFO(logFormat, ...) 
+	#define YGE_CORE_DEBUG_WARN(logFormat, ...) 
+	#define YGE_CORE_DEBUG_ERROR(logFormat, ...)
+	#define YGE_CORE_DEBUG_FATAL(logFormat, ...)
 #endif
 
 #ifdef YGE_ENABLE_LOGS
-	#define YGE_TRACE(logFormat, ...) ::Yakreb::Log::PrintMessage(::Yakreb::Log::Type::Client, ::Yakreb::Log::Level::Trace, logFormat, __VA_ARGS__)
-	#define YGE_INFO(logFormat, ...) ::Yakreb::Log::PrintMessage(::Yakreb::Log::Type::Client, ::Yakreb::Log::Level::Info, logFormat, __VA_ARGS__)
-	#define YGE_WARN(logFormat, ...) ::Yakreb::Log::PrintMessage(::Yakreb::Log::Type::Client, ::Yakreb::Log::Level::Warn, logFormat, __VA_ARGS__)
-	#define YGE_ERROR(logFormat, ...) ::Yakreb::Log::PrintMessage(::Yakreb::Log::Type::Client, ::Yakreb::Log::Level::Error, logFormat, __VA_ARGS__)
-	#define YGE_FATAL(logFormat, ...) ::Yakreb::Log::PrintMessage(::Yakreb::Log::Type::Client, ::Yakreb::Log::Level::Fatal, logFormat, __VA_ARGS__)
+	#define YGE_DEBUG_TRACE(logFormat, ...) ::Yakreb::Log::PrintMessage(::Yakreb::Log::Type::Client, ::Yakreb::Log::Level::Trace, logFormat, __VA_ARGS__)
+	#define YGE_DEBUG_INFO(logFormat, ...) ::Yakreb::Log::PrintMessage(::Yakreb::Log::Type::Client, ::Yakreb::Log::Level::Info, logFormat, __VA_ARGS__)
+	#define YGE_DEBUG_WARN(logFormat, ...) ::Yakreb::Log::PrintMessage(::Yakreb::Log::Type::Client, ::Yakreb::Log::Level::Warn, logFormat, __VA_ARGS__)
+	#define YGE_DEBUG_ERROR(logFormat, ...) ::Yakreb::Log::PrintMessage(::Yakreb::Log::Type::Client, ::Yakreb::Log::Level::Error, logFormat, __VA_ARGS__)
+	#define YGE_DEBUG_FATAL(logFormat, ...) ::Yakreb::Log::PrintMessage(::Yakreb::Log::Type::Client, ::Yakreb::Log::Level::Fatal, logFormat, __VA_ARGS__)
 #else
-	#define YGE_TRACE(logFormat, ...)
-	#define YGE_INFO(logFormat, ...) 
-	#define YGE_WARN(logFormat, ...) 
-	#define YGE_ERROR(logFormat, ...)
-	#define YGE_FATAL(logFormat, ...)
+	#define YGE_DEBUG_TRACE(logFormat, ...)
+	#define YGE_DEBUG_INFO(logFormat, ...) 
+	#define YGE_DEBUG_WARN(logFormat, ...) 
+	#define YGE_DEBUG_ERROR(logFormat, ...)
+	#define YGE_DEBUG_FATAL(logFormat, ...)
 #endif
 
 namespace Yakreb {
@@ -87,19 +99,19 @@ namespace Yakreb {
 		std::shared_ptr<spdlog::logger> logger = (type == Type::Core) ? GetCoreLogger() : GetClientLogger();
 		switch (level) {
 			case Level::Trace:
-				logger->trace(logFormat, fmt::format(std::forward<Args>(args)...));
+				logger->trace(logFormat, std::forward<Args>(args)...);
 				break;
 			case Level::Info:
-				logger->info(logFormat, fmt::format(std::forward<Args>(args)...));
+				logger->info(logFormat, std::forward<Args>(args)...);
 				break;
 			case Level::Warn:
-				logger->warn(logFormat, fmt::format(std::forward<Args>(args)...));
+				logger->warn(logFormat, std::forward<Args>(args)...);
 				break;
 			case Level::Error:
-				logger->error(logFormat, fmt::format(std::forward<Args>(args)...));
+				logger->error(logFormat, std::forward<Args>(args)...);
 				break;
 			case Level::Fatal:
-				logger->critical(logFormat, fmt::format(std::forward<Args>(args)...));
+				logger->critical(logFormat, std::forward<Args>(args)...);
 				break;
 		}
 	}

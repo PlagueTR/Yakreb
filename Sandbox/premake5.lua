@@ -47,7 +47,16 @@ project "Sandbox"
         }
 
         links {
-
+            "GLFW",
+            "X11",
+            "Xrandr",
+            "Xi",
+            "Xinerama",
+            "Xxf86vm",
+            "Xcursor",
+            "Xrender",
+            "GL",
+            "pthread"
         }
 
     filter "configurations:Debug"

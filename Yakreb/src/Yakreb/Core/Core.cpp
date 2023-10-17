@@ -11,9 +11,9 @@ namespace Yakreb {
 		FilesystemHelper::Init();
 		Log::Init();
 
-		// We always want to log these - do not use YGE_CORE_TRACE macro here
-		Log::PrintMessage(Log::Type::Core, Log::Level::Trace, "Yakreb Engine - {0}", YGE_VERSION);
-		Log::PrintMessage(Log::Type::Core, Log::Level::Trace, "Platform - {0}", PlatformInfo::GetPlatformString());
+		// We always want to log these
+		YGE_CORE_INFO("Yakreb Engine - {}", YGE_VERSION);
+		YGE_CORE_INFO("Platform - {}", PlatformInfo::GetPlatformString());
 
 	}
 

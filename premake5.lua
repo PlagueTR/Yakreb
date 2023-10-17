@@ -20,6 +20,7 @@ startproject "Sandbox"
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 group "Dependencies"
+    include "Yakreb/vendor/GLFW"
 group ""
 
 group "YakrebCore"

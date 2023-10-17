@@ -26,11 +26,12 @@ project "Yakreb"
 
     includedirs{
         "src",
-        "%{IncludeDir.spdlog}"
+        "%{IncludeDir.spdlog}",
+        "%{IncludeDir.GLFW}"
     }
 
     links {
-
+        "GLFW"
     }
 
     filter "system:windows"

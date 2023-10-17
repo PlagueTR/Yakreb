@@ -4,3 +4,6 @@
 [submodule "Yakreb/vendor/spdlog"]
 	path = Yakreb/vendor/spdlog
 	url = https://github.com/PlagueTR/spdlog
+[submodule "Yakreb/vendor/GLFW"]
+	path = Yakreb/vendor/GLFW
+	url = https://github.com/PlagueTR/GLFW
