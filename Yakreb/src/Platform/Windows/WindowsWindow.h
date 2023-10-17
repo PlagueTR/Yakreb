@@ -32,6 +32,8 @@ namespace Yakreb {
 			virtual void Init(const WindowProperties& properties);
 			virtual void Shutdown();
 
+			static void GLFWErrorCallback(int error, const char *description);
+
 			GLFWwindow* m_Window;
 
 			WindowData m_Data;

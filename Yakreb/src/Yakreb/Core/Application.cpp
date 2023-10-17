@@ -7,10 +7,18 @@ namespace Yakreb {
 
 	Application::Application() {
 		m_Window = std::unique_ptr<Window>(Window::Create());
+		m_Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
 	}
 
 	Application::~Application() {
 
+	}
+
+	void Application::OnEvent(Event& event) {
+		YGE_CORE_DEBUG_TRACE("{}", event);
+
+		EventDispatcher dispatcher(event);
+		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowClose));
 	}
 
 	void Application::Run() {
@@ -60,13 +68,18 @@ namespace Yakreb {
 					break;
 			}
 
-			YGE_DEBUG_TRACE("rgb: {0:02X}{1:02X}{2:02X}", (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f));
+			YGE_CORE_DEBUG_TRACE("rgb: {0:02X}{1:02X}{2:02X}", (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f));
 
 			glClearColor(r, g, b, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			m_Window->OnUpdate();
 		}
+	}
+
+	bool Application::OnWindowClose(WindowCloseEvent& event) {
+		m_Running = false;
+		return true;
 	}
 
 }

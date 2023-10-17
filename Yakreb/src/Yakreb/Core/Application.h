@@ -1,6 +1,7 @@
 #pragma once
 #include "Yakreb/Core/Core.h"
 
+#include "Yakreb/Events/ApplicationEvent.h"
 #include "Yakreb/Core/Window.h"
 
 namespace Yakreb {
@@ -11,7 +12,12 @@ namespace Yakreb {
 			virtual ~Application();
 
 			void Run();
+
+			void OnEvent(Event& event);
+
 		private:
+			bool OnWindowClose(WindowCloseEvent& event);
+
 			std::unique_ptr<Window> m_Window;
 			bool m_Running = true;
 	};
