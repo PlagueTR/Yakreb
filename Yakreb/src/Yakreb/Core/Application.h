@@ -4,22 +4,31 @@
 #include "Yakreb/Events/ApplicationEvent.h"
 #include "Yakreb/Core/Window.h"
 
+int main(int argc, char** argv);
+
 namespace Yakreb {
 
 	class Application {
 		public:
-			Application();
+			Application(const std::string &name = "Yakreb Application");
 			virtual ~Application();
-
-			void Run();
 
 			void OnEvent(Event& event);
 
+			static Application& Get() { return *s_Instance; }
+			Window& GetWindow() { return *m_Window; }
+
 		private:
+			void Run();
+
 			bool OnWindowClose(WindowCloseEvent& event);
 
-			std::unique_ptr<Window> m_Window;
+			static Application* s_Instance;
+			Scope<Window> m_Window;
+
 			bool m_Running = true;
+			
+			friend int ::main(int argc, char** argv);
 	};
 	
 	// To be defined in client

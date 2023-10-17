@@ -30,10 +30,12 @@ namespace Yakreb {
 			virtual void SetVSync(bool enabled) = 0;
 			virtual bool IsVSync() const = 0;
 
-			static Window* Create(const WindowProperties& properties = WindowProperties());
+			virtual void* GetNativeWindow() const = 0;
+
+			static Scope<Window> Create(const WindowProperties& properties = WindowProperties());
 
 		protected:
-			static bool s_GLFWInitialized;
+			static uint8_t s_GLFWWindowCount;
 
 	};
 

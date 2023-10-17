@@ -20,6 +20,8 @@ namespace Yakreb {
 			void SetVSync(bool enabled) override;
 			bool IsVSync() const override;
 
+			inline void* GetNativeWindow() const override { return m_Window; }
+
 		private:
 			struct WindowData {
 				std::string Title;
@@ -32,7 +34,7 @@ namespace Yakreb {
 			virtual void Init(const WindowProperties& properties);
 			virtual void Shutdown();
 
-			static void GLFWErrorCallback(int error, const char *description);
+			static void GLFWErrorCallback(int error, const char* description);
 
 			GLFWwindow* m_Window;
 

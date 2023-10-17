@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Yakreb/Events/Event.h"
+#include "Yakreb/Core/Input/MouseButtonCodes.h"
 
 #include <sstream>
 
@@ -40,30 +41,30 @@ namespace Yakreb {
 			}
 
 			EVENT_CLASS_TYPE(MouseScrolled)
-				EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
+			EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 		private:
 			float m_XOffset, m_YOffset;
 	};
 
 	class MouseButtonEvent : public Event {
 		public:
-			inline int GetMouseButton() const { return m_Button; }
+			inline ButtonCode GetMouseButton() const { return m_Button; }
 
 			EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 		protected:
-			MouseButtonEvent(const int button) : m_Button(button) {}
+			MouseButtonEvent(const ButtonCode button) : m_Button(button) {}
 
-			int m_Button;
+			ButtonCode m_Button;
 	};
 
 	class MouseButtonPressedEvent : public MouseButtonEvent {
 		public:
-			MouseButtonPressedEvent(const int button) : MouseButtonEvent(button) {}
+			MouseButtonPressedEvent(const ButtonCode button) : MouseButtonEvent(button) {}
 
 			std::string ToString() const override
 			{
 				std::stringstream ss;
-				ss << "MouseButtonPressedEvent: " << m_Button;
+				ss << "MouseButtonPressedEvent: " << GetButtonName(m_Button);
 				return ss.str();
 			}
 
@@ -72,12 +73,12 @@ namespace Yakreb {
 
 	class  MouseButtonReleasedEvent : public MouseButtonEvent {
 		public:
-			MouseButtonReleasedEvent(const int button) : MouseButtonEvent(button) {}
+			MouseButtonReleasedEvent(const ButtonCode button) : MouseButtonEvent(button) {}
 
 			std::string ToString() const override
 			{
 				std::stringstream ss;
-				ss << "MouseButtonReleasedEvent: " << m_Button;
+				ss << "MouseButtonReleasedEvent: " << GetButtonName(m_Button);
 				return ss.str();
 			}
 

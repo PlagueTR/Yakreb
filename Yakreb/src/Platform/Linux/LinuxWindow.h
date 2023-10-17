@@ -6,37 +6,39 @@
 namespace Yakreb {
 
 	class LinuxWindow : public Window {
-	public:
-		LinuxWindow(const WindowProperties& properties);
-		virtual ~LinuxWindow();
+		public:
+			LinuxWindow(const WindowProperties& properties);
+			virtual ~LinuxWindow();
 
-		void OnUpdate() override;
+			void OnUpdate() override;
 
-		inline uint32_t GetWidth() const override { return m_Data.Width; }
-		inline uint32_t GetHeight() const override { return m_Data.Height; }
+			inline uint32_t GetWidth() const override { return m_Data.Width; }
+			inline uint32_t GetHeight() const override { return m_Data.Height; }
 
-		inline void SetEventCallback(const EventCallbackFn& callback) override { m_Data.EventCallback = callback; }
+			inline void SetEventCallback(const EventCallbackFn& callback) override { m_Data.EventCallback = callback; }
 
-		void SetVSync(bool enabled) override;
-		bool IsVSync() const override;
+			void SetVSync(bool enabled) override;
+			bool IsVSync() const override;
 
-	private:
-		struct WindowData {
-			std::string Title;
-			uint32_t Width, Height;
-			bool VSync;
+			inline void* GetNativeWindow() const override { return m_Window; }
 
-			EventCallbackFn EventCallback;
-		};
+		private:
+			struct WindowData {
+				std::string Title;
+				uint32_t Width, Height;
+				bool VSync;
 
-		virtual void Init(const WindowProperties& properties);
-		virtual void Shutdown();
+				EventCallbackFn EventCallback;
+			};
 
-		static void GLFWErrorCallback(int error, const char* description);
+			virtual void Init(const WindowProperties& properties);
+			virtual void Shutdown();
 
-		GLFWwindow* m_Window;
+			static void GLFWErrorCallback(int error, const char* description);
 
-		WindowData m_Data;
+			GLFWwindow* m_Window;
+
+			WindowData m_Data;
 
 	};
 

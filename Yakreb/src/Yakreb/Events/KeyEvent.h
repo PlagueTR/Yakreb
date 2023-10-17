@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Yakreb/Events/Event.h"
+#include "Yakreb/Core/Input/KeyCodes.h"
 
 #include <sstream>
 
@@ -8,23 +9,23 @@ namespace Yakreb {
 
 	class KeyEvent : public Event {
 		public:
-			inline int GetKeyCode() const { return m_KeyCode; }
+			inline KeyCode GetKeyCode() const { return m_KeyCode; }
 
 			EVENT_CLASS_CATEGORY(EventCategoryKeyboard | EventCategoryInput)
 		protected:
-			KeyEvent(const int keycode) : m_KeyCode(keycode) {}
-			int m_KeyCode;
+			KeyEvent(const KeyCode keycode) : m_KeyCode(keycode) {}
+			KeyCode m_KeyCode;
 	};
 
 	class  KeyPressedEvent : public KeyEvent {
 		public:
-			KeyPressedEvent(const int keycode, const uint16_t repeatCount) : KeyEvent(keycode), m_RepeatCount(repeatCount) {}
+			KeyPressedEvent(const KeyCode keycode, const uint16_t repeatCount) : KeyEvent(keycode), m_RepeatCount(repeatCount) {}
 
-			uint16_t GetRepeatCount() const { return m_RepeatCount; }
+			inline uint16_t GetRepeatCount() const { return m_RepeatCount; }
 
 			std::string ToString() const override {
 				std::stringstream ss;
-				ss << "KeyPressedEvent: " << m_KeyCode << " (" << m_RepeatCount << " repeats)";
+				ss << "KeyPressedEvent: " << GetKeyName(m_KeyCode) << " (" << m_RepeatCount << " repeats)";
 				return ss.str();
 			}
 
@@ -35,11 +36,11 @@ namespace Yakreb {
 
 	class  KeyReleasedEvent : public KeyEvent {
 		public:
-			KeyReleasedEvent(const int keycode) : KeyEvent(keycode) {}
+			KeyReleasedEvent(const KeyCode keycode) : KeyEvent(keycode) {}
 
 			std::string ToString() const override {
 				std::stringstream ss;
-				ss << "KeyReleasedEvent: " << m_KeyCode;
+				ss << "KeyReleasedEvent: " << GetKeyName(m_KeyCode);
 				return ss.str();
 			}
 
@@ -48,11 +49,11 @@ namespace Yakreb {
 
 	class  KeyTypedEvent : public KeyEvent {
 		public:
-			KeyTypedEvent(const int keycode) : KeyEvent(keycode) {}
+			KeyTypedEvent(const KeyCode keycode) : KeyEvent(keycode) {}
 
 			std::string ToString() const override {
 				std::stringstream ss;
-				ss << "KeyTypedEvent: " << (char)m_KeyCode;
+				ss << "KeyTypedEvent: " << GetKeyName(m_KeyCode);
 				return ss.str();
 			}
 

@@ -16,7 +16,7 @@ namespace Yakreb {
 		}
 	}
 
-	std::filesystem::file_time_type LinuxFilesystemHelper::GetFileCreationTime(const std::filesystem::path& path) {
+	std::filesystem::file_time_type FilesystemHelper::GetFileCreationTime(const std::filesystem::path& path) {
 		struct stat fileStat;
 		std::filesystem::file_time_type returnValue;
 		if (stat(path.string().c_str(), &fileStat) == 0) {
@@ -29,6 +29,11 @@ namespace Yakreb {
 			returnValue = std::filesystem::file_time_type(timePoint);
 		}
 		return returnValue;
+	}
+
+	// Can not modify file creation date on Linux without system specific utilities or libraries such as debugfs
+	void FilesystemHelper::SetFileCreationTime(const std::filesystem::path& path, const std::filesystem::file_time_type& creationTime) {
+
 	}
 
 }

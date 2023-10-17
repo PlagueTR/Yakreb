@@ -9,14 +9,14 @@
 
 namespace Yakreb {
 
-	bool Window::s_GLFWInitialized = false;
+	uint8_t Window::s_GLFWWindowCount = 0;
 
-	Window* Window::Create(const WindowProperties& properties) {
+	Scope<Window> Window::Create(const WindowProperties& properties) {
 
 		#ifdef YGE_PLATFORM_WINDOWS
-			return new WindowsWindow(properties);
+			return CreateScope<WindowsWindow>(properties);
 		#elif defined(YGE_PLATFORM_LINUX)
-			return new LinuxWindow(properties);
+			return CreateScope<LinuxWindow>(properties);
 		#endif
 		return nullptr;
 

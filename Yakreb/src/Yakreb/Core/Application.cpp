@@ -1,13 +1,22 @@
 #include "yakrebpch.h"
 #include "Yakreb/Core/Application.h"
 
+#include "Yakreb/Core/Input/Input.h"
+
 #include <GLFW/glfw3.h>
 
 namespace Yakreb {
 
-	Application::Application() {
-		m_Window = std::unique_ptr<Window>(Window::Create());
+	Application* Application::s_Instance = nullptr;
+
+	Application::Application(const std::string &name) {
+
+		YGE_CORE_ASSERT(!s_Instance, "Multiple instances of Application can not be created!");
+		s_Instance = this;
+
+		m_Window = Window::Create(Window::WindowProperties(name));
 		m_Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
+
 	}
 
 	Application::~Application() {

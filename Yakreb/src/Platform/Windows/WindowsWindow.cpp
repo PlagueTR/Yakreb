@@ -22,15 +22,17 @@ namespace Yakreb {
 
 		YGE_CORE_INFO("Creating window - {0} ({1}, {2})", m_Data.Title, m_Data.Width, m_Data.Height);
 
-		if (!s_GLFWInitialized) {
+		if (!s_GLFWWindowCount) {
+
+			YGE_CORE_INFO("{}", "Initializing GLFW");
 			int success = glfwInit();
 			YGE_CORE_ASSERT(success, "Coult not initialize GLFW!");
-			s_GLFWInitialized = true;
 
 			glfwSetErrorCallback(WindowsWindow::GLFWErrorCallback);
 		}
 
 		m_Window = glfwCreateWindow((int)m_Data.Width, (int)m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
+		s_GLFWWindowCount++;
 		glfwMakeContextCurrent(m_Window);
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(true);
@@ -58,21 +60,28 @@ namespace Yakreb {
 
 			switch (action) {
 				case GLFW_PRESS: {
-					KeyPressedEvent event(key, 0);
+					KeyPressedEvent event(static_cast<KeyCode>(key), 0);
 					data.EventCallback(event);
 					break;
 				}
 				case GLFW_RELEASE: {
-					KeyReleasedEvent event(key);
+					KeyReleasedEvent event(static_cast<KeyCode>(key));
 					data.EventCallback(event);
 					break;
 				}
 				case GLFW_REPEAT: {
-					KeyPressedEvent event(key, 1);
+					KeyPressedEvent event(static_cast<KeyCode>(key), 1);
 					data.EventCallback(event);
 					break;
 				}
 			}
+		});
+
+		glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int key) {
+			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+			KeyTypedEvent event(static_cast<KeyCode>(key));
+			data.EventCallback(event);
 		});
 
 		glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods) {
@@ -80,12 +89,12 @@ namespace Yakreb {
 
 			switch (action) {
 				case GLFW_PRESS: {
-					MouseButtonPressedEvent event(button);
+					MouseButtonPressedEvent event(static_cast<ButtonCode>(button));
 					data.EventCallback(event);
 					break;
 				}
 				case GLFW_RELEASE: {
-					MouseButtonReleasedEvent event(button);
+					MouseButtonReleasedEvent event(static_cast<ButtonCode>(button));
 					data.EventCallback(event);
 					break;
 				}
@@ -110,6 +119,11 @@ namespace Yakreb {
 
 	void WindowsWindow::Shutdown() {
 		glfwDestroyWindow(m_Window);
+		s_GLFWWindowCount--;
+		if (!s_GLFWWindowCount) {
+			YGE_CORE_INFO("{}", "Terminating GLFW");
+			glfwTerminate();
+		}
 	}
 
 	void WindowsWindow::GLFWErrorCallback(int error, const char* description) {

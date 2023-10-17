@@ -11,7 +11,7 @@ namespace Yakreb {
 		s_ExecutableName = s_ExecutablePath.filename().string();
 	}
 
-	std::filesystem::file_time_type WindowsFilesystemHelper::GetFileCreationTime(const std::filesystem::path& path) {
+	std::filesystem::file_time_type FilesystemHelper::GetFileCreationTime(const std::filesystem::path& path) {
 		HANDLE fileHandle = CreateFile(path.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
 		FILETIME creationTime = { 0 };
 		if (fileHandle != INVALID_HANDLE_VALUE) {
@@ -41,7 +41,7 @@ namespace Yakreb {
 		return std::filesystem::file_time_type(std::chrono::duration_cast<std::chrono::system_clock::duration>(secs));
 	}
 
-	void WindowsFilesystemHelper::SetFileCreationTime(const std::filesystem::path& path, const std::filesystem::file_time_type& creationTime) {
+	void FilesystemHelper::SetFileCreationTime(const std::filesystem::path& path, const std::filesystem::file_time_type& creationTime) {
 
 		std::chrono::system_clock::time_point timePoint(std::chrono::duration_cast<std::chrono::seconds>(creationTime.time_since_epoch()));
 

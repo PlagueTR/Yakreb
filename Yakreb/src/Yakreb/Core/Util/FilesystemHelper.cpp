@@ -23,25 +23,5 @@ namespace Yakreb {
 
 	}
 
-	std::filesystem::file_time_type FilesystemHelper::GetFileCreationTime(const std::filesystem::path& path) {
-
-		#ifdef YGE_PLATFORM_WINDOWS
-			return WindowsFilesystemHelper::GetFileCreationTime(path);
-		#elif defined(YGE_PLATFORM_LINUX)
-			return LinuxFilesystemHelper::GetFileCreationTime(path);
-		#endif
-		return std::filesystem::file_time_type();
-
-	}
-
-	void FilesystemHelper::SetFileCreationTime(const std::filesystem::path& path, const std::filesystem::file_time_type& creationTime) {
-
-		#ifdef YGE_PLATFORM_WINDOWS
-			WindowsFilesystemHelper::SetFileCreationTime(path, creationTime);
-		#elif defined(YGE_PLATFORM_LINUX)
-			// Can not modify file creation date on Linux without system specific utilities or libraries such as debugfs
-		#endif
-	}
-
 }
 
