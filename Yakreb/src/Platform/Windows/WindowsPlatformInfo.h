@@ -63,7 +63,7 @@ namespace Yakreb {
             };
 
             static void Init();
-            friend void PlatformInfo::Init();
+            friend void ::Yakreb::PlatformInfo::Init();
 
     };
 

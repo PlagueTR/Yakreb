@@ -3,6 +3,7 @@
 
 #include "Yakreb/Events/ApplicationEvent.h"
 #include "Yakreb/Core/Window.h"
+#include "Yakreb/Core/Layer/LayerStack.h"
 
 int main(int argc, char** argv);
 
@@ -14,6 +15,12 @@ namespace Yakreb {
 			virtual ~Application();
 
 			void OnEvent(Event& event);
+
+			void PushLayer(Layer* layer);
+			void PushOverlay(Layer* overlay);
+
+			void PopLayer(Layer* layer);
+			void PopOverlay(Layer* overlay);
 
 			static Application& Get() { return *s_Instance; }
 			Window& GetWindow() { return *m_Window; }
@@ -27,6 +34,8 @@ namespace Yakreb {
 			Scope<Window> m_Window;
 
 			bool m_Running = true;
+
+			LayerStack m_LayerStack;
 			
 			friend int ::main(int argc, char** argv);
 	};

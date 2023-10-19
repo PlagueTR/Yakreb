@@ -7,7 +7,7 @@ namespace Yakreb {
 		private:
 			static void Init();
 
-			friend void FilesystemHelper::Init();
+			friend void ::Yakreb::FilesystemHelper::Init();
 
 	};
 

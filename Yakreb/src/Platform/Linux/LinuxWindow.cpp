@@ -143,7 +143,6 @@ namespace Yakreb {
 		glfwSwapBuffers(m_Window);
 	}
 
-	// Doesn't work yet
 	void LinuxWindow::SetVSync(bool enabled) {
 		glfwSwapInterval(enabled ? 1 : 0);
 		m_Data.VSync = enabled;

@@ -7,6 +7,8 @@
 
 #include "Yakreb/Core/Application.h"
 
+#include "Yakreb/Core/GameTime.h"
+
 // Input
 
 #include "Yakreb/Core/Input/Input.h"

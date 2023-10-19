@@ -2,6 +2,8 @@
 #include "Yakreb/Core/Application.h"
 
 #include "Yakreb/Core/Input/Input.h"
+#include "Yakreb/Core/GameTimer.h"
+#include "Yakreb/Core/GameTime.h"
 
 #include <glad/glad.h>
 
@@ -28,23 +30,50 @@ namespace Yakreb {
 
 		EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowClose));
+
+		for (auto it = m_LayerStack.rbegin(); it != m_LayerStack.rend(); ++it) {
+			if (event.Handled)
+				break;
+			(*it)->OnEvent(event);
+		}
+	}
+
+	void Application::PushLayer(Layer* layer) {
+		m_LayerStack.PushLayer(layer);
+		layer->OnAttach();
+	}
+
+	void Application::PushOverlay(Layer* overlay) {
+		m_LayerStack.PushOverlay(overlay);
+		overlay->OnAttach();
+	}
+
+	void Application::PopLayer(Layer* layer) {
+		m_LayerStack.PopLayer(layer);
+		layer->OnDetach();
+	}
+
+	void Application::PopOverlay(Layer* overlay) {
+		m_LayerStack.PopOverlay(overlay);
+		overlay->OnDetach();
 	}
 
 	void Application::Run() {
 
-		uint8_t state = 0;
+		int state = 0;
 		float frac = 0.0f;
-		float speed = 1e-2f;
+		float speed = 1.0f;
 
 		float r, g, b;
 
 		while (m_Running) {
-			frac += speed;
-			if (frac > 1.0f) { frac -= 1.0f; state++; }
+
+			GameTimer::UpdateGameTime();
+
+			frac += speed * GameTime::GetScaledDeltaTime();
+			if (frac > 1.0f) { frac -= 1.0f; state++; };
 
 			switch (state) {
-				case 6:
-					state = 0;
 				case 0:
 					r = 1.0f;
 					g = frac;
@@ -75,11 +104,17 @@ namespace Yakreb {
 					g = 0.0f;
 					b = 1.0f - frac;
 					break;
+				case 6:
+					r = 1.0f;
+					g = frac;
+					b = 0.0f;
+					state = 0;
 			}
 
-			YGE_CORE_DEBUG_TRACE("rgb: {0:02X}{1:02X}{2:02X}", (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f));
+			for (Layer* layer : m_LayerStack)
+				layer->OnUpdate();
 
-			glClearColor(r, g, b, 1.0f);
+			glClearColor(r, g, b, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			m_Window->OnUpdate();
