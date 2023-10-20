@@ -28,7 +28,7 @@ function generate_version()
 
     local yakrebVersionMicro = commitDate .. "-b" .. tostring(commitPosition)
 
-    local content = string.format("// Commit: %s\n#define YGE_VERSION \"%s.%s.%s\"\n", currentCommit, yakrebVersionMajor, yakrebVersionMinor, yakrebVersionMicro)
+    local content = string.format("// Commit: %s\n#define YGE_VERSION \"%s.%s.%s\"\n#ifdef YGE_DEBUG\n    #define YGE_BUILD_CONFIGURATION \"Debug\"\n#elif defined(YGE_RELEASE)\n    #define YGE_BUILD_CONFIGURATION \"Release\"\n#else\n    #define YGE_BUILD_CONFIGURATION \"Distribution\"\n#endif\n", currentCommit, yakrebVersionMajor, yakrebVersionMinor, yakrebVersionMicro)
 
     local versionHeaderPath = path.join("Yakreb/src/Yakreb/Core", "Version.h")
 

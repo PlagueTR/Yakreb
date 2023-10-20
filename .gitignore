@@ -27,3 +27,7 @@ Yakreb/src/Yakreb/Core/Version.h
 **.cbp
 **.depend
 **.layout
+
+# Files we don't want to track
+
+Sandbox/imgui.ini

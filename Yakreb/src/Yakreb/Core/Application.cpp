@@ -71,12 +71,23 @@ namespace Yakreb {
 
 		while (m_Running) {
 
+			m_Window->OnUpdate();
+
 			GameTimer::UpdateGameTime();
 
-			frac += speed * GameTime::GetScaledDeltaTime();
-			if (frac > 1.0f) { frac -= 1.0f; state++; };
+			for (Layer* layer : m_LayerStack)
+				layer->OnUpdate();
 
-			switch (state) {
+			m_ImGuiLayer->BeginRender();
+			for (Layer* layer : m_LayerStack)
+				layer->OnImGuiRender();
+
+			// Other rendering
+			{
+				frac += speed * GameTime::GetScaledDeltaTime();
+				if (frac > 1.0f) { frac -= 1.0f; state++; };
+
+				switch (state) {
 				case 0:
 					r = 1.0f;
 					g = frac;
@@ -112,20 +123,13 @@ namespace Yakreb {
 					g = frac;
 					b = 0.0f;
 					state = 0;
+				}
+
+				glClearColor(r, g, b, 1);
+				glClear(GL_COLOR_BUFFER_BIT);
 			}
 
-			glClearColor(r, g, b, 1);
-			glClear(GL_COLOR_BUFFER_BIT);
-
-			for (Layer* layer : m_LayerStack)
-				layer->OnUpdate();
-
-			m_ImGuiLayer->BeginRender();
-			for (Layer* layer : m_LayerStack)
-				layer->OnImGuiRender();
 			m_ImGuiLayer->EndRender();
-
-			m_Window->OnUpdate();
 
 		}
 	}
