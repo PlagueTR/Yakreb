@@ -10,3 +10,7 @@
 [submodule "Yakreb/vendor/glad"]
 	path = Yakreb/vendor/glad
 	url = https://github.com/PlagueTR/GL-Loader
+[submodule "Yakreb/vendor/imgui"]
+	path = Yakreb/vendor/imgui
+	url = https://github.com/PlagueTR/imgui
+	branch = docking

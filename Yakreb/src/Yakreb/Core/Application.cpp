@@ -19,6 +19,9 @@ namespace Yakreb {
 		m_Window = Window::Create(Window::WindowProperties(name));
 		m_Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
 
+		m_ImGuiLayer = new ImGuiLayer("Core ImGui");
+		PushOverlay(m_ImGuiLayer);
+
 	}
 
 	Application::~Application() {
@@ -111,13 +114,19 @@ namespace Yakreb {
 					state = 0;
 			}
 
-			for (Layer* layer : m_LayerStack)
-				layer->OnUpdate();
-
 			glClearColor(r, g, b, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
 
+			for (Layer* layer : m_LayerStack)
+				layer->OnUpdate();
+
+			m_ImGuiLayer->BeginRender();
+			for (Layer* layer : m_LayerStack)
+				layer->OnImGuiRender();
+			m_ImGuiLayer->EndRender();
+
 			m_Window->OnUpdate();
+
 		}
 	}
 

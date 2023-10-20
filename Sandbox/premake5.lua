@@ -14,7 +14,8 @@ project "Sandbox"
 
     includedirs {
         "%{wks.location}/Yakreb/src",
-        "%{IncludeDir.spdlog}"
+        "%{IncludeDir.spdlog}",
+        "%{IncludeDir.ImGui}"
     }
 
     links {
@@ -49,6 +50,7 @@ project "Sandbox"
         links {
             "GLFW",
             "glad",
+            "ImGui",
             "X11",
             "Xrandr",
             "Xi",

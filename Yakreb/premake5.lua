@@ -29,12 +29,14 @@ project "Yakreb"
         "src",
         "%{IncludeDir.spdlog}",
         "%{IncludeDir.GLFW}",
-        "%{IncludeDir.glad}"
+        "%{IncludeDir.glad}",
+        "%{IncludeDir.ImGui}"
     }
 
     links {
         "GLFW",
-        "glad"
+        "glad",
+        "ImGui"
     }
 
     filter "system:windows"

@@ -3,6 +3,7 @@
 
 #include "Yakreb/Events/ApplicationEvent.h"
 #include "Yakreb/Core/Window.h"
+#include "Yakreb/Core/Layer/ImGuiLayer.h"
 #include "Yakreb/Core/Layer/LayerStack.h"
 
 int main(int argc, char** argv);
@@ -23,7 +24,7 @@ namespace Yakreb {
 			void PopOverlay(Layer* overlay);
 
 			static Application& Get() { return *s_Instance; }
-			Window& GetWindow() { return *m_Window; }
+			inline Window& GetWindow() { return *m_Window; }
 
 		private:
 			void Run();
@@ -36,6 +37,7 @@ namespace Yakreb {
 			bool m_Running = true;
 
 			LayerStack m_LayerStack;
+			ImGuiLayer* m_ImGuiLayer;
 			
 			friend int ::main(int argc, char** argv);
 	};
