@@ -7,8 +7,15 @@ namespace Yakreb {
 
 	class Input {
 		public:
-			static bool IsKeyPressed(Key key);
-			static bool IsMouseButtonPressed(Button button);
+			inline static bool IsKeyPressed(Key key) { return s_Instance->IsKeyPressedImpl(key); }
+			inline static bool IsMouseButtonPressed(Button button) { return s_Instance->IsMouseButtonPressed(button); }
+
+		protected:
+			inline virtual bool IsKeyPressedImpl(Key key) = 0;
+			inline virtual bool IsMouseButtonPressedImpl(Button button) = 0;
+
+			static Input* s_Instance;
+
 	};
 
 }

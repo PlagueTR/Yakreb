@@ -3,15 +3,21 @@
 
 namespace Yakreb {
 
-	void WindowsFilesystemHelper::Init() {
+	std::filesystem::path FilesystemHelper::s_ExecutablePath;
+	std::filesystem::path FilesystemHelper::s_ExecutableDirectoryPath;
+	std::string FilesystemHelper::s_ExecutableName;
+
+	FilesystemHelper* FilesystemHelper::s_Instance = new WindowsFilesystemHelper();
+
+	WindowsFilesystemHelper::WindowsFilesystemHelper() {
 		wchar_t buffer[MAX_PATH];
 		GetModuleFileNameW(NULL, buffer, MAX_PATH);
-		s_ExecutablePath = std::filesystem::canonical(buffer);
-		s_ExecutableDirectoryPath = s_ExecutablePath.parent_path();
-		s_ExecutableName = s_ExecutablePath.filename().string();
+		FilesystemHelper::s_ExecutablePath = std::filesystem::canonical(buffer);
+		FilesystemHelper::s_ExecutableDirectoryPath = FilesystemHelper::s_ExecutablePath.parent_path();
+		FilesystemHelper::s_ExecutableName = FilesystemHelper::s_ExecutablePath.filename().string();
 	}
 
-	std::filesystem::file_time_type FilesystemHelper::GetFileCreationTime(const std::filesystem::path& path) {
+	inline std::filesystem::file_time_type WindowsFilesystemHelper::GetFileCreationTimeImpl(const std::filesystem::path& path) {
 		HANDLE fileHandle = CreateFile(path.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
 		FILETIME creationTime = { 0 };
 		if (fileHandle != INVALID_HANDLE_VALUE) {
@@ -41,7 +47,7 @@ namespace Yakreb {
 		return std::filesystem::file_time_type(std::chrono::duration_cast<std::chrono::system_clock::duration>(secs));
 	}
 
-	void FilesystemHelper::SetFileCreationTime(const std::filesystem::path& path, const std::filesystem::file_time_type& creationTime) {
+	inline void WindowsFilesystemHelper::SetFileCreationTimeImpl(const std::filesystem::path& path, const std::filesystem::file_time_type& creationTime) {
 
 		std::chrono::system_clock::time_point timePoint(std::chrono::duration_cast<std::chrono::seconds>(creationTime.time_since_epoch()));
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Yakreb/Events/Event.h"
+#include "Yakreb/Core/Events/Event.h"
 #include "Yakreb/Core/Input/MouseButtonCodes.h"
 
 #include <sstream>

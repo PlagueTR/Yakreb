@@ -14,8 +14,9 @@ class MyLayer : public Yakreb::Layer {
 		}
 
 		void OnUpdate() override {
-			YGE_TRACE("{0}::Update", GetName());
-			YGE_TRACE("Total time: {0:.4f}s, delta time: {1:.2f}ms", Yakreb::GameTime::GetSeconds(), Yakreb::GameTime::GetDeltaTime() * 1000.0f);
+			if (Yakreb::Input::IsKeyPressed(Yakreb::Key::Space)) {
+ 				YGE_TRACE("{}", "Space key is held down!");
+			}
 		}
 
 		void OnImGuiRender() override {
@@ -27,7 +28,7 @@ class MyLayer : public Yakreb::Layer {
 		}
 
 		void OnEvent(Yakreb::Event& event) override {
-			YGE_TRACE("{0} -> {1}", GetName(), event);
+			
 		}
 };
 

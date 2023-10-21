@@ -6,21 +6,28 @@
 
 namespace Yakreb {
 
-	void LinuxPlatformInfo::Init() {
+    std::string PlatformInfo::s_PlatformString;
+    std::string PlatformInfo::s_OSShortName;
+    std::string PlatformInfo::s_OSName;
+    std::string PlatformInfo::s_OSVersion;
+
+    PlatformInfo* PlatformInfo::s_Instance = new LinuxPlatformInfo();
+
+	LinuxPlatformInfo::LinuxPlatformInfo() {
         struct utsname native;
         if (uname(&native) > -1) {
-            s_OSShortName = native.sysname;
-            s_OSVersion = native.release;
+            PlatformInfo::s_OSShortName = native.sysname;
+            PlatformInfo::s_OSVersion = native.release;
         }
         else {
-            s_OSShortName = "Unrecognized Linux";
-            s_OSVersion = "unknown";
+            PlatformInfo::s_OSShortName = "Unrecognized Linux";
+            PlatformInfo::s_OSVersion = "unknown";
         }
 
         // most modern Linux distros have /etc/os-release
         FILE* pipe = popen("cat /etc/os-release", "r");
         if (!pipe)
-            s_OSName = "Unrecognized Linux";
+            PlatformInfo::s_OSName = "Unrecognized Linux";
         else {
             char buffer[2048];
             std::string result = "";
@@ -34,15 +41,15 @@ namespace Yakreb {
             if (pos != std::string::npos) {
                 pos += strlen("PRETTY_NAME=");
                 size_t end = result.find("\n", pos);
-                s_OSName = result.substr(pos, end - pos);
-                if (s_OSName.size() >= 2 && s_OSName.front() == '"' && s_OSName.back() == '"')
-                    s_OSName = s_OSName.substr(1, s_OSName.size() - 2);
+                PlatformInfo::s_OSName = result.substr(pos, end - pos);
+                if (PlatformInfo::s_OSName.size() >= 2 && PlatformInfo::s_OSName.front() == '"' && PlatformInfo::s_OSName.back() == '"')
+                    PlatformInfo::s_OSName = PlatformInfo::s_OSName.substr(1, PlatformInfo::s_OSName.size() - 2);
             }
             else {
-                s_OSName = "Unrecognized Linux";
+                PlatformInfo::s_OSName = "Unrecognized Linux";
             }
         }
-        s_PlatformString = s_OSName + " Kernel(" + s_OSVersion + ")";
+        PlatformInfo::s_PlatformString = PlatformInfo::s_OSName + " Kernel(" + PlatformInfo::s_OSVersion + ")";
 	}
 
 }

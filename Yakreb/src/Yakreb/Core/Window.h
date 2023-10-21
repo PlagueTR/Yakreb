@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Yakreb/Core/Core.h"
-#include "Yakreb/Events/Event.h"
+#include "Yakreb/Core/Events/Event.h"
 
 namespace Yakreb {
 

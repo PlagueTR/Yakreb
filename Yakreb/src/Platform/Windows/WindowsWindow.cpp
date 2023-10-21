@@ -1,9 +1,9 @@
 #include "yakrebpch.h"
 #include "WindowsWindow.h"
 
-#include "Yakreb/Events/ApplicationEvent.h"
-#include "Yakreb/Events/KeyEvent.h"
-#include "Yakreb/Events/MouseEvent.h"
+#include "Yakreb/Core/Events/ApplicationEvent.h"
+#include "Yakreb/Core/Events/KeyEvent.h"
+#include "Yakreb/Core/Events/MouseEvent.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>

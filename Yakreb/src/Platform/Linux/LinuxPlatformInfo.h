@@ -4,11 +4,8 @@
 namespace Yakreb {
 
     class LinuxPlatformInfo : public PlatformInfo {
-
-        private:
-            static void Init();
-
-            friend void ::Yakreb::PlatformInfo::Init();
+        public:
+            LinuxPlatformInfo();
 
     };
 

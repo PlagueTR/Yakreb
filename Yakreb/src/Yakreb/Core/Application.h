@@ -1,7 +1,7 @@
 #pragma once
 #include "Yakreb/Core/Core.h"
 
-#include "Yakreb/Events/ApplicationEvent.h"
+#include "Yakreb/Core/Events/ApplicationEvent.h"
 #include "Yakreb/Core/Window.h"
 #include "Yakreb/Core/Layer/ImGuiLayer.h"
 #include "Yakreb/Core/Layer/LayerStack.h"

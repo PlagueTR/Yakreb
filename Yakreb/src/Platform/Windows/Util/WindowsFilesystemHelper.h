@@ -4,10 +4,12 @@
 namespace Yakreb {
 
 	class WindowsFilesystemHelper : public FilesystemHelper {
-		private:
-			static void Init();
+		public:
+			WindowsFilesystemHelper();
 
-			friend void ::Yakreb::FilesystemHelper::Init();
+		protected:
+			inline virtual std::filesystem::file_time_type GetFileCreationTimeImpl(const std::filesystem::path& path) override;
+			inline virtual void SetFileCreationTimeImpl(const std::filesystem::path& path, const std::filesystem::file_time_type& creationTime) override;
 
 	};
 

@@ -24,6 +24,8 @@
 namespace Yakreb {
 
     class WindowsPlatformInfo : public PlatformInfo {
+        public:
+            WindowsPlatformInfo();
 
         private:
             enum WindowsBuildThreshold
@@ -61,9 +63,6 @@ namespace Yakreb {
                 Win11_21H2,     // Windows 11
                 Win11_22H2      // Windows 11 September 2022 update
             };
-
-            static void Init();
-            friend void ::Yakreb::PlatformInfo::Init();
 
     };
 

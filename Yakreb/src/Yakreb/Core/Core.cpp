@@ -7,8 +7,6 @@ namespace Yakreb {
 
 	void InitializeCore() {
 
-		PlatformInfo::Init();
-		FilesystemHelper::Init();
 		Log::Init();
 
 		// We always want to log these

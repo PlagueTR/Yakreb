@@ -1,13 +1,17 @@
 #include "yakrebpch.h"
-#include "GameTimer.h"
-
-#include "Yakreb/Core/GameTime.h"
+#include "OpenGLGameTimer.h"
 
 #include <GLFW/glfw3.h>
 
 namespace Yakreb {
 
-	void GameTimer::UpdateGameTime() {
+	GameTimer* GameTimer::s_Instance = new OpenGLGameTimer();
+
+	OpenGLGameTimer::OpenGLGameTimer() {
+
+	}
+
+	inline void OpenGLGameTimer::UpdateGameTimeImpl() {
 		float time = (float)glfwGetTime();
 		GameTime::s_DeltaTime = time - GameTime::s_RealTime;
 		GameTime::s_RealTime = time;

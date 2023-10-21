@@ -1,5 +1,4 @@
 #pragma once
-#include "Yakreb/Core/GameTimer.h"
 
 namespace Yakreb {
 
@@ -14,7 +13,7 @@ namespace Yakreb {
 			inline static float GetDeltaTime() { return s_DeltaTime; }
 			inline static float GetScaledDeltaTime() { return s_DeltaTime * s_TimeScale; }
 
-		private:
+		protected:
 
 			static float s_RealTime;
 			static float s_ScaledTime;
@@ -23,7 +22,6 @@ namespace Yakreb {
 
 			static float s_DeltaTime;
 
-			friend class GameTimer;
 	};
 
 }

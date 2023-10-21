@@ -5,18 +5,24 @@
 
 namespace Yakreb {
 
-	void LinuxFilesystemHelper::Init() {
+	std::filesystem::path FilesystemHelper::s_ExecutablePath;
+	std::filesystem::path FilesystemHelper::s_ExecutableDirectoryPath;
+	std::string FilesystemHelper::s_ExecutableName;
+
+	FilesystemHelper* FilesystemHelper::s_Instance = new LinuxFilesystemHelper();
+
+	LinuxFilesystemHelper::LinuxFilesystemHelper() {
 		char buffer[PATH_MAX];
 		ssize_t len = readlink("/proc/self/exe", buffer, PATH_MAX);
 		if (len != -1) {
 			buffer[len] = '\0';
-			s_ExecutablePath = std::filesystem::canonical(buffer);
-			s_ExecutableDirectoryPath = s_ExecutablePath.parent_path();
-			s_ExecutableName = s_ExecutablePath.filename().string();
+			FilesystemHelper::s_ExecutablePath = std::filesystem::canonical(buffer);
+			FilesystemHelper::s_ExecutableDirectoryPath = FilesystemHelper::s_ExecutablePath.parent_path();
+			FilesystemHelper::s_ExecutableName = FilesystemHelper::s_ExecutablePath.filename().string();
 		}
 	}
 
-	std::filesystem::file_time_type FilesystemHelper::GetFileCreationTime(const std::filesystem::path& path) {
+	inline std::filesystem::file_time_type LinuxFilesystemHelper::GetFileCreationTimeImpl(const std::filesystem::path& path) {
 		struct stat fileStat;
 		std::filesystem::file_time_type returnValue;
 		if (stat(path.string().c_str(), &fileStat) == 0) {
@@ -32,7 +38,7 @@ namespace Yakreb {
 	}
 
 	// Can not modify file creation date on Linux without system specific utilities or libraries such as debugfs
-	void FilesystemHelper::SetFileCreationTime(const std::filesystem::path& path, const std::filesystem::file_time_type& creationTime) {
+	inline void LinuxFilesystemHelper::SetFileCreationTimeImpl(const std::filesystem::path& path, const std::filesystem::file_time_type& creationTime) {
 
 	}
 
