@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Yakreb/Core/Log.h"
+#include "Yakreb/Core/Log/Log.h"
 
 //glfw3.h
 

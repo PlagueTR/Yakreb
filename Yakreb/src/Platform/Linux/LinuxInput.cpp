@@ -24,4 +24,11 @@ namespace Yakreb {
 		return state == GLFW_PRESS;
 	}
 
+	inline glm::vec2 LinuxInput::GetMousePositionImpl() {
+		GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
+		double x, y;
+		glfwGetCursorPos(window, &x, &y);
+		return { (float)x, (float)y };
+	}
+
 }

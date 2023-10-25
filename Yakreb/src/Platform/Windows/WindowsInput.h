@@ -11,6 +11,8 @@ namespace Yakreb {
 			inline virtual bool IsKeyPressedImpl(Key key) override;
 			inline virtual bool IsMouseButtonPressedImpl(Button button) override;
 
+			inline virtual glm::vec2 GetMousePositionImpl() override;
+
 	};
 
 }

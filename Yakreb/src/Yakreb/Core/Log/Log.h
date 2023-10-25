@@ -2,6 +2,8 @@
 
 #include "Yakreb/Core/Core.h"
 
+#include "LogHelper.h"
+
 // Ignore warnings raised inside external headers
 #pragma warning(push, 0)
 #include <spdlog/spdlog.h>

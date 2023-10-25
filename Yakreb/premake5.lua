@@ -30,7 +30,8 @@ project "Yakreb"
         "%{IncludeDir.spdlog}",
         "%{IncludeDir.GLFW}",
         "%{IncludeDir.glad}",
-        "%{IncludeDir.ImGui}"
+        "%{IncludeDir.ImGui}",
+        "%{IncludeDir.glm}"
     }
 
     links {

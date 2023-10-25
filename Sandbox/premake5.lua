@@ -15,7 +15,8 @@ project "Sandbox"
     includedirs {
         "%{wks.location}/Yakreb/src",
         "%{IncludeDir.spdlog}",
-        "%{IncludeDir.ImGui}"
+        "%{IncludeDir.ImGui}",
+        "%{IncludeDir.glm}"
     }
 
     links {

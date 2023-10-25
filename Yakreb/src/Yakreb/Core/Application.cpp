@@ -88,41 +88,41 @@ namespace Yakreb {
 				if (frac > 1.0f) { frac -= 1.0f; state++; };
 
 				switch (state) {
-				case 0:
-					r = 1.0f;
-					g = frac;
-					b = 0.0f;
-					break;
-				case 1:
-					r = 1.0f - frac;
-					g = 1.0f;
-					b = 0.0f;
-					break;
-				case 2:
-					r = 0.0f;
-					g = 1.0f;
-					b = frac;
-					break;
-				case 3:
-					r = 0.0f;
-					g = 1.0f - frac;
-					b = 1.0f;
-					break;
-				case 4:
-					r = frac;
-					g = 0.0f;
-					b = 1.0f;
-					break;
-				case 5:
-					r = 1.0f;
-					g = 0.0f;
-					b = 1.0f - frac;
-					break;
-				case 6:
-					r = 1.0f;
-					g = frac;
-					b = 0.0f;
-					state = 0;
+					case 0:
+						r = 1.0f;
+						g = frac;
+						b = 0.0f;
+						break;
+					case 1:
+						r = 1.0f - frac;
+						g = 1.0f;
+						b = 0.0f;
+						break;
+					case 2:
+						r = 0.0f;
+						g = 1.0f;
+						b = frac;
+						break;
+					case 3:
+						r = 0.0f;
+						g = 1.0f - frac;
+						b = 1.0f;
+						break;
+					case 4:
+						r = frac;
+						g = 0.0f;
+						b = 1.0f;
+						break;
+					case 5:
+						r = 1.0f;
+						g = 0.0f;
+						b = 1.0f - frac;
+						break;
+					default:
+						r = 1.0f;
+						g = frac;
+						b = 0.0f;
+						state = 0;
 				}
 
 				glClearColor(r, g, b, 1);

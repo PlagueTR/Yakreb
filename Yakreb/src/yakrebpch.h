@@ -27,6 +27,6 @@
 	#include <unistd.h>
 #endif
 
-#include "Yakreb/Core/Log.h"
+#include "Yakreb/Core/Log/Log.h"
 
 #endif
