@@ -3,9 +3,14 @@
 #include "Yakreb/Core/Util/FilesystemHelper.h"
 #include "Yakreb/Core/Version.h"
 
+#include "Yakreb/Renderer/RendererAPI.h"
+
 namespace Yakreb {
 
 	void InitializeCore() {
+
+		// For now, just set the renderer API to OpenGL
+		RendererAPI::SetAPI(RendererAPI::API::OpenGL);
 
 		Log::Init();
 

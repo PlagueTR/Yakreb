@@ -5,7 +5,10 @@
 #include "Yakreb/Core/Events/KeyEvent.h"
 #include "Yakreb/Core/Events/MouseEvent.h"
 
-#include <glad/glad.h>
+#include "Yakreb/Renderer/RendererAPI.h"
+
+#include "Platform/OpenGL/OpenGLContext.h"
+
 #include <GLFW/glfw3.h>
 
 namespace Yakreb {
@@ -35,12 +38,21 @@ namespace Yakreb {
 		}
 
 		m_Window = glfwCreateWindow((int)m_Data.Width, (int)m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
+		
 		s_GLFWWindowCount++;
 		glfwMakeContextCurrent(m_Window);
 
-		YGE_CORE_INFO("{}", "Initializing glad");
-		int success = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		YGE_CORE_ASSERT(success, "Could not initialize glad!");
+		switch (RendererAPI::GetAPI()) {
+			default:
+				YGE_CORE_ERROR("{}", "Renderer API was set to None, defaulting to OpenGL");
+				[[fallthrough]];
+			case RendererAPI::API::OpenGL:
+				m_Data.API = RendererAPI::API::OpenGL;
+				m_Context = new OpenGLContext(m_Window);
+				break;
+		}
+
+		m_Context->Init();
 
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(true);
@@ -140,7 +152,7 @@ namespace Yakreb {
 
 	void WindowsWindow::OnUpdate() {
 		glfwPollEvents();
-		glfwSwapBuffers(m_Window);
+		m_Context->SwapBuffers();
 	}
 
 	void WindowsWindow::SetVSync(bool enabled) {

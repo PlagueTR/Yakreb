@@ -1,5 +1,9 @@
 #pragma once
+
 #include "Yakreb/Core/Window.h"
+#include "Yakreb/Renderer/GraphicsContext.h"
+
+#include "Yakreb/Renderer/RendererAPI.h"
 
 struct GLFWwindow;
 
@@ -26,6 +30,8 @@ namespace Yakreb {
 			struct WindowData {
 				std::string Title;
 				uint32_t Width, Height;
+				RendererAPI::API API;
+
 				bool VSync;
 
 				EventCallbackFn EventCallback;
@@ -37,6 +43,7 @@ namespace Yakreb {
 			static void GLFWErrorCallback(int error, const char* description);
 
 			GLFWwindow* m_Window;
+			GraphicsContext* m_Context;
 
 			WindowData m_Data;
 

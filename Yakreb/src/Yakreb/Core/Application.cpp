@@ -5,7 +5,7 @@
 #include "Yakreb/Core/GameTimer.h"
 #include "Yakreb/Core/GameTime.h"
 
-#include <glad/glad.h>
+#include "Yakreb/Renderer/RendererAPI.h"
 
 namespace Yakreb {
 
@@ -67,7 +67,7 @@ namespace Yakreb {
 		float frac = 0.0f;
 		float speed = 1.0f;
 
-		float r, g, b;
+		glm::vec4 clearColor = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
 
 		while (m_Running) {
 
@@ -89,44 +89,45 @@ namespace Yakreb {
 
 				switch (state) {
 					case 0:
-						r = 1.0f;
-						g = frac;
-						b = 0.0f;
+						clearColor.r = 1.0f;
+						clearColor.g = frac;
+						clearColor.b = 0.0f;
 						break;
 					case 1:
-						r = 1.0f - frac;
-						g = 1.0f;
-						b = 0.0f;
+						clearColor.r = 1.0f - frac;
+						clearColor.g = 1.0f;
+						clearColor.b = 0.0f;
 						break;
 					case 2:
-						r = 0.0f;
-						g = 1.0f;
-						b = frac;
+						clearColor.r = 0.0f;
+						clearColor.g = 1.0f;
+						clearColor.b = frac;
 						break;
 					case 3:
-						r = 0.0f;
-						g = 1.0f - frac;
-						b = 1.0f;
+						clearColor.r = 0.0f;
+						clearColor.g = 1.0f - frac;
+						clearColor.b = 1.0f;
 						break;
 					case 4:
-						r = frac;
-						g = 0.0f;
-						b = 1.0f;
+						clearColor.r = frac;
+						clearColor.g = 0.0f;
+						clearColor.b = 1.0f;
 						break;
 					case 5:
-						r = 1.0f;
-						g = 0.0f;
-						b = 1.0f - frac;
+						clearColor.r = 1.0f;
+						clearColor.g = 0.0f;
+						clearColor.b = 1.0f - frac;
 						break;
 					default:
-						r = 1.0f;
-						g = frac;
-						b = 0.0f;
+						clearColor.r = 1.0f;
+						clearColor.g = frac;
+						clearColor.b = 0.0f;
 						state = 0;
 				}
 
-				glClearColor(r, g, b, 1);
-				glClear(GL_COLOR_BUFFER_BIT);
+				RendererAPI::SetClearColor(clearColor);
+				RendererAPI::Clear();
+
 			}
 
 			m_ImGuiLayer->EndRender();
