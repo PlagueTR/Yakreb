@@ -14,12 +14,12 @@ namespace Yakreb {
 			WindowsWindow(const WindowProperties& properties);
 			virtual ~WindowsWindow();
 
-			void OnUpdate() override;
+			virtual void OnUpdate() override;
 
-			inline uint32_t GetWidth() const override { return m_Data.Width; }
-			inline uint32_t GetHeight() const override { return m_Data.Height; }
+			inline virtual uint32_t GetWidth() const override { return m_Data.Width; }
+			inline virtual uint32_t GetHeight() const override { return m_Data.Height; }
 
-			inline void SetEventCallback(const EventCallbackFn& callback) override { m_Data.EventCallback = callback; }
+			inline virtual void SetEventCallback(const EventCallbackFn& callback) override { m_Data.EventCallback = callback; }
 
 			void SetVSync(bool enabled) override;
 			bool IsVSync() const override;

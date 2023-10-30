@@ -13,7 +13,7 @@ namespace Yakreb {
 	class Application {
 		public:
 			Application(const std::string &name = "Yakreb Application");
-			virtual ~Application();
+			virtual ~Application() = default;
 
 			void OnEvent(Event& event);
 

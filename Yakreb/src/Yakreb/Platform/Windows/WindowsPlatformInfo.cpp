@@ -15,7 +15,7 @@ namespace Yakreb {
 	WindowsPlatformInfo::WindowsPlatformInfo() {
         PlatformInfo::s_OSShortName = "Windows";
 
-        RTL_OSVERSIONINFOEXW native;
+        RTL_OSVERSIONINFOEXW native{ 0 };
         native.dwOSVersionInfoSize = sizeof(native);
 
         fnRtlGetVersion RtlGetVersion;

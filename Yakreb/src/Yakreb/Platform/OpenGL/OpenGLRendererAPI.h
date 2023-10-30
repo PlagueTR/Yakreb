@@ -9,6 +9,8 @@ namespace Yakreb {
 
 			virtual void SetClearColorImpl(const glm::vec4& color) override;
 			virtual void ClearImpl() override;
+
+			virtual void DrawIndexedImpl(const VertexArray* vertexArray) override;
 	};
 
 }

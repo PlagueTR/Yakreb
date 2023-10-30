@@ -53,7 +53,7 @@ namespace Yakreb {
 
 			std::string ToString() const override {
 				std::stringstream ss;
-				ss << "KeyTypedEvent: " << GetKeyName(m_KeyCode);
+				ss << "KeyTypedEvent: " << GetTypedUnicode(m_KeyCode);
 				return ss.str();
 			}
 

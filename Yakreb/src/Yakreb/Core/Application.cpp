@@ -5,7 +5,8 @@
 #include "Yakreb/Core/GameTimer.h"
 #include "Yakreb/Core/GameTime.h"
 
-#include "Yakreb/Renderer/RendererAPI.h"
+#include "Yakreb/Renderer/RenderCommand.h"
+#include "Yakreb/Renderer/Renderer.h"
 
 namespace Yakreb {
 
@@ -21,10 +22,6 @@ namespace Yakreb {
 
 		m_ImGuiLayer = new ImGuiLayer("Core ImGui");
 		PushOverlay(m_ImGuiLayer);
-
-	}
-
-	Application::~Application() {
 
 	}
 
@@ -82,53 +79,8 @@ namespace Yakreb {
 			for (Layer* layer : m_LayerStack)
 				layer->OnImGuiRender();
 
-			// Other rendering
-			{
-				frac += speed * GameTime::GetScaledDeltaTime();
-				if (frac > 1.0f) { frac -= 1.0f; state++; };
-
-				switch (state) {
-					case 0:
-						clearColor.r = 1.0f;
-						clearColor.g = frac;
-						clearColor.b = 0.0f;
-						break;
-					case 1:
-						clearColor.r = 1.0f - frac;
-						clearColor.g = 1.0f;
-						clearColor.b = 0.0f;
-						break;
-					case 2:
-						clearColor.r = 0.0f;
-						clearColor.g = 1.0f;
-						clearColor.b = frac;
-						break;
-					case 3:
-						clearColor.r = 0.0f;
-						clearColor.g = 1.0f - frac;
-						clearColor.b = 1.0f;
-						break;
-					case 4:
-						clearColor.r = frac;
-						clearColor.g = 0.0f;
-						clearColor.b = 1.0f;
-						break;
-					case 5:
-						clearColor.r = 1.0f;
-						clearColor.g = 0.0f;
-						clearColor.b = 1.0f - frac;
-						break;
-					default:
-						clearColor.r = 1.0f;
-						clearColor.g = frac;
-						clearColor.b = 0.0f;
-						state = 0;
-				}
-
-				RendererAPI::SetClearColor(clearColor);
-				RendererAPI::Clear();
-
-			}
+			// Temporary
+			// Other rendering should happen here
 
 			m_ImGuiLayer->EndRender();
 

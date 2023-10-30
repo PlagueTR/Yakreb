@@ -6,6 +6,10 @@
 
 namespace Yakreb {
 
+	namespace detail::Input {
+		static char unicodeBuffer[5] = "";
+	}
+
 	typedef enum class KeyCode : uint16_t {
 		Space = 32,
 		Apostrophe = 39, /* ' */
@@ -138,6 +142,12 @@ namespace Yakreb {
 		RightSuper = 347,
 		Menu = 348
 	} Key;
+
+	static const char* GetTypedUnicode(const KeyCode keycode) {
+		if (static_cast<uint32_t>(keycode) <= 0x10FFFF)
+			std::snprintf(detail::Input::unicodeBuffer, sizeof(5), "%c", static_cast<char>(keycode));
+		return detail::Input::unicodeBuffer;
+	}
 
 	constexpr const char* GetKeyName(const KeyCode keycode) {
 		switch (keycode)
@@ -272,7 +282,7 @@ namespace Yakreb {
 			case KeyCode::Menu:				return "MENU";
 		}
 
-		YGE_CORE_DEBUG_ERROR("Unknown keycode ()!", (int)keycode);
+		YGE_CORE_DEBUG_ERROR("Unknown KeyCode ({})!", (int)keycode);
 		return "";
 	}
 

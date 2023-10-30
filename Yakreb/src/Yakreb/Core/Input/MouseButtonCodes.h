@@ -35,7 +35,7 @@ namespace Yakreb {
 		case ButtonCode::Button7: return "MB8";
 		}
 
-		YGE_CORE_DEBUG_ERROR("Unknown keycode ()!", (int)buttoncode);
+		YGE_CORE_DEBUG_ERROR("Unknown ButtonCode ({})!", (int)buttoncode);
 		return "";
 	}
 

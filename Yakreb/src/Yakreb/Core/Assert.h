@@ -16,11 +16,16 @@
 #elif defined(YGE_RELEASE)
 	#define YGE_DEBUGBREAK
 	#define YGE_ENABLE_LOGS
+	#define YGE_ENABLE_LOG_ONLY_ASSERTS
 #elif defined(YGE_DIST)
 	#define YGE_DEBUGBREAK
+	#define YGE_ENABLE_LOG_ONLY_ASSERTS
 #endif
 
 #ifdef YGE_ENABLE_ASSERTS
+	#define YGE_CORE_ASSERT(condition, ...) { if(!(condition)) { ::Yakreb::Log::PrintMessage(::Yakreb::Log::Type::Core, ::Yakreb::Log::Level::Error, "Assertion Failed: {0}", __VA_ARGS__); YGE_DEBUGBREAK; } }
+	#define YGE_ASSERT(condition, ...) { if(!(condition)) { ::Yakreb::Log::PrintMessage(::Yakreb::Log::Type::Client, ::Yakreb::Log::Level::Error, "Assertion Failed: {0}", __VA_ARGS__); YGE_DEBUGBREAK; } }
+#elif defined(YGE_ENABLE_LOG_ONLY_ASSERTS)
 	#define YGE_CORE_ASSERT(condition, ...) { if(!(condition)) { ::Yakreb::Log::PrintMessage(::Yakreb::Log::Type::Core, ::Yakreb::Log::Level::Error, "Assertion Failed: {0}", __VA_ARGS__); YGE_DEBUGBREAK; } }
 	#define YGE_ASSERT(condition, ...) { if(!(condition)) { ::Yakreb::Log::PrintMessage(::Yakreb::Log::Type::Client, ::Yakreb::Log::Level::Error, "Assertion Failed: {0}", __VA_ARGS__); YGE_DEBUGBREAK; } }
 #else

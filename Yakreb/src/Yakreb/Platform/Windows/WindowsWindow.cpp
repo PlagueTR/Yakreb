@@ -1,27 +1,25 @@
 #include "yakrebpch.h"
-#include "LinuxWindow.h"
+#include "WindowsWindow.h"
 
 #include "Yakreb/Core/Events/ApplicationEvent.h"
 #include "Yakreb/Core/Events/KeyEvent.h"
 #include "Yakreb/Core/Events/MouseEvent.h"
 
-#include "Yakreb/Renderer/RendererAPI.h"
-
-#include "Platform/OpenGL/OpenGLContext.h"
+#include "Yakreb/Platform/OpenGL/OpenGLContext.h"
 
 #include <GLFW/glfw3.h>
 
 namespace Yakreb {
 
-	LinuxWindow::LinuxWindow(const WindowProperties& properties) {
+	WindowsWindow::WindowsWindow(const WindowProperties& properties) {
 		Init(properties);
 	}
 
-	LinuxWindow::~LinuxWindow() {
+	WindowsWindow::~WindowsWindow() {
 		Shutdown();
 	}
 
-	void LinuxWindow::Init(const WindowProperties& properties) {
+	void WindowsWindow::Init(const WindowProperties& properties) {
 		m_Data.Title = properties.Title;
 		m_Data.Width = properties.Width;
 		m_Data.Height = properties.Height;
@@ -34,7 +32,7 @@ namespace Yakreb {
 			int success = glfwInit();
 			YGE_CORE_ASSERT(success, "Coult not initialize GLFW!");
 
-			glfwSetErrorCallback(LinuxWindow::GLFWErrorCallback);
+			glfwSetErrorCallback(WindowsWindow::GLFWErrorCallback);
 		}
 
 		m_Window = glfwCreateWindow((int)m_Data.Width, (int)m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
@@ -44,7 +42,8 @@ namespace Yakreb {
 
 		switch (RendererAPI::GetAPI()) {
 			default:
-				YGE_CORE_ERROR("{}", "Renderer API was set to None, defaulting to OpenGL");
+				YGE_CORE_ASSERT("{}", CoreError::YGE_NONE_RENDERER_API);
+				RendererAPI::SetAPI(RendererAPI::API::OpenGL);
 				[[fallthrough]];
 			case RendererAPI::API::OpenGL:
 				m_Data.API = RendererAPI::API::OpenGL;
@@ -60,7 +59,7 @@ namespace Yakreb {
 		// GLFW callbacks
 
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height) {
-			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+			WindowData& data = *(WindowData *)glfwGetWindowUserPointer(window);
 			data.Width = (uint32_t)width;
 			data.Height = (uint32_t)height;
 
@@ -100,7 +99,7 @@ namespace Yakreb {
 		glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int key) {
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
-			KeyTypedEvent event(static_cast<KeyCode>(key));
+			KeyTypedEvent event(static_cast<KeyCode>( key));
 			data.EventCallback(event);
 		});
 
@@ -137,7 +136,7 @@ namespace Yakreb {
 
 	}
 
-	void LinuxWindow::Shutdown() {
+	void WindowsWindow::Shutdown() {
 		glfwDestroyWindow(m_Window);
 		s_GLFWWindowCount--;
 		if (!s_GLFWWindowCount) {
@@ -146,21 +145,21 @@ namespace Yakreb {
 		}
 	}
 
-	void LinuxWindow::GLFWErrorCallback(int error, const char* description) {
+	void WindowsWindow::GLFWErrorCallback(int error, const char* description) {
 		YGE_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
 	}
 
-	void LinuxWindow::OnUpdate() {
+	void WindowsWindow::OnUpdate() {
 		glfwPollEvents();
 		m_Context->SwapBuffers();
 	}
 
-	void LinuxWindow::SetVSync(bool enabled) {
+	void WindowsWindow::SetVSync(bool enabled) {
 		glfwSwapInterval(enabled ? 1 : 0);
 		m_Data.VSync = enabled;
 	}
 
-	bool LinuxWindow::IsVSync() const {
+	bool WindowsWindow::IsVSync() const {
 		return m_Data.VSync;
 	}
 

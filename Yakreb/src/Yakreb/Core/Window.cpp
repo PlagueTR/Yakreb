@@ -2,9 +2,9 @@
 #include "Window.h"
 
 #ifdef YGE_PLATFORM_WINDOWS
-	#include "Platform/Windows/WindowsWindow.h"
+	#include "Yakreb/Platform/Windows/WindowsWindow.h"
 #elif defined(YGE_PLATFORM_LINUX)
-	#include "Platform/Linux/LinuxWindow.h"
+	#include "Yakreb/Platform/Linux/LinuxWindow.h"
 #endif
 
 namespace Yakreb {

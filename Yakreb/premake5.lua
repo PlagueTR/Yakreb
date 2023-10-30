@@ -16,8 +16,8 @@ project "Yakreb"
     }
 
     removefiles {
-        "src/Platform/Windows/**",
-        "src/Platform/Linux/**"
+        "src/Yakreb/Platform/Windows/**",
+        "src/Yakreb/Platform/Linux/**"
     }
 
     defines {
@@ -44,7 +44,7 @@ project "Yakreb"
         systemversion "latest"
 
         files {
-            "src/Platform/Windows/**"
+            "src/Yakreb/Platform/Windows/**"
         }
 
         defines {
@@ -59,7 +59,7 @@ project "Yakreb"
         pic "on"
 
         files {
-            "src/Platform/Linux/**"
+            "src/Yakreb/Platform/Linux/**"
         }
 
         defines {

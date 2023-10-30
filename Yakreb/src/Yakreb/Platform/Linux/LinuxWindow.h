@@ -3,7 +3,7 @@
 #include "Yakreb/Core/Window.h"
 #include "Yakreb/Renderer/GraphicsContext.h"
 
-#include "Yakreb/Renderer/RendererAPI.h"
+#include "Yakreb/Renderer/Renderer.h"
 
 struct GLFWwindow;
 
