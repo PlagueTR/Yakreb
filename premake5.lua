@@ -1,4 +1,3 @@
-require "vendor/premake/ext/codeblocks"
 dofile "Scripts/Premake/generate_version.lua"
 
 include "Dependencies.lua"
