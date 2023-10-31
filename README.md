@@ -1,10 +1,10 @@
-# Yakreb Game Engine
+# Yakreb Engine
 
 [![GitHub license: MIT](https://img.shields.io/badge/license-MIT%20License-green)](https://raw.githubusercontent.com/PlagueTR/Yakreb/main/LICENSE)
 
 **I do not plan on accepting other contributions to the main repository as I want to learn how everything works.**
 
-## 📖 What's Yakreb Game Engine?
+## 📖 What's Yakreb Engine?
 
 Yakreb is a simple game engine being written for learning purposes and personal use.
 
