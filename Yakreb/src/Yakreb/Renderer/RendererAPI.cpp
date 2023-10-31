@@ -14,7 +14,7 @@ namespace Yakreb {
 
 		switch (api) {
 			default:
-				YGE_CORE_ASSERT("{}", CoreError::YGE_NONE_RENDERER_API);
+				YGE_CORE_ASSERT(false, CoreError::YGE_NONE_RENDERER_API);
 				[[fallthrough]];
 			case API::OpenGL:
 				s_API = API::OpenGL;

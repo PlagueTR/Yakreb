@@ -23,10 +23,8 @@ namespace Yakreb {
 			case ShaderDataType::Mat3:		return sizeof(float) * 3 * 3;
 			case ShaderDataType::Mat4:		return sizeof(float) * 4 * 4;
 			case ShaderDataType::Bool:		return sizeof(bool);
+			default: YGE_CORE_ASSERT(false, "Unknown ShaderDataType!"); return 0;
 		}
-
-		YGE_CORE_ASSERT(false, "Unknown ShaderDataType!");
-		return 0;
 	}
 
 	struct BufferElement {
@@ -52,10 +50,8 @@ namespace Yakreb {
 				case ShaderDataType::Mat3:		return 3 * 3;
 				case ShaderDataType::Mat4:		return 4 * 4;
 				case ShaderDataType::Bool:		return 1;
+				default: YGE_CORE_ASSERT(false, "Unknown ShaderDataType!"); return 0;
 			}
-
-			YGE_CORE_ASSERT(false, "Unknown ShaderDataType!");
-			return 0;
 		}
 
 	};

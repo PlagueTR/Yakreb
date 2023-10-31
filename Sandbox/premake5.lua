@@ -23,6 +23,10 @@ project "Sandbox"
         "Yakreb"
     }
 
+    postbuildcommands {
+        "{COPYDIR} \"../Resources/Sandbox/\" \"../bin/"..outputdir.."/Sandbox/\""
+    }
+
     filter "system:windows"
         systemversion "latest"
 

@@ -143,11 +143,28 @@ namespace Yakreb {
 		Menu = 348
 	} Key;
 
-	static const char* GetTypedUnicode(const KeyCode keycode) {
-		if (static_cast<uint32_t>(keycode) <= 0x10FFFF)
-			std::snprintf(detail::Input::unicodeBuffer, sizeof(5), "%c", static_cast<char>(keycode));
-		return detail::Input::unicodeBuffer;
-	}
+	static const char* GetUTF8(const unsigned int unicode) {
+		std::memset(detail::Input::unicodeBuffer, 0, 5);
+		if (unicode <= 0x7F) { 
+			detail::Input::unicodeBuffer[0] = unicode;
+		}
+		else if (unicode <= 0x7FF) { 
+			detail::Input::unicodeBuffer[0] = (unicode >> 6) + 192;
+			detail::Input::unicodeBuffer[1] = (unicode & 63) + 128;
+		}
+		else if (0xd800 <= unicode && unicode <= 0xdfff) {} // Invalid block of utf8
+		else if (unicode <= 0xFFFF) { 
+			detail::Input::unicodeBuffer[0] = (unicode >> 12) + 224;
+			detail::Input::unicodeBuffer[1] = ((unicode >> 6) & 63) + 128;
+			detail::Input::unicodeBuffer[2] = (unicode & 63) + 128;
+		}
+		else if (unicode <= 0x10FFFF) {
+			detail::Input::unicodeBuffer[0] = (unicode >> 18) + 240;
+			detail::Input::unicodeBuffer[1] = ((unicode >> 12) & 63) + 128;
+			detail::Input::unicodeBuffer[2] = ((unicode >> 6) & 63) + 128;
+			detail::Input::unicodeBuffer[3] = (unicode & 63) + 128;
+		}
+		return detail::Input::unicodeBuffer;	}
 
 	constexpr const char* GetKeyName(const KeyCode keycode) {
 		switch (keycode)

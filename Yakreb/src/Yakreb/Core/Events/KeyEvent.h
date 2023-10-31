@@ -53,7 +53,7 @@ namespace Yakreb {
 
 			std::string ToString() const override {
 				std::stringstream ss;
-				ss << "KeyTypedEvent: " << GetTypedUnicode(m_KeyCode);
+				ss << "KeyTypedEvent: " << GetUTF8(static_cast<const unsigned int>(m_KeyCode));
 				return ss.str();
 			}
 

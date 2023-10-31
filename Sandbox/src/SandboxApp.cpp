@@ -31,35 +31,6 @@ class MyLayer : public Yakreb::Layer {
 			Yakreb::IndexBuffer* indexBuffer = Yakreb::IndexBuffer::Create(indices, 3);
 			m_VertexArray->SetIndexBuffer(indexBuffer);
 
-			std::string vertexSrc = R"(
-				#version 330 core
-			
-				layout(location = 0) in vec3 a_Position;
-				layout(location = 1) in vec4 a_Color;
-
-				uniform mat4 u_ViewProjection;
-				uniform mat4 u_Transform;
-
-				out vec4 v_Color;
-
-				void main(){
-					v_Color = a_Color;
-					gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
-				}
-			)";
-
-			std::string fragmentSrc = R"(
-				#version 330 core
-		
-				layout(location = 0) out vec4 color;
-
-				in vec4 v_Color;
-
-				void main(){
-					color = v_Color;
-				}
-			)";
-
 			m_SquareVA = Yakreb::VertexArray::Create();
 			float squareVertices[3 * 4] = {
 				-0.75f, -0.75f, 0.0f,
@@ -78,32 +49,9 @@ class MyLayer : public Yakreb::Layer {
 			Yakreb::IndexBuffer *squareIB = Yakreb::IndexBuffer::Create(squareIndices, 6);
 			m_SquareVA->SetIndexBuffer(squareIB);
 
-			std::string blueShaderVertexSrc = R"(
-				#version 330 core
+			m_Shader = Yakreb::Shader::Create("Resources/Shaders/ColorShader.glsl");
 
-				layout (location = 0) in vec3 a_Position;
-
-				uniform mat4 u_ViewProjection;
-				uniform mat4 u_Transform;
-
-				void main(){
-					gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
-				}
-			)";
-
-			std::string blueShaderFragmentSrc = R"(
-				#version 330 core
-
-				layout (location = 0) out vec4 color;
-
-				void main(){
-					color = vec4(0.1, 0.1, 0.9, 1.0);
-				}
-			)";
-
-			m_Shader = Yakreb::Shader::Create("Shader", vertexSrc, fragmentSrc);
-
-			m_BlueShader = Yakreb::Shader::Create("BlueShader", blueShaderVertexSrc, blueShaderFragmentSrc);
+			m_BlueShader = Yakreb::Shader::Create("Resources/Shaders/BlueShader.glsl");
 
 		}
 

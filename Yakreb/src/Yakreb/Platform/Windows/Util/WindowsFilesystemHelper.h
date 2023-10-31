@@ -8,8 +8,8 @@ namespace Yakreb {
 			WindowsFilesystemHelper();
 
 		protected:
-			inline virtual std::filesystem::file_time_type GetFileCreationTimeImpl(const std::filesystem::path& path) override;
-			inline virtual void SetFileCreationTimeImpl(const std::filesystem::path& path, const std::filesystem::file_time_type& creationTime) override;
+			virtual inline std::filesystem::file_time_type GetFileCreationTimeImpl(const std::filesystem::path& path) override;
+			virtual inline void SetFileCreationTimeImpl(const std::filesystem::path& path, const std::filesystem::file_time_type& creationTime) override;
 
 	};
 

@@ -34,7 +34,7 @@ namespace Yakreb {
 			virtual const std::string& GetName() const override { return m_Name; }
 
 		private:
-			std::string ReadFile(const std::string& path);
+			std::string ReadFile(const std::filesystem::path& path);
 			std::unordered_map<GLenum, std::string> ProcessFile(const std::string& source);
 			void Compile(const std::unordered_map<GLenum, std::string>& shaderSources);
 			uint32_t m_RendererID;

@@ -1,6 +1,8 @@
 #include "yakrebpch.h"
 #include "OpenGLShader.h"
 
+#include "Yakreb/Core/Util/FilesystemHelper.h"
+
 #include <glad/glad.h>
 
 namespace Yakreb {
@@ -14,14 +16,11 @@ namespace Yakreb {
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& path) {
-		std::string source = ReadFile(path);
+		std::filesystem::path filePath = std::filesystem::absolute(FilesystemHelper::GetExecutableDirectoryPath() / (std::filesystem::path(path).make_preferred()));
+		std::string source = ReadFile(filePath);
 		auto shaderSources = ProcessFile(source);
 		Compile(shaderSources);
-
-		auto ls = path.find_last_of("/\\"), ld = path.rfind(".");
-		ls = ls == std::string::npos ? 0 : ls + 1;
-		auto count = ld == std::string::npos ? path.size() - ls : ld - ls;
-		m_Name = path.substr(ls, count);
+		m_Name = filePath.stem().string();
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc) : m_Name(name) {
@@ -151,11 +150,15 @@ namespace Yakreb {
 		glUniform1i(location, value);
 	}
 
-	std::string OpenGLShader::ReadFile(const std::string& path) {
+	std::string OpenGLShader::ReadFile(const std::filesystem::path& path) {
 		std::string source;
 		std::ifstream in(path, std::ios::in | std::ios::binary);
-		YGE_CORE_ASSERT(in, "Could not open file!");
-		if (in) {
+		if (!in) {
+			YGE_CORE_ERROR("Could not open file: {}", path.string());
+			YGE_CORE_ERROR("Reason: {}", std::strerror(errno));
+			YGE_CORE_ASSERT(false, "Could not open file!");
+		}
+		else if (in) {
 			in.seekg(0, std::ios::end);
 			source.resize(in.tellg());
 			in.seekg(0, std::ios::beg);

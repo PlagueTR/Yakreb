@@ -18,10 +18,8 @@ namespace Yakreb {
 			case ShaderDataType::Mat3:     return GL_FLOAT;
 			case ShaderDataType::Mat4:     return GL_FLOAT;
 			case ShaderDataType::Bool:     return GL_BOOL;
+			default: YGE_CORE_ASSERT(false, "Unknown ShaderDataType!"); return 0;
 		}
-
-		YGE_CORE_ASSERT(false, "Unknown ShaderDataType!");
-		return 0;
 	}
 
 	OpenGLVertexArray::OpenGLVertexArray() {
