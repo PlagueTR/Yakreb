@@ -20,13 +20,15 @@ Yakreb/src/Yakreb/Core/Version.h
 **.vcxproj.filters
 **.vcxproj.user
 
-# Codeblocks files
+# CodeLite files and folders
 
+.build-debug/
+.codelite/
+Makefile
 **.workspace
-**.workspace.layout
-**.cbp
-**.depend
-**.layout
+**.mk
+**.project
+**.txt
 
 # Files we don't want to track
 

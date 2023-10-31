@@ -24,7 +24,7 @@ project "Sandbox"
     }
 
     postbuildcommands {
-        "{COPYDIR} \"../Resources/Sandbox/\" \"../bin/"..outputdir.."/Sandbox/\""
+        "{COPYDIR} \"../Resources/Sandbox/\"* \"../bin/"..outputdir.."/Sandbox/\""
     }
 
     filter "system:windows"

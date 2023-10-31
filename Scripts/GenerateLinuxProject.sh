@@ -2,7 +2,7 @@
 
 pushd "$(dirname "$0")/../" > /dev/null
 
-./vendor/premake/bin/premake5 codeblocks
+./vendor/premake/bin/premake5 codelite
 
 popd > /dev/null
 

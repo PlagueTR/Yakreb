@@ -10,7 +10,7 @@ Yakreb is a simple game engine being written for learning purposes and personal 
 
 Yakreb is currently compatible with both Windows and Linux. However; it is being developed mainly on Windows, for Windows. Thus, while it runs on Linux, I can not guarantee the same level of support or performance on Linux systems.
 
-Testing and development on Windows is done using Visual Studio 2022, whereas on Linux, CodeBlocks 20.03 with the GCC compiler is used for testing.<br>
+Testing and development on Windows is done using Visual Studio 2022, whereas on Linux, CodeLite 17.0.0 with the GCC compiler is used for testing.<br>
 This project is built with Premake 5 as the primary build system, so while other IDEs may potentially work, their compatibility can't be guaranteed.
 
 ## 📖 Getting Started
@@ -18,7 +18,7 @@ This project is built with Premake 5 as the primary build system, so while other
 **Prerequisites:**
 
 Before you begin, make sure you have Python 3.3 or a later version installed on your system.<br>
-It is highly recommended to have Visual Studio 2019 or later for Windows and CodeBlocks for Linux testing and development.
+It is highly recommended to have Visual Studio 2019 or later for Windows and CodeLite for Linux testing and development.
 
 **Setup:**
 

@@ -2,6 +2,8 @@
 
 #include "Yakreb/Renderer/Shader.h"
 
+#include <filesystem>
+
 typedef unsigned int GLenum;
 
 namespace Yakreb {
