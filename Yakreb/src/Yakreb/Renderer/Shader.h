@@ -6,7 +6,7 @@
 
 namespace Yakreb {
 
-	class Shader {
+	class Shader : public RefCounted {
 		public:
 			virtual ~Shader() = default;
 
@@ -31,8 +31,8 @@ namespace Yakreb {
 
 			virtual const std::string& GetName() const = 0;
 
-			static Shader* Create(const std::string& path);
-			static Shader* Create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc);
+			static Ref<Shader> Create(const std::string& path);
+			static Ref<Shader> Create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc);
 
 		private:
 			uint32_t m_RendererID;

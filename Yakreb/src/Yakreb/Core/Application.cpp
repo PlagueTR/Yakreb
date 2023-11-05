@@ -59,13 +59,6 @@ namespace Yakreb {
 	}
 
 	void Application::Run() {
-
-		int state = 0;
-		float frac = 0.0f;
-		float speed = 1.0f;
-
-		glm::vec4 clearColor = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
-
 		while (m_Running) {
 
 			m_Window->OnUpdate();

@@ -27,6 +27,10 @@
 	#include <unistd.h>
 #endif
 
+#include "Yakreb/Core/Assert.h"
+#include "Yakreb/Core/Core.h"
+#include "Yakreb/Core/Events/Event.h"
 #include "Yakreb/Core/Log/Log.h"
+#include "Yakreb/Core/Memory.h"
 
 #endif

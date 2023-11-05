@@ -38,7 +38,7 @@ namespace Yakreb {
 		glBindVertexArray(0);
 	}
 
-	void OpenGLVertexArray::AddVertexBuffer(const VertexBuffer *vertexBuffer) {
+	void OpenGLVertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer) {
 
 		if (!vertexBuffer->GetLayout().GetElements().size()) {
 			YGE_CORE_ASSERT(false, "Vertex buffer has no layout!");
@@ -61,16 +61,16 @@ namespace Yakreb {
 			index++;
 		}
 
-		m_VertexBuffers.push_back((VertexBuffer *)vertexBuffer);
+		m_VertexBuffers.push_back(vertexBuffer);
 
 	}
 
-	void OpenGLVertexArray::SetIndexBuffer(const IndexBuffer* indexBuffer) {
+	void OpenGLVertexArray::SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer) {
 
 		glBindVertexArray(m_RendererID);
 		indexBuffer->Bind();
 
-		m_IndexBuffer = (IndexBuffer *)indexBuffer;
+		m_IndexBuffer = indexBuffer;
 
 	}
 

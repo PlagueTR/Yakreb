@@ -7,7 +7,7 @@
 
 namespace Yakreb {
 
-	VertexArray* VertexArray::Create() {
+	Ref<VertexArray> VertexArray::Create() {
 
 		switch (RendererAPI::GetAPI()) {
 			default:
@@ -15,7 +15,7 @@ namespace Yakreb {
 				RendererAPI::SetAPI(RendererAPI::API::OpenGL);
 				[[fallthrough]];
 			case RendererAPI::API::OpenGL:
-				return new OpenGLVertexArray();
+				return Ref<OpenGLVertexArray>::Create();
 		}
 
 	}

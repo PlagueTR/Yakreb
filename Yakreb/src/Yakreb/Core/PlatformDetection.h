@@ -37,3 +37,16 @@
 #else
 	#error "Unknown platform!"
 #endif
+
+// Compiler detection using predefined macros
+
+#ifdef __clang__
+	#define YGE_COMPILER_CLANG
+	#warning "Yakreb does not officially support Clang, consider using gcc"
+#elif defined(_MSC_VER)
+	#define YGE_COMPILER_MSVC
+#elif defined(__GNUG__)
+	#define YGE_COMPILER_GCC
+#else
+	#error "Unknown compiler!"
+#endif

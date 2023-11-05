@@ -17,7 +17,7 @@ namespace Yakreb {
 	void Log::Init() {
 
 		//How many log files to keep
-		int maxLogCount = 9;
+		unsigned int maxLogCount = 9;
 
 		std::string latestLog = "latest.log";
 		std::filesystem::path logsDirectory = FilesystemHelper::GetExecutableDirectoryPath() / "logs";

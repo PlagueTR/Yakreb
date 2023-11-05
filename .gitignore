@@ -23,6 +23,8 @@ Yakreb/src/Yakreb/Core/Version.h
 # CodeLite files and folders
 
 .build-debug/
+.build-release/
+.build-dist/
 .codelite/
 Makefile
 **.workspace

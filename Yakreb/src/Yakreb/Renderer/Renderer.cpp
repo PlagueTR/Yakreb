@@ -13,10 +13,10 @@ namespace Yakreb {
 
 	}
 
-	void Renderer::Submit(const Shader* shader, const VertexArray* vertexArray, const glm::mat4& transform) {
+	void Renderer::Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray, const glm::mat4& transform) {
 		shader->Bind();
-		((Shader *)shader)->SetMat4("u_ViewProjection", s_SceneData->ViewProjectionMatrix);
-		((Shader *)shader)->SetMat4("u_Transform", transform);
+		(static_cast<Ref<Shader>>(shader))->SetMat4("u_ViewProjection", s_SceneData->ViewProjectionMatrix);
+		(static_cast<Ref<Shader>>(shader))->SetMat4("u_Transform", transform);
 
 		vertexArray->Bind();
 

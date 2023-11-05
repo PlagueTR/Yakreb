@@ -9,10 +9,12 @@ namespace Yakreb {
 
 	void InitializeCore() {
 
-		// For now, just set the renderer API to OpenGL
-		RendererAPI::SetAPI(RendererAPI::API::OpenGL);
+		Allocator::Init();
 
 		Log::Init();
+
+		// For now, just set the renderer API to OpenGL
+		RendererAPI::SetAPI(RendererAPI::API::OpenGL);
 
 		// We always want to log these
 		YGE_CORE_INFO("Yakreb Engine - {0} - {1} Build", YGE_VERSION, YGE_BUILD_CONFIGURATION);

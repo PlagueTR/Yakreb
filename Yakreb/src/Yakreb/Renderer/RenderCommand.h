@@ -14,7 +14,7 @@ namespace Yakreb {
 				RendererAPI::Clear();
 			}
 
-			inline static void DrawIndexed(const VertexArray* vertexArray) {
+			inline static void DrawIndexed(const Ref<VertexArray>& vertexArray) {
 				RendererAPI::DrawIndexed(vertexArray);
 			}
 

@@ -17,7 +17,7 @@ namespace Yakreb {
 		}
 	}
 
-	VertexBuffer* VertexBuffer::Create(float* vertices, uint32_t count) {
+	Ref<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t count) {
 
 		switch (RendererAPI::GetAPI()) {
 			default:
@@ -25,12 +25,12 @@ namespace Yakreb {
 				RendererAPI::SetAPI(RendererAPI::API::OpenGL);
 				[[fallthrough]];
 			case RendererAPI::API::OpenGL:
-				return new OpenGLVertexBuffer(vertices, count);
+				return Ref<OpenGLVertexBuffer>::Create(vertices, count);
 		}
 
 	}
 
-	IndexBuffer* IndexBuffer::Create(uint32_t* indices, uint32_t count) {
+	Ref<IndexBuffer> IndexBuffer::Create(uint32_t* indices, uint32_t count) {
 
 		switch (RendererAPI::GetAPI()) {
 			default:
@@ -38,7 +38,7 @@ namespace Yakreb {
 				RendererAPI::SetAPI(RendererAPI::API::OpenGL);
 				[[fallthrough]];
 			case RendererAPI::API::OpenGL:
-				return new OpenGLIndexBuffer(indices, count);
+				return Ref<OpenGLIndexBuffer>::Create(indices, count);
 		}
 
 	}

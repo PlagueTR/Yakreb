@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include "Yakreb/Core/Ref.h"
 
 #define BIT(x) (1 << (x))
 

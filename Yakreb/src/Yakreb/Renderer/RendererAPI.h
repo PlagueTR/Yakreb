@@ -25,7 +25,7 @@ namespace Yakreb {
 			inline static void SetClearColor(const glm::vec4& color) { s_Instance->SetClearColorImpl(color); }
 			inline static void Clear() { s_Instance->ClearImpl(); }
 
-			inline static void DrawIndexed(const VertexArray* vertexArray) { s_Instance->DrawIndexedImpl(vertexArray); }
+			inline static void DrawIndexed(const Ref<VertexArray>& vertexArray) { s_Instance->DrawIndexedImpl(vertexArray); }
 
 			inline static API GetAPI() { return s_API; }
 			static void SetAPI(API api);
@@ -36,7 +36,7 @@ namespace Yakreb {
 			virtual void SetClearColorImpl(const glm::vec4& color) = 0;
 			virtual void ClearImpl() = 0;
 
-			virtual void DrawIndexedImpl(const VertexArray* vertexArray) = 0;
+			virtual void DrawIndexedImpl(const Ref<VertexArray>& vertexArray) = 0;
 
 			static RendererAPI* s_Instance;
 			static API s_API;

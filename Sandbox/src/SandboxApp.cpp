@@ -5,8 +5,18 @@
 
 class MyLayer : public Yakreb::Layer {
 	public:
+		struct Xstr : public Yakreb::RefCounted {
+			int num;
+			std::string name;
+			Xstr(int n, std::string nn) : num(n), name(nn) {}
+		};
+
 		MyLayer(const std::string& name) : Layer(name) {
+
 			YGE_INFO("Creating layer: {0}", name);
+
+			Yakreb::Ref<Xstr> x = Yakreb::Ref<Xstr>::Create(0, "hello");
+			Yakreb::Ref<Xstr> x2 = x;
 
 			m_OrthoCamera = Yakreb::OrthographicCamera(-1.6f, 1.6f, -0.9f, 0.9f);
 
@@ -18,7 +28,7 @@ class MyLayer : public Yakreb::Layer {
 				 0.0f,  0.5f, 0.0f, 0.9f, 0.1f, 0.1f, 1.0f
 			};
 
-			Yakreb::VertexBuffer *vertexBuffer = Yakreb::VertexBuffer::Create(vertices, sizeof(vertices));
+			Yakreb::Ref<Yakreb::VertexBuffer> vertexBuffer = Yakreb::VertexBuffer::Create(vertices, sizeof(vertices));
 			Yakreb::BufferLayout layout = {
 				{Yakreb::ShaderDataType::Float3, "a_Position"},
 				{Yakreb::ShaderDataType::Float4, "a_Color"}
@@ -28,7 +38,7 @@ class MyLayer : public Yakreb::Layer {
 
 			uint32_t indices[3] = { 0, 1, 2 };
 
-			Yakreb::IndexBuffer* indexBuffer = Yakreb::IndexBuffer::Create(indices, 3);
+			Yakreb::Ref<Yakreb::IndexBuffer> indexBuffer = Yakreb::IndexBuffer::Create(indices, 3);
 			m_VertexArray->SetIndexBuffer(indexBuffer);
 
 			m_SquareVA = Yakreb::VertexArray::Create();
@@ -39,14 +49,14 @@ class MyLayer : public Yakreb::Layer {
 				-0.75f,  0.75f, 0.0f
 			};
 
-			Yakreb::VertexBuffer *squareVB = Yakreb::VertexBuffer::Create(squareVertices, sizeof(squareVertices));
+			Yakreb::Ref<Yakreb::VertexBuffer> squareVB = Yakreb::VertexBuffer::Create(squareVertices, sizeof(squareVertices));
 			squareVB->SetLayout({
 				{ Yakreb::ShaderDataType::Float3, "a_Position" }
 				});
 
 			m_SquareVA->AddVertexBuffer(squareVB);
 			uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
-			Yakreb::IndexBuffer *squareIB = Yakreb::IndexBuffer::Create(squareIndices, 6);
+			Yakreb::Ref<Yakreb::IndexBuffer> squareIB = Yakreb::IndexBuffer::Create(squareIndices, 6);
 			m_SquareVA->SetIndexBuffer(squareIB);
 
 			m_Shader = Yakreb::Shader::Create("Resources/Shaders/ColorShader.glsl");
@@ -119,6 +129,24 @@ class MyLayer : public Yakreb::Layer {
 		}
 
 		void OnImGuiRender() override {
+			Yakreb::AllocationStats globalMemoryStats = Yakreb::Allocator::GetGlobalAllocationStats();
+			Yakreb::AllocationStatsVec memoryStatsByCategories = Yakreb::Allocator::GetAllocationStatsVec();
+			ImGui::Begin("Memory Statistics");
+			ImGui::Text("Total allocated: %lu bytes", globalMemoryStats.TotalAllocated);
+			ImGui::Text("Total freed: %lu bytes", globalMemoryStats.TotalFreed);
+			ImGui::Text("In use: %lu bytes", globalMemoryStats.TotalAllocated - globalMemoryStats.TotalFreed);
+			if (memoryStatsByCategories.size()) {
+				ImGui::Separator();
+				ImGui::Text("Memory Usage by Categories");
+				for (auto& [category, stats] : memoryStatsByCategories) {
+					ImGui::Text("");
+					ImGui::Text("%s", category);
+					ImGui::Text("Total allocated: %lu bytes", stats.TotalAllocated);
+					ImGui::Text("Total freed: %lu bytes", stats.TotalFreed);
+					ImGui::Text("In use: %lu bytes", stats.TotalAllocated - stats.TotalFreed);
+				}
+			}
+			ImGui::End();
 			
 		}
 
@@ -129,16 +157,16 @@ class MyLayer : public Yakreb::Layer {
 	private:
 		float m_rgb = 30.0f / 255.0f;
 
-		Yakreb::Shader* m_Shader;
-		Yakreb::VertexArray* m_VertexArray;
+		Yakreb::Ref<Yakreb::Shader> m_Shader;
+		Yakreb::Ref<Yakreb::VertexArray> m_VertexArray;
 
 		glm::vec3 m_SquarePosition = glm::vec3(0.0f);
 		float m_SquareRotation = 0.0f;
 		float m_SquareMoveSpeed = 1.0f;
 		float m_SquareRotateSpeed = 30.0f;
 
-		Yakreb::Shader* m_BlueShader;
-		Yakreb::VertexArray* m_SquareVA;
+		Yakreb::Ref<Yakreb::Shader> m_BlueShader;
+		Yakreb::Ref<Yakreb::VertexArray> m_SquareVA;
 
 		Yakreb::OrthographicCamera m_OrthoCamera;
 		float m_CameraMoveSpeed = 2.0f;

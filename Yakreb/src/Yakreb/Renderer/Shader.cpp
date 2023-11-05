@@ -7,7 +7,7 @@
 
 namespace Yakreb {
 
-	Shader* Shader::Create(const std::string& path) {
+	Ref<Shader> Shader::Create(const std::string& path) {
 
 		switch (RendererAPI::GetAPI()) {
 			default:
@@ -15,12 +15,12 @@ namespace Yakreb {
 				RendererAPI::SetAPI(RendererAPI::API::OpenGL);
 				[[fallthrough]];
 			case RendererAPI::API::OpenGL:
-				return new OpenGLShader(path);
+				return Ref<OpenGLShader>::Create(path);
 		}
 
 	}
 
-	Shader* Shader::Create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc) {
+	Ref<Shader> Shader::Create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc) {
 
 		switch (RendererAPI::GetAPI()) {
 			default:
@@ -28,7 +28,7 @@ namespace Yakreb {
 				RendererAPI::SetAPI(RendererAPI::API::OpenGL);
 				[[fallthrough]];
 			case RendererAPI::API::OpenGL:
-				return new OpenGLShader(name, vertexSrc, fragmentSrc);
+				return Ref<OpenGLShader>::Create(name, vertexSrc, fragmentSrc);
 		}
 
 	}
