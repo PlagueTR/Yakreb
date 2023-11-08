@@ -3,14 +3,12 @@
 
 namespace Yakreb {
 
-	class OpenGLGameTimer : public GameTimer {
+	class WindowsGameTimer : public GameTimer {
 		public:
-			OpenGLGameTimer();
-
+			WindowsGameTimer();
 		protected:
 			inline virtual void UpdateGameTimeImpl() override;
 
 	};
-
 
 }

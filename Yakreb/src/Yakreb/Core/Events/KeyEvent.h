@@ -3,8 +3,6 @@
 #include "Yakreb/Core/Events/Event.h"
 #include "Yakreb/Core/Input/KeyCodes.h"
 
-#include <sstream>
-
 namespace Yakreb {
 
 	class KeyEvent : public Event {
@@ -23,10 +21,8 @@ namespace Yakreb {
 
 			inline uint16_t GetRepeatCount() const { return m_RepeatCount; }
 
-			std::string ToString() const override {
-				std::stringstream ss;
-				ss << "KeyPressedEvent: " << GetKeyName(m_KeyCode) << " (" << m_RepeatCount << " repeats)";
-				return ss.str();
+			virtual inline std::string ToString() const override {
+				return fmt::format("KeyPressedEvent: {} ({} repeats)", GetKeyName(m_KeyCode), m_RepeatCount);
 			}
 
 			EVENT_CLASS_TYPE(KeyPressed)
@@ -38,10 +34,8 @@ namespace Yakreb {
 		public:
 			KeyReleasedEvent(const KeyCode keycode) : KeyEvent(keycode) {}
 
-			std::string ToString() const override {
-				std::stringstream ss;
-				ss << "KeyReleasedEvent: " << GetKeyName(m_KeyCode);
-				return ss.str();
+			virtual inline std::string ToString() const override {
+				return fmt::format("KeyReleasedEvent: {}", GetKeyName(m_KeyCode));
 			}
 
 			EVENT_CLASS_TYPE(KeyReleased)
@@ -51,10 +45,8 @@ namespace Yakreb {
 		public:
 			KeyTypedEvent(const KeyCode keycode) : KeyEvent(keycode) {}
 
-			std::string ToString() const override {
-				std::stringstream ss;
-				ss << "KeyTypedEvent: " << GetUTF8(static_cast<const unsigned int>(m_KeyCode));
-				return ss.str();
+			virtual inline std::string ToString() const override {
+				return fmt::format("KeyTypedEvent: {}", GetUTF8(static_cast<const unsigned int>(m_KeyCode)));
 			}
 
 			EVENT_CLASS_TYPE(KeyTyped)

@@ -164,7 +164,8 @@ namespace Yakreb {
 			detail::Input::unicodeBuffer[2] = ((unicode >> 6) & 63) + 128;
 			detail::Input::unicodeBuffer[3] = (unicode & 63) + 128;
 		}
-		return detail::Input::unicodeBuffer;	}
+		return detail::Input::unicodeBuffer;
+	}
 
 	constexpr const char* GetKeyName(const KeyCode keycode) {
 		switch (keycode)

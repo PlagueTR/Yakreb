@@ -28,7 +28,7 @@ namespace Yakreb {
 
 		if (!s_GLFWWindowCount) {
 
-			YGE_CORE_INFO("{}", "Initializing GLFW");
+			YGE_CORE_INFO("Initializing GLFW");
 			int success = glfwInit();
 			YGE_CORE_ASSERT(success, "Coult not initialize GLFW!");
 
@@ -140,7 +140,7 @@ namespace Yakreb {
 		glfwDestroyWindow(m_Window);
 		s_GLFWWindowCount--;
 		if (!s_GLFWWindowCount) {
-			YGE_CORE_INFO("{}", "Terminating GLFW");
+			YGE_CORE_INFO("Terminating GLFW");
 			glfwTerminate();
 		}
 	}

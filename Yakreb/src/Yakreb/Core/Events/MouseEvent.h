@@ -3,8 +3,6 @@
 #include "Yakreb/Core/Events/Event.h"
 #include "Yakreb/Core/Input/MouseButtonCodes.h"
 
-#include <sstream>
-
 namespace Yakreb {
 
 	class MouseMovedEvent : public Event {
@@ -14,10 +12,8 @@ namespace Yakreb {
 			float GetX() const { return m_MouseX; }
 			float GetY() const { return m_MouseY; }
 
-			std::string ToString() const override {
-				std::stringstream ss;
-				ss << "MouseMovedEvent: " << m_MouseX << ", " << m_MouseY;
-				return ss.str();
+			virtual inline std::string ToString() const override {
+				return fmt::format("MouseMovedEvent: {}, {}", m_MouseX, m_MouseY);
 			}
 
 			EVENT_CLASS_TYPE(MouseMoved)
@@ -33,11 +29,8 @@ namespace Yakreb {
 			float GetXOffset() const { return m_XOffset; }
 			float GetYOffset() const { return m_YOffset; }
 
-			std::string ToString() const override
-			{
-				std::stringstream ss;
-				ss << "MouseScrolledEvent: " << GetXOffset() << ", " << GetYOffset();
-				return ss.str();
+			virtual inline std::string ToString() const override {
+				return fmt::format("MouseScrolledEvent: {}, {}", m_XOffset, m_YOffset);
 			}
 
 			EVENT_CLASS_TYPE(MouseScrolled)
@@ -61,11 +54,8 @@ namespace Yakreb {
 		public:
 			MouseButtonPressedEvent(const ButtonCode button) : MouseButtonEvent(button) {}
 
-			std::string ToString() const override
-			{
-				std::stringstream ss;
-				ss << "MouseButtonPressedEvent: " << GetButtonName(m_Button);
-				return ss.str();
+			virtual inline std::string ToString() const override {
+				return fmt::format("MouseButtonPressedEvent: {}", GetButtonName(m_Button));
 			}
 
 			EVENT_CLASS_TYPE(MouseButtonPressed)
@@ -75,11 +65,8 @@ namespace Yakreb {
 		public:
 			MouseButtonReleasedEvent(const ButtonCode button) : MouseButtonEvent(button) {}
 
-			std::string ToString() const override
-			{
-				std::stringstream ss;
-				ss << "MouseButtonReleasedEvent: " << GetButtonName(m_Button);
-				return ss.str();
+			virtual inline std::string ToString() const override {
+				return fmt::format("MouseButtonReleasedEvent: {}", GetButtonName(m_Button));
 			}
 
 			EVENT_CLASS_TYPE(MouseButtonReleased)

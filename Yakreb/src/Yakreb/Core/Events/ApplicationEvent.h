@@ -2,8 +2,6 @@
 
 #include "Yakreb/Core/Events/Event.h"
 
-#include <sstream>
-
 namespace Yakreb {
 
 	class WindowResizeEvent : public Event {
@@ -13,10 +11,8 @@ namespace Yakreb {
 			uint32_t GetWidth() const { return m_Width; }
 			uint32_t GetHeight() const { return m_Height; }
 
-			std::string ToString() const override {
-				std::stringstream ss;
-				ss << "WindowResizeEvent: " << m_Width << ", " << m_Height;
-				return ss.str();
+			virtual inline std::string ToString() const override {
+				return fmt::format("WindowResizedEvent: {}, {}", m_Width, m_Height);
 			}
 
 			EVENT_CLASS_TYPE(WindowResize)

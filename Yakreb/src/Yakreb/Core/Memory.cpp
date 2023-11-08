@@ -89,72 +89,74 @@ namespace Yakreb {
 
 }
 
-#ifdef YGE_PLATFORM_WINDOWS
+#ifdef YGE_TRACK_MEMORY
+	#ifdef YGE_COMPILER_MSVC
 
-	_NODISCARD _Ret_notnull_ _Post_writable_byte_size_(size) _VCRT_ALLOCATOR void* __CRTDECL operator new(size_t size) {
-		return Yakreb::Allocator::Allocate(size);
-	}
+		_NODISCARD _Ret_notnull_ _Post_writable_byte_size_(size) _VCRT_ALLOCATOR void* __CRTDECL operator new(size_t size) {
+			return Yakreb::Allocator::Allocate(size);
+		}
 
-	_NODISCARD _Ret_notnull_ _Post_writable_byte_size_(size) _VCRT_ALLOCATOR void* __CRTDECL operator new[](size_t size) {
-		return Yakreb::Allocator::Allocate(size);
-	}
+		_NODISCARD _Ret_notnull_ _Post_writable_byte_size_(size) _VCRT_ALLOCATOR void* __CRTDECL operator new[](size_t size) {
+			return Yakreb::Allocator::Allocate(size);
+		}
 
-	_NODISCARD _Ret_notnull_ _Post_writable_byte_size_(size) _VCRT_ALLOCATOR void* __CRTDECL operator new(size_t size, const char* desc) {
-		return Yakreb::Allocator::Allocate(size, desc);
-	}
+		_NODISCARD _Ret_notnull_ _Post_writable_byte_size_(size) _VCRT_ALLOCATOR void* __CRTDECL operator new(size_t size, const char* desc) {
+			return Yakreb::Allocator::Allocate(size, desc);
+		}
 
-	_NODISCARD _Ret_notnull_ _Post_writable_byte_size_(size) _VCRT_ALLOCATOR void* __CRTDECL operator new[](size_t size, const char* desc) {
-		return Yakreb::Allocator::Allocate(size, desc);
-	}
+		_NODISCARD _Ret_notnull_ _Post_writable_byte_size_(size) _VCRT_ALLOCATOR void* __CRTDECL operator new[](size_t size, const char* desc) {
+			return Yakreb::Allocator::Allocate(size, desc);
+		}
 
-	void __CRTDECL operator delete(void* memory) {
-		Yakreb::Allocator::Free(memory);
-	}
+		void __CRTDECL operator delete(void* memory) {
+			Yakreb::Allocator::Free(memory);
+		}
 
-	void __CRTDECL operator delete[](void* memory) {
-		Yakreb::Allocator::Free(memory);
-	}
+		void __CRTDECL operator delete[](void* memory) {
+			Yakreb::Allocator::Free(memory);
+		}
 
-	void __CRTDECL operator delete(void* memory, const char* desc) {
-		Yakreb::Allocator::Free(memory);
-	}
+		void __CRTDECL operator delete(void* memory, const char* desc) {
+			Yakreb::Allocator::Free(memory);
+		}
 
-	void __CRTDECL operator delete[](void* memory, const char* desc) {
-		Yakreb::Allocator::Free(memory);
-	}
+		void __CRTDECL operator delete[](void* memory, const char* desc) {
+			Yakreb::Allocator::Free(memory);
+		}
 
-#elif defined(YGE_PLATFORM_LINUX)
+	#elif defined(YGE_COMPILER_GCC)
 
-	_GLIBCXX_NODISCARD void* operator new(size_t size) _GLIBCXX_THROW(std::bad_alloc) {
-		return Yakreb::Allocator::Allocate(size);
-	}
+		_GLIBCXX_NODISCARD void* operator new(size_t size) _GLIBCXX_THROW(std::bad_alloc) {
+			return Yakreb::Allocator::Allocate(size);
+		}
 
-	_GLIBCXX_NODISCARD void* operator new[](size_t size) _GLIBCXX_THROW(std::bad_alloc) {
-		return Yakreb::Allocator::Allocate(size);
-	}
+		_GLIBCXX_NODISCARD void* operator new[](size_t size) _GLIBCXX_THROW(std::bad_alloc) {
+			return Yakreb::Allocator::Allocate(size);
+		}
 
-	_GLIBCXX_NODISCARD void* operator new(size_t size, const char* desc) _GLIBCXX_THROW(std::bad_alloc) {
-		return Yakreb::Allocator::Allocate(size, desc);
-	}
+		_GLIBCXX_NODISCARD void* operator new(size_t size, const char* desc) _GLIBCXX_THROW(std::bad_alloc) {
+			return Yakreb::Allocator::Allocate(size, desc);
+		}
 
-	_GLIBCXX_NODISCARD void* operator new[](size_t size, const char* desc) _GLIBCXX_THROW(std::bad_alloc) {
-		return Yakreb::Allocator::Allocate(size, desc);
-	}
+		_GLIBCXX_NODISCARD void* operator new[](size_t size, const char* desc) _GLIBCXX_THROW(std::bad_alloc) {
+			return Yakreb::Allocator::Allocate(size, desc);
+		}
 
-	void operator delete(void* memory) _GLIBCXX_USE_NOEXCEPT {
-		Yakreb::Allocator::Free(memory);
-	}
+		void operator delete(void* memory) _GLIBCXX_USE_NOEXCEPT {
+			Yakreb::Allocator::Free(memory);
+		}
 
-	void operator delete[](void* memory) _GLIBCXX_USE_NOEXCEPT {
-		Yakreb::Allocator::Free(memory);
-	}
+		void operator delete[](void* memory) _GLIBCXX_USE_NOEXCEPT {
+			Yakreb::Allocator::Free(memory);
+		}
 
-	void operator delete(void* memory, const char* desc) _GLIBCXX_USE_NOEXCEPT {
-		Yakreb::Allocator::Free(memory);
-	}
+		void operator delete(void* memory, const char* desc) _GLIBCXX_USE_NOEXCEPT {
+			Yakreb::Allocator::Free(memory);
+		}
 
-	void operator delete[](void* memory, const char* desc) _GLIBCXX_USE_NOEXCEPT {
-		Yakreb::Allocator::Free(memory);
-	}
+		void operator delete[](void* memory, const char* desc) _GLIBCXX_USE_NOEXCEPT {
+			Yakreb::Allocator::Free(memory);
+		}
 
+	#endif
 #endif

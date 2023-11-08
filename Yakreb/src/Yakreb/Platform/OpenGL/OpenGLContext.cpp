@@ -15,7 +15,7 @@ namespace Yakreb {
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		YGE_CORE_ASSERT(status, "Failed to initialize glad!");
 
-		YGE_CORE_INFO("{}", "OpenGL Info");
+		YGE_CORE_INFO("OpenGL Info");
 		YGE_CORE_INFO("  Version: {}", reinterpret_cast<const char *>(glGetString(GL_VERSION)));
 		YGE_CORE_INFO("  Renderer: {}", reinterpret_cast<const char*>(glGetString(GL_RENDERER)));
 	}

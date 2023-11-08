@@ -9,6 +9,12 @@
 
 #include "Yakreb/Core/GameTime.h"
 
+// Events
+
+#include "Yakreb/Core/Events/ApplicationEvent.h"
+#include "Yakreb/Core/Events/KeyEvent.h"
+#include "Yakreb/Core/Events/MouseEvent.h"
+
 // Input
 
 #include "Yakreb/Core/Input/Input.h"

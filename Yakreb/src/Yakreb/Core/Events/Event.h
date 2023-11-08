@@ -4,6 +4,7 @@
 
 #include <string>
 #include <functional>
+#include <spdlog/fmt/fmt.h>
 
 namespace Yakreb {
 
@@ -38,7 +39,7 @@ namespace Yakreb {
 			virtual EventType GetEventType() const = 0;
 			virtual const char* GetName() const = 0;
 			virtual int GetCategoryFlags() const = 0;
-			virtual std::string ToString() const { return GetName(); }
+			virtual inline std::string ToString() const { return GetName(); }
 
 			bool IsInCategory(EventCategory category) {
 				return GetCategoryFlags() & category;

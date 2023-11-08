@@ -5,18 +5,10 @@
 
 class MyLayer : public Yakreb::Layer {
 	public:
-		struct Xstr : public Yakreb::RefCounted {
-			int num;
-			std::string name;
-			Xstr(int n, std::string nn) : num(n), name(nn) {}
-		};
 
 		MyLayer(const std::string& name) : Layer(name) {
 
 			YGE_INFO("Creating layer: {0}", name);
-
-			Yakreb::Ref<Xstr> x = Yakreb::Ref<Xstr>::Create(0, "hello");
-			Yakreb::Ref<Xstr> x2 = x;
 
 			m_OrthoCamera = Yakreb::OrthographicCamera(-1.6f, 1.6f, -0.9f, 0.9f);
 
@@ -141,13 +133,12 @@ class MyLayer : public Yakreb::Layer {
 				for (auto& [category, stats] : memoryStatsByCategories) {
 					ImGui::Text("");
 					ImGui::Text("%s", category);
-					ImGui::Text("Total allocated: %lu bytes", stats.TotalAllocated);
-					ImGui::Text("Total freed: %lu bytes", stats.TotalFreed);
-					ImGui::Text("In use: %lu bytes", stats.TotalAllocated - stats.TotalFreed);
+					ImGui::Text("  Total allocated: %lu bytes", stats.TotalAllocated);
+					ImGui::Text("  Total freed: %lu bytes", stats.TotalFreed);
+					ImGui::Text("  In use: %lu bytes", stats.TotalAllocated - stats.TotalFreed);
 				}
 			}
 			ImGui::End();
-			
 		}
 
 		void OnEvent(Yakreb::Event& event) override {
@@ -173,7 +164,6 @@ class MyLayer : public Yakreb::Layer {
 		float m_CameraRotateSpeed = 45.0f;
 		float m_CameraZoomSpeed = 1.0f;
 
-
 };
 
 class Sandbox : public Yakreb::Application {
@@ -188,6 +178,7 @@ class Sandbox : public Yakreb::Application {
 		~Sandbox() {
 
 		}
+		
 };
 
 Yakreb::Application* Yakreb::CreateApplication() {
