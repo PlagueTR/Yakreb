@@ -1,4 +1,5 @@
 import sys
+import os
 import subprocess
 import importlib.util as importlib_util
 
@@ -31,14 +32,9 @@ class PythonRequirements:
 
     @classmethod
     def __InstallPackage(cls, package):
-        while True:
-            reply = str(input("Python package '{0:s}' is required for the setup script, would you like to install {0:s}? [Y/N]".format(package)))
-            if ((reply == 'n') or (reply == 'N')):
-                return False
-            elif ((reply == 'y') or (reply == 'Y')):
-                print("Installing {0:s}...".format(package))
-                subprocess.check_call([sys.executable, "-m", "pip", "install", package])
-                return cls.__ValidatePackage(package)
+        print("Installing {0:s}...".format(package))
+        subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+        return cls.__ValidatePackage(package)
 
 if __name__ == "__main__":
     PythonRequirements.Validate()

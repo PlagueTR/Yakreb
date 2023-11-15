@@ -17,7 +17,7 @@ This project is built with Premake 5 as the primary build system, so while other
 
 **Prerequisites:**
 
-Before you begin, make sure you have Python 3.3 or a later version installed on your system.<br>
+Before you begin, make sure you have Python 3.3 or a later version and venv python package installed on your system.<br>
 It is highly recommended to have Visual Studio 2019 or later for Windows and CodeLite for Linux testing and development.
 
 **Setup:**

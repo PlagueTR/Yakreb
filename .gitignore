@@ -4,9 +4,10 @@ bin/
 bin-int/
 **.h.gch
 
-# Cache cleanup
+# Setup script cleanup
 
 Scripts/Utility/Python/__pycache__
+Scripts/Utility/Python/venv
 
 # Version header should be generated when Generate...Project script is run
 
