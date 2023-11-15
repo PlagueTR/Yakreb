@@ -7,18 +7,15 @@ namespace Yakreb {
 
 	class Input {
 		public:
-			inline static bool IsKeyPressed(Key key) { return s_Instance->IsKeyPressedImpl(key); }
-			inline static bool IsMouseButtonPressed(Button button) { return s_Instance->IsMouseButtonPressedImpl(button); }
+			static void Init();
 
-			inline static glm::vec2 GetMousePosition() { return s_Instance->GetMousePositionImpl(); }
+			static bool IsKeyPressed(Key key);
+			static bool IsMouseButtonPressed(Button button);
 
-		protected:
-			inline virtual bool IsKeyPressedImpl(Key key) = 0;
-			inline virtual bool IsMouseButtonPressedImpl(Button button) = 0;
+			static glm::vec2 GetMousePosition();
 
-			inline virtual glm::vec2 GetMousePositionImpl() = 0;
-
-			static Input* s_Instance;
+		private:
+			static void* s_NativeWindow;
 
 	};
 

@@ -5,14 +5,13 @@
 #include "Yakreb/Core/GameTimer.h"
 #include "Yakreb/Core/GameTime.h"
 
-#include "Yakreb/Renderer/RenderCommand.h"
 #include "Yakreb/Renderer/Renderer.h"
 
 namespace Yakreb {
 
 	Application* Application::s_Instance = nullptr;
 
-	Application::Application(const std::string &name) {
+	Application::Application(const std::string& name) {
 
 		YGE_CORE_ASSERT(!s_Instance, "Multiple instances of Application can not be created!");
 		s_Instance = this;
@@ -20,8 +19,16 @@ namespace Yakreb {
 		m_Window = Window::Create(Window::WindowProperties(name));
 		m_Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
 
+		Input::Init();
+
+		Renderer::Init();
+
 		m_ImGuiLayer = new ImGuiLayer("Core ImGui");
 		PushOverlay(m_ImGuiLayer);
+
+	}
+
+	Application::~Application() {
 
 	}
 
@@ -68,16 +75,16 @@ namespace Yakreb {
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate();
 
-			m_ImGuiLayer->BeginRender();
-			for (Layer* layer : m_LayerStack)
-				layer->OnImGuiRender();
-
-			// Temporary
-			// Other rendering should happen here
-
-			m_ImGuiLayer->EndRender();
+			RenderImGui();
 
 		}
+	}
+
+	void Application::RenderImGui() {
+		m_ImGuiLayer->BeginRender();
+		for (Layer* layer : m_LayerStack)
+			layer->OnImGuiRender();
+		m_ImGuiLayer->EndRender();
 	}
 
 	bool Application::OnWindowClose(WindowCloseEvent& event) {

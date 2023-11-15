@@ -23,4 +23,5 @@ namespace Yakreb {
 
 	void InitializeCore();
 	void ShutdownCore();
+
 }

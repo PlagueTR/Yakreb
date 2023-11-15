@@ -16,7 +16,6 @@ namespace Yakreb {
 	}
 
 	void ImGuiLayer::OnAttach() {
-
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
 
@@ -37,15 +36,12 @@ namespace Yakreb {
 		GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
 		ImGui_ImplOpenGL3_Init("#version 410");
-
 	}
 
 	void ImGuiLayer::OnDetach() {
-
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
-
 	}
 
 	void ImGuiLayer::OnEvent(Event& event) {

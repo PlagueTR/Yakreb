@@ -15,14 +15,14 @@ namespace Yakreb {
 
 		protected:
 
-			inline static float s_RealTime = 0.0f;
-			inline static float s_ScaledTime = 0.0f;
+			static float s_RealTime;
+			static float s_ScaledTime;
 
-			inline static float s_TimeScale = 1.0f;
-			inline static float s_TimeScaleNext = 1.0f;
+			static float s_TimeScale;
+			static float s_TimeScaleNext;
 
-			inline static float s_DeltaTime = 0.0f;
-			inline static float s_ScaledDeltaTime = 0.0f;
+			static float s_DeltaTime;
+			static float s_ScaledDeltaTime;
 
 	};
 

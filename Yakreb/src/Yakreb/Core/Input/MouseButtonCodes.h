@@ -7,7 +7,6 @@
 namespace Yakreb {
 
 	typedef enum class ButtonCode : uint16_t {
-
 		Button0 = 0,
 		Button1 = 1,
 		Button2 = 2,
@@ -20,7 +19,6 @@ namespace Yakreb {
 		ButtonLeft = Button0,
 		ButtonRight = Button1,
 		ButtonMiddle = Button2
-
 	} Button;
 
 	constexpr const char* GetButtonName(const ButtonCode buttoncode) {
@@ -35,7 +33,7 @@ namespace Yakreb {
 		case ButtonCode::Button7: return "MB8";
 		}
 
-		YGE_CORE_DEBUG_ERROR("Unknown ButtonCode ({})!", (int)buttoncode);
+		YGE_CORE_DEBUG_WARN("Unknown ButtonCode ({})!", (int)buttoncode);
 		return "";
 	}
 

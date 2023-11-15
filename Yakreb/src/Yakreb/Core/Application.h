@@ -13,7 +13,7 @@ namespace Yakreb {
 	class Application {
 		public:
 			Application(const std::string &name = "Yakreb Application");
-			virtual ~Application() = default;
+			virtual ~Application();
 
 			void OnEvent(Event& event);
 
@@ -25,6 +25,8 @@ namespace Yakreb {
 
 			static Application& Get() { return *s_Instance; }
 			inline Window& GetWindow() { return *m_Window; }
+
+			void RenderImGui();
 
 		private:
 			void Run();

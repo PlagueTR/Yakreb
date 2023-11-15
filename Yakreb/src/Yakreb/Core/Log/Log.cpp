@@ -1,7 +1,7 @@
 #include "yakrebpch.h"
 #include "Log.h"
 
-#include "Yakreb/Core/Util/FilesystemHelper.h"
+#include "Yakreb/Core/Util/FileSystem.h"
 
 // Ignore warnings raised inside external headers
 #pragma warning(push, 0)
@@ -11,6 +11,7 @@
 
 namespace Yakreb {
 
+	bool Log::s_Initialized = false;
 	std::shared_ptr<spdlog::logger> Log::s_CoreLogger = nullptr;
 	std::shared_ptr<spdlog::logger> Log::s_ClientLogger = nullptr;
 
@@ -20,7 +21,7 @@ namespace Yakreb {
 		unsigned int maxLogCount = 9;
 
 		std::string latestLog = "latest.log";
-		std::filesystem::path logsDirectory = FilesystemHelper::GetExecutableDirectoryPath() / "logs";
+		std::filesystem::path logsDirectory = FileSystem::GetExecutableDirectoryPath() / "logs";
 		std::filesystem::path latestLogPath = logsDirectory / latestLog;
 
 		if (!std::filesystem::exists(logsDirectory))
@@ -31,7 +32,7 @@ namespace Yakreb {
 		for (const auto& entry : std::filesystem::directory_iterator(logsDirectory)) {
 			if (entry.is_regular_file() && entry.path().extension() == ".log") {
 				if (entry.path().filename() == latestLog) {
-					std::filesystem::file_time_type creationTime = FilesystemHelper::GetFileCreationTime(entry.path());
+					std::filesystem::file_time_type creationTime = FileSystem::GetFileCreationTime(entry.path());
 					std::chrono::system_clock::time_point timePoint(creationTime.time_since_epoch());
 					time_t time = std::chrono::system_clock::to_time_t(timePoint);
 					std::tm *timeInfo = std::localtime(&time);
@@ -78,7 +79,9 @@ namespace Yakreb {
 		//   because many applications would delete and recreate configuration files when an option was changed
 		//   rather than updating/altering the file
 		// If we do not use this, the latest.log file keep it's original creation date and will override the older log
-		FilesystemHelper::SetFileCreationTime(latestLogPath, std::filesystem::file_time_type(std::chrono::system_clock::now().time_since_epoch()));
+		FileSystem::SetFileCreationTime(latestLogPath, std::filesystem::file_time_type(std::chrono::system_clock::now().time_since_epoch()));
+
+		s_Initialized = true;
 
 	}
 

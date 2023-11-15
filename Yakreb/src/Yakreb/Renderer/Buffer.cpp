@@ -21,7 +21,7 @@ namespace Yakreb {
 
 		switch (RendererAPI::GetAPI()) {
 			default:
-				YGE_CORE_ASSERT(false, CoreError::YGE_NONE_RENDERER_API);
+				YGE_CORE_ASSERT(false, CoreError::Renderer::YGE_NONE_RENDERER_API);
 				RendererAPI::SetAPI(RendererAPI::API::OpenGL);
 				[[fallthrough]];
 			case RendererAPI::API::OpenGL:
@@ -34,7 +34,7 @@ namespace Yakreb {
 
 		switch (RendererAPI::GetAPI()) {
 			default:
-				YGE_CORE_ASSERT(false, CoreError::YGE_NONE_RENDERER_API);
+				YGE_CORE_ASSERT(false, CoreError::Renderer::YGE_NONE_RENDERER_API);
 				RendererAPI::SetAPI(RendererAPI::API::OpenGL);
 				[[fallthrough]];
 			case RendererAPI::API::OpenGL:

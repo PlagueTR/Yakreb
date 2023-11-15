@@ -10,6 +10,8 @@
 #include <spdlog/fmt/ostr.h>
 #pragma warning(pop)
 
+#include "CommonMessages.h"
+
 namespace Yakreb {
 
 	class Log {
@@ -38,17 +40,23 @@ namespace Yakreb {
 
 			constexpr const char* GetLevelName(const Level level) {
 				switch (level) {
-					case Level::Info:  return "INFO";
-					case Level::Warn:  return "WARN";
-					case Level::Error: return "ERROR";
-					case Level::Fatal: return "FATAL";
-					default:           return "TRACE";
+					case Level::Trace: return "Trace";
+					case Level::Info:  return "Info";
+					case Level::Warn:  return "Warning";
+					case Level::Error: return "Error";
+					case Level::Fatal: return "Critical Error";
 				}
+				#ifdef YGE_ENABLE_CORE_LOGS
+					PrintMessage(Type::Core, Level::Warn, "", "Unknown log level");
+				#endif
+				return "";
 			}
+			inline static bool Initialized() { return s_Initialized; }
 
 		private:
 			static std::shared_ptr<spdlog::logger> s_CoreLogger;
 			static std::shared_ptr<spdlog::logger> s_ClientLogger;
+			static bool s_Initialized;
 
 	};
 

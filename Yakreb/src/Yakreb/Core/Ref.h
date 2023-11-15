@@ -6,41 +6,7 @@
 #include <stdint.h>
 #include <typeinfo>
 
-#ifdef YGE_COMPILER_GCC
-	#include <cxxabi.h>
-#endif
-
 namespace Yakreb {
-
-	#ifdef YGE_COMPILER_GCC
-		namespace detail::Reference {
-
-			static std::map<const char*, const char*> DemangledMap;
-
-			template <typename T>
-			const char* Demangle() {
-				const char* name = typeid(T).name();
-				std::map<const char*, const char*>::iterator demangledMapIt = DemangledMap.find(name);
-				bool found = demangledMapIt != DemangledMap.end();
-				if (found) {
-					return demangledMapIt->second;
-				}
-				else {
-					int status;
-					const char* prettyName = abi::__cxa_demangle(name, nullptr, nullptr, &status);
-					if (status == 0) {
-						DemangledMap[name] = prettyName;
-						return prettyName;
-					}
-					else {
-						DemangledMap[name] = name;
-						return name;
-					}
-				}
-			}
-
-		}
-	#endif
 
 	class RefCounted {
 		public:
@@ -154,9 +120,9 @@ namespace Yakreb {
 			static Ref<T> Create(Args&&... args) {
 				#ifdef YGE_TRACK_MEMORY
 					#ifdef YGE_COMPILER_MSVC
-						return Ref<T>(new(typeid(T).name()) T(std::forward<Args>(args)...));
+						return Ref<T>(new(detail::Memory::Demangler::Demangle<T>()) T(std::forward<Args>(args)...));
 					#elif defined(YGE_COMPILER_GCC)
-						return Ref<T>(new(detail::Reference::Demangle<T>()) T(std::forward<Args>(args)...));
+						return Ref<T>(new(detail::Memory::Demangler::Demangle<T>()) T(std::forward<Args>(args)...));
 					#else
 						// Unsupported compilers
 						return Ref<T>(new T(std::forward<Args>(args)...));

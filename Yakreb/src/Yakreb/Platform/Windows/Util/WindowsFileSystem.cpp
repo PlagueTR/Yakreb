@@ -1,26 +1,31 @@
 #include "yakrebpch.h"
-#include "WindowsFilesystemHelper.h"
+#include "Yakreb/Core/Util/FileSystem.h"
 
 namespace Yakreb {
 
-	std::filesystem::path FilesystemHelper::s_ExecutablePath;
-	std::filesystem::path FilesystemHelper::s_ExecutableDirectoryPath;
-	std::string FilesystemHelper::s_ExecutableName;
+	std::filesystem::path FileSystem::s_ExecutablePath;
+	std::filesystem::path FileSystem::s_ExecutableDirectoryPath;
+	std::string FileSystem::s_ExecutableName;
 
-	FilesystemHelper* FilesystemHelper::s_Instance = new WindowsFilesystemHelper();
-
-	WindowsFilesystemHelper::WindowsFilesystemHelper() {
+	void FileSystem::Init() {
 		wchar_t buffer[MAX_PATH];
 		GetModuleFileNameW(NULL, buffer, MAX_PATH);
-		FilesystemHelper::s_ExecutablePath = std::filesystem::canonical(buffer);
-		FilesystemHelper::s_ExecutableDirectoryPath = FilesystemHelper::s_ExecutablePath.parent_path();
-		FilesystemHelper::s_ExecutableName = FilesystemHelper::s_ExecutablePath.filename().string();
+		FileSystem::s_ExecutablePath = std::filesystem::canonical(buffer);
+		FileSystem::s_ExecutableDirectoryPath = FileSystem::s_ExecutablePath.parent_path();
+		FileSystem::s_ExecutableName = FileSystem::s_ExecutablePath.filename().string();
 	}
 
-	inline std::filesystem::file_time_type WindowsFilesystemHelper::GetFileCreationTimeImpl(const std::filesystem::path& path) {
+	std::filesystem::file_time_type FileSystem::GetFileCreationTime(const std::filesystem::path& path) {
 		HANDLE fileHandle = CreateFile(path.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
 		FILETIME creationTime = { 0 };
-		if (fileHandle != INVALID_HANDLE_VALUE) {
+		if (fileHandle == INVALID_HANDLE_VALUE) {
+			//Log calls these helper methods during initialization
+			if (Log::Initialized()) {
+				YGE_CORE_ERROR("Unable to get a handle to file {}", path.string());
+				YGE_CORE_ASSERT(false, "Reason: {}", GetLastError());
+			}
+		}
+		else if (fileHandle != INVALID_HANDLE_VALUE) {
 			GetFileTime(fileHandle, &creationTime, NULL, NULL);
 			CloseHandle(fileHandle);
 		}
@@ -47,7 +52,7 @@ namespace Yakreb {
 		return std::filesystem::file_time_type(std::chrono::duration_cast<std::chrono::system_clock::duration>(secs));
 	}
 
-	inline void WindowsFilesystemHelper::SetFileCreationTimeImpl(const std::filesystem::path& path, const std::filesystem::file_time_type& creationTime) {
+	void FileSystem::SetFileCreationTime(const std::filesystem::path& path, const std::filesystem::file_time_type& creationTime) {
 
 		std::chrono::system_clock::time_point timePoint(std::chrono::duration_cast<std::chrono::seconds>(creationTime.time_since_epoch()));
 
@@ -67,7 +72,14 @@ namespace Yakreb {
 		SystemTimeToFileTime(&systemTime, &fileCreationTime);
 
 		HANDLE fileHandle = CreateFile(path.c_str(), FILE_WRITE_ATTRIBUTES, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-		if (fileHandle != INVALID_HANDLE_VALUE) {
+		if (fileHandle == INVALID_HANDLE_VALUE) {
+			//Log calls these helper methods during initialization
+			if (Log::Initialized()) {
+				YGE_CORE_ERROR("Unable to get a handle to file {}", path.string());
+				YGE_CORE_ASSERT(false, "Reason: {}", GetLastError());
+			}
+		}
+		else if (fileHandle != INVALID_HANDLE_VALUE) {
 			SetFileTime(fileHandle, &fileCreationTime, nullptr, nullptr);
 			CloseHandle(fileHandle);
 		}

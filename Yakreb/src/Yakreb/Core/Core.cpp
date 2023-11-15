@@ -1,6 +1,6 @@
 #include "yakrebpch.h"
 #include "Yakreb/Core/PlatformInfo.h"
-#include "Yakreb/Core/Util/FilesystemHelper.h"
+#include "Yakreb/Core/Util/FileSystem.h"
 #include "Yakreb/Core/Version.h"
 
 #include "Yakreb/Renderer/RendererAPI.h"
@@ -10,6 +10,10 @@ namespace Yakreb {
 	void InitializeCore() {
 
 		Allocator::Init();
+
+		PlatformInfo::Init();
+
+		FileSystem::Init();
 
 		Log::Init();
 

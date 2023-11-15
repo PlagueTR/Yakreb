@@ -24,7 +24,6 @@
 // Renderer
 
 #include "Yakreb/Renderer/Renderer.h"
-#include "Yakreb/Renderer/RenderCommand.h"
 
 #include "Yakreb/Renderer/Buffer.h"
 #include "Yakreb/Renderer/Shader.h"

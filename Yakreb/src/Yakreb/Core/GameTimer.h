@@ -6,12 +6,8 @@ namespace Yakreb {
 
 	class GameTimer : public GameTime {
 		public:
-			inline static void UpdateGameTime() { s_Instance->UpdateGameTimeImpl(); }
+			static void UpdateGameTime();
 
-		protected:
-			inline virtual void UpdateGameTimeImpl() = 0;
-
-			static GameTimer* s_Instance;
 	};
 
 }

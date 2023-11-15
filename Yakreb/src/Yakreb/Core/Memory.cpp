@@ -46,8 +46,10 @@ namespace Yakreb {
 			alloc.Category = desc;
 
 			Allocator::s_GlobalStats.TotalAllocated += size;
-			if (desc)
+			if (desc) {
 				Allocator::s_Data->m_AllocationStatsMap[desc].TotalAllocated += size;
+				Allocator::s_Data->m_AllocationStatsMap[desc].Instances++;
+			}
 		}
 		return memory;
 	}
@@ -64,8 +66,10 @@ namespace Yakreb {
 				if (found) {
 					const Allocation& alloc = allocMapIt->second;
 					Allocator::s_GlobalStats.TotalFreed += alloc.Size;
-					if (alloc.Category)
+					if (alloc.Category) {
 						s_Data->m_AllocationStatsMap[alloc.Category].TotalFreed += alloc.Size;
+						s_Data->m_AllocationStatsMap[alloc.Category].Instances--;
+					}
 					s_Data->m_AllocationMap.erase(memory);
 				}
 			}
@@ -79,9 +83,9 @@ namespace Yakreb {
 		std::scoped_lock<std::mutex> lock(Allocator::s_Data->m_Mutex);
 		AllocationStatsVec allocationVec(Allocator::s_Data->m_AllocationStatsMap.begin(), Allocator::s_Data->m_AllocationStatsMap.end());
 		std::sort(allocationVec.rbegin(), allocationVec.rend(),
-			[](std::pair<const char*, AllocationStats>& lhs, std::pair<const char*, AllocationStats>& rhs) {
-				AllocationStats& lhsStats = lhs.second;
-				AllocationStats& rhsStats = rhs.second;
+			[](std::pair<const char*, InstanceAllocationStats>& lhs, std::pair<const char*, InstanceAllocationStats>& rhs) {
+				InstanceAllocationStats& lhsStats = lhs.second;
+				InstanceAllocationStats& rhsStats = rhs.second;
 				return (lhsStats.TotalAllocated - lhsStats.TotalFreed) < (rhsStats.TotalAllocated - rhsStats.TotalFreed);
 			});
 		return allocationVec;
@@ -125,6 +129,8 @@ namespace Yakreb {
 		}
 
 	#elif defined(YGE_COMPILER_GCC)
+
+		Yakreb::detail::Memory::Demangler::DemangledMap;
 
 		_GLIBCXX_NODISCARD void* operator new(size_t size) _GLIBCXX_THROW(std::bad_alloc) {
 			return Yakreb::Allocator::Allocate(size);

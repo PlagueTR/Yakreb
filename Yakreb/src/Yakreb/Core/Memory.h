@@ -8,11 +8,21 @@
 #include <map>
 #include <mutex>
 
+#ifdef YGE_COMPILER_GCC
+	#include <cxxabi.h>
+#endif
+
 namespace Yakreb {
 
 	struct AllocationStats {
 		size_t TotalAllocated = 0;
 		size_t TotalFreed = 0;
+	};
+
+	struct InstanceAllocationStats {
+		size_t TotalAllocated = 0;
+		size_t TotalFreed = 0;
+		uint32_t Instances = 0;
 	};
 
 	struct Allocation {
@@ -45,13 +55,13 @@ namespace Yakreb {
 
 	namespace detail::Memory {
 		using MapAlloc = Mallocator<std::pair<const void* const, Allocation>>;
-		using StatsMapAlloc = Mallocator<std::pair<const char* const, AllocationStats>>;
-		using StatsVecAlloc = Mallocator<std::pair<const char*, AllocationStats>>;
+		using StatsMapAlloc = Mallocator<std::pair<const char* const, InstanceAllocationStats>>;
+		using StatsVecAlloc = Mallocator<std::pair<const char*, InstanceAllocationStats>>;
 		using AllocationMap = std::map<const void*, Allocation, std::less<const void*>, MapAlloc>;
 	}
 
-	using AllocationStatsMap = std::map<const char*, AllocationStats, std::less<const char*>, detail::Memory::StatsMapAlloc>;
-	using AllocationStatsVec = std::vector<std::pair<const char*, AllocationStats>, detail::Memory::StatsVecAlloc>;
+	using AllocationStatsMap = std::map<const char*, InstanceAllocationStats, std::less<const char*>, detail::Memory::StatsMapAlloc>;
+	using AllocationStatsVec = std::vector<std::pair<const char*, InstanceAllocationStats>, detail::Memory::StatsVecAlloc>;
 
 	class Allocator {
 		public:
@@ -87,8 +97,45 @@ namespace Yakreb {
 
 }
 
+namespace Yakreb::detail::Memory {
+
+	class Demangler {
+	public:
+		#ifdef YGE_COMPILER_GCC
+			static std::map<const char*, const char*> DemangledMap;
+		#endif
+
+		template <typename T>
+		static const char* Demangle() {
+			#ifdef YGE_COMPILER_MSVC
+				return typeid(T).name();
+			#elif defined(YGE_COMPILER_GCC)
+				const char* name = typeid(T).name();
+				std::map<const char*, const char*>::iterator demangledMapIt = DemangledMap.find(name);
+				bool found = demangledMapIt != DemangledMap.end();
+				if (found) {
+					return demangledMapIt->second;
+				}
+				else {
+					int status;
+					const char* prettyName = abi::__cxa_demangle(name, nullptr, nullptr, &status);
+					if (status == 0) {
+						DemangledMap[name] = prettyName;
+						return prettyName;
+					}
+					else {
+						DemangledMap[name] = name;
+						return name;
+					}
+				}
+			#endif
+		}
+	};
+
+}
+
 #ifdef YGE_TRACK_MEMORY
-	
+
 	#ifdef YGE_COMPILER_MSVC
 		_NODISCARD _Ret_notnull_ _Post_writable_byte_size_(size) _VCRT_ALLOCATOR void* __CRTDECL operator new(size_t size);
 		_NODISCARD _Ret_notnull_ _Post_writable_byte_size_(size) _VCRT_ALLOCATOR void* __CRTDECL operator new[](size_t size);
@@ -110,5 +157,11 @@ namespace Yakreb {
 		void operator delete(void* memory, const char* desc) _GLIBCXX_USE_NOEXCEPT __attribute__((__externally_visible__));
 		void operator delete[](void* memory, const char* desc) _GLIBCXX_USE_NOEXCEPT __attribute__((__externally_visible__));
 	#endif
+
+	#define ygenew(desc) new(desc)
+
+#else
+	
+	#define ygenew(desc) new
 
 #endif

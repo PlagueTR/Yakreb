@@ -1,7 +1,7 @@
 #include "yakrebpch.h"
 #include "OpenGLShader.h"
 
-#include "Yakreb/Core/Util/FilesystemHelper.h"
+#include "Yakreb/Core/Util/FileSystem.h"
 
 #include <glad/glad.h>
 
@@ -16,7 +16,7 @@ namespace Yakreb {
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& path) {
-		std::filesystem::path filePath = std::filesystem::absolute(FilesystemHelper::GetExecutableDirectoryPath() / (std::filesystem::path(path).make_preferred()));
+		std::filesystem::path filePath = std::filesystem::absolute(FileSystem::GetExecutableDirectoryPath() / (std::filesystem::path(path).make_preferred()));
 		std::string source = ReadFile(filePath);
 		auto shaderSources = ProcessFile(source);
 		Compile(shaderSources);
@@ -218,7 +218,7 @@ namespace Yakreb {
 
 				glDeleteShader(shader);
 
-				YGE_CORE_ERROR("{}", "Shader compilation failed!");
+				YGE_CORE_ERROR("Shader compilation failed!");
 				YGE_CORE_ASSERT(false, &(infoLog[0]));
 
 				return;
@@ -242,7 +242,7 @@ namespace Yakreb {
 
 			glDeleteProgram(program);
 
-			YGE_CORE_ERROR("{}", "Shader link failed!");
+			YGE_CORE_ERROR("Shader link failed!");
 			YGE_CORE_ASSERT(false, &(infoLog[0]));
 
 			return;

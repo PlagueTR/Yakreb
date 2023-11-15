@@ -42,7 +42,7 @@ namespace Yakreb {
 
 		switch (RendererAPI::GetAPI()) {
 			default:
-				YGE_CORE_ASSERT(false, CoreError::YGE_NONE_RENDERER_API);
+				YGE_CORE_ASSERT(false, CoreError::Renderer::YGE_NONE_RENDERER_API);
 				RendererAPI::SetAPI(RendererAPI::API::OpenGL);
 				[[fallthrough]];
 			case RendererAPI::API::OpenGL:
@@ -54,7 +54,8 @@ namespace Yakreb {
 		m_Context->Init();
 
 		glfwSetWindowUserPointer(m_Window, &m_Data);
-		SetVSync(true);
+		//SetVSync(true);
+		SetVSync(false);
 
 		// GLFW callbacks
 

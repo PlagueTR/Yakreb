@@ -6,6 +6,8 @@ namespace Yakreb {
 	class PlatformInfo {
 		public:
 
+			static void Init();
+
 			static bool IsWindows() {
 				#ifdef YGE_PLATFORM_WINDOWS
 					return true;
@@ -45,8 +47,6 @@ namespace Yakreb {
 			static std::string s_OSShortName;
 			static std::string s_OSName;
 			static std::string s_OSVersion;
-
-			static PlatformInfo* s_Instance;
 
 	};
 

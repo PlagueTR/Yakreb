@@ -1,19 +1,23 @@
 #include "yakrebpch.h"
-#include "LinuxGameTimer.h"
+
+#include "Yakreb/Core/GameTimer.h"
 
 #include <GLFW/glfw3.h>
 
 namespace Yakreb {
 
-	GameTimer* GameTimer::s_Instance = new LinuxGameTimer();
+	float GameTime::s_RealTime = 0.0f;
+	float GameTime::s_ScaledTime = 0.0f;
+		  
+	float GameTime::s_TimeScale = 1.0f;
+	float GameTime::s_TimeScaleNext = 1.0f;
+		  
+	float GameTime::s_DeltaTime = 0.0f;
+	float GameTime::s_ScaledDeltaTime = 0.0f;
 
-	LinuxGameTimer::LinuxGameTimer() {
-
-	}
-
-	inline void LinuxGameTimer::UpdateGameTimeImpl() {
+	void GameTimer::UpdateGameTime() {
 		GameTime::s_TimeScale = GameTime::s_TimeScaleNext;
-		float time = (float)glfwGetTime();
+		float time = static_cast<float>(glfwGetTime());
 		GameTime::s_DeltaTime = time - GameTime::s_RealTime;
 		GameTime::s_ScaledDeltaTime = GameTime::s_DeltaTime * GameTime::s_TimeScale;
 		GameTime::s_RealTime = time;

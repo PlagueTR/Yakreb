@@ -39,6 +39,7 @@ namespace Yakreb {
 			std::string ReadFile(const std::filesystem::path& path);
 			std::unordered_map<GLenum, std::string> ProcessFile(const std::string& source);
 			void Compile(const std::unordered_map<GLenum, std::string>& shaderSources);
+
 			uint32_t m_RendererID;
 			std::string m_Name;
 

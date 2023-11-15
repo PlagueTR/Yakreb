@@ -35,10 +35,10 @@ class MyLayer : public Yakreb::Layer {
 
 			m_SquareVA = Yakreb::VertexArray::Create();
 			float squareVertices[3 * 4] = {
-				-0.75f, -0.75f, 0.0f,
-				 0.75f, -0.75f, 0.0f,
-				 0.75f,  0.75f, 0.0f,
-				-0.75f,  0.75f, 0.0f
+				-0.5f, -0.5f, 0.0f,
+				 0.5f, -0.5f, 0.0f,
+				 0.5f,  0.5f, 0.0f,
+				-0.5f,  0.5f, 0.0f
 			};
 
 			Yakreb::Ref<Yakreb::VertexBuffer> squareVB = Yakreb::VertexBuffer::Create(squareVertices, sizeof(squareVertices));
@@ -54,6 +54,8 @@ class MyLayer : public Yakreb::Layer {
 			m_Shader = Yakreb::Shader::Create("Resources/Shaders/ColorShader.glsl");
 
 			m_BlueShader = Yakreb::Shader::Create("Resources/Shaders/BlueShader.glsl");
+
+			Yakreb::Renderer::SetClearColor({ m_rgb, m_rgb, m_rgb, 1 });
 
 		}
 
@@ -105,16 +107,15 @@ class MyLayer : public Yakreb::Layer {
 			if (Yakreb::Input::IsKeyPressed(Yakreb::Key::X))
 				m_SquareRotation -= m_SquareRotateSpeed * deltaTime;
 
-			Yakreb::RenderCommand::SetClearColor({ m_rgb, m_rgb, m_rgb, 1 });
-			Yakreb::RenderCommand::Clear();
+			m_SquareTransform = glm::rotate(glm::translate(glm::mat4(1.0f), m_SquarePosition), glm::radians(m_SquareRotation), glm::vec3(0.0f, 0.0f, 1.0f));
+
+			Yakreb::Renderer::Clear();
 
 			Yakreb::Renderer::BeginScene(m_OrthoCamera);
 
-			Yakreb::Renderer::Submit(m_BlueShader, m_SquareVA,
-				glm::rotate(glm::translate(glm::mat4(1.0f), m_SquarePosition), glm::radians(m_SquareRotation), glm::vec3(0.0f, 0.0f, 1.0f))
-				* glm::scale(glm::mat4(1.0f), glm::vec3(0.7f)));
+			Yakreb::Renderer::Draw(m_BlueShader, m_SquareVA, m_SquareTransform);
 
-			Yakreb::Renderer::Submit(m_Shader, m_VertexArray);
+			Yakreb::Renderer::Draw(m_Shader, m_VertexArray);
 
 			Yakreb::Renderer::EndScene();
 
@@ -133,6 +134,7 @@ class MyLayer : public Yakreb::Layer {
 				for (auto& [category, stats] : memoryStatsByCategories) {
 					ImGui::Text("");
 					ImGui::Text("%s", category);
+					ImGui::Text("  Active instances: %u", stats.Instances);
 					ImGui::Text("  Total allocated: %lu bytes", stats.TotalAllocated);
 					ImGui::Text("  Total freed: %lu bytes", stats.TotalFreed);
 					ImGui::Text("  In use: %lu bytes", stats.TotalAllocated - stats.TotalFreed);
@@ -155,6 +157,7 @@ class MyLayer : public Yakreb::Layer {
 		float m_SquareRotation = 0.0f;
 		float m_SquareMoveSpeed = 1.0f;
 		float m_SquareRotateSpeed = 30.0f;
+		glm::mat4 m_SquareTransform;
 
 		Yakreb::Ref<Yakreb::Shader> m_BlueShader;
 		Yakreb::Ref<Yakreb::VertexArray> m_SquareVA;

@@ -1,5 +1,6 @@
 #include "yakrebpch.h"
-#include "LinuxPlatformInfo.h"
+
+#include "Yakreb/Core/PlatformInfo.h"
 
 #include <cstring>
 #include <sys/utsname.h>
@@ -11,9 +12,7 @@ namespace Yakreb {
     std::string PlatformInfo::s_OSName;
     std::string PlatformInfo::s_OSVersion;
 
-    PlatformInfo* PlatformInfo::s_Instance = new LinuxPlatformInfo();
-
-	LinuxPlatformInfo::LinuxPlatformInfo() {
+	void PlatformInfo::Init() {
         struct utsname native;
         if (uname(&native) > -1) {
             PlatformInfo::s_OSShortName = native.sysname;

@@ -7,10 +7,6 @@
 
 namespace Yakreb {
 
-	namespace CoreError {
-		inline static const char* YGE_NONE_RENDERER_API = "Renderer API was None, defaulting to OpenGL";
-	}
-
 	class RendererAPI {
 		public:
 			enum class API {
