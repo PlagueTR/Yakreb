@@ -3,7 +3,7 @@
 
 #include "Yakreb/Renderer/RendererAPI.h"
 
-#include "Yakreb/Platform/OpenGL/OpenGLBuffer.h"
+#include "Yakreb/Platform/Renderer/OpenGL/OpenGLBuffer.h"
 
 namespace Yakreb {
 

@@ -3,7 +3,7 @@
 
 #include "Yakreb/Renderer/RendererAPI.h"
 
-#include "Yakreb/Platform/OpenGL/OpenGLVertexArray.h"
+#include "Yakreb/Platform/Renderer/OpenGL/OpenGLVertexArray.h"
 
 namespace Yakreb {
 

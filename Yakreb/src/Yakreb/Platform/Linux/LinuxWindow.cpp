@@ -5,7 +5,7 @@
 #include "Yakreb/Core/Events/KeyEvent.h"
 #include "Yakreb/Core/Events/MouseEvent.h"
 
-#include "Yakreb/Platform/OpenGL/OpenGLContext.h"
+#include "Yakreb/Platform/Renderer/OpenGL/OpenGLContext.h"
 
 #include <GLFW/glfw3.h>
 

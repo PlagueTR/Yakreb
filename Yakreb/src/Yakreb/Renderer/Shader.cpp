@@ -3,7 +3,7 @@
 
 #include "Yakreb/Renderer/RendererAPI.h"
 
-#include "Yakreb/Platform/OpenGL/OpenGLShader.h"
+#include "Yakreb/Platform/Renderer/OpenGL/OpenGLShader.h"
 
 namespace Yakreb {
 

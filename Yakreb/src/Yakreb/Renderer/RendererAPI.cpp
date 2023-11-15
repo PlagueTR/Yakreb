@@ -1,7 +1,7 @@
 #include "yakrebpch.h"
 #include "RendererAPI.h"
 
-#include "Yakreb/Platform/OpenGL/OpenGLRendererAPI.h"
+#include "Yakreb/Platform/Renderer/OpenGL/OpenGLRendererAPI.h"
 
 namespace Yakreb {
 

@@ -37,13 +37,16 @@ class PremakeRequirements:
             elif ((reply == 'y') or (reply == 'Y')):
                 premakePathWin = "{0:s}/premake-{1:s}-windows.zip".format(cls.premakeDirectory, cls.premakeVersion)
                 premakePathLin = "{0:s}/premake-{1:s}-linux.tar.gz".format(cls.premakeDirectory, cls.premakeVersion)
-                print("Downloading {0:s} to {1:s}".format(cls.premakeZipUrl, premakePathWin))
-                Utilities.DownloadFile(cls.premakeZipUrl, premakePathWin)
-                print("Downloading {0:s} to {1:s}".format(cls.premakeTarUrl, premakePathLin))
-                Utilities.DownloadFile(cls.premakeTarUrl, premakePathLin)
-                print("Extracting")
-                Utilities.UnzipFile(premakePathWin, files=["premake5.exe"] ,deleteZipFile=True)
-                Utilities.UntarFile(premakePathLin, compression="gz", files=["premake5"] ,deleteTarFile=True)
+                if sys.platform == "win32":
+                    print("Downloading {0:s} to {1:s}".format(cls.premakeZipUrl, premakePathWin))
+                    Utilities.DownloadFile(cls.premakeZipUrl, premakePathWin)
+                    print("Extracting")
+                    Utilities.UnzipFile(premakePathWin, files=["premake5.exe"], deleteZipFile=True)
+                elif sys.platform == "linux":
+                    print("Downloading {0:s} to {1:s}".format(cls.premakeTarUrl, premakePathLin))
+                    Utilities.DownloadFile(cls.premakeTarUrl, premakePathLin)
+                    print("Extracting")
+                    Utilities.UntarFile(premakePathLin, compression="gz", files=["premake5"] ,deleteTarFile=True)
                 premakeLicensePath = "{0:s}/LICENSE.txt".format(cls.premakeDirectory)
                 print("Downloading {0:s} to {1:s}".format(cls.premakeLicenseUrl, premakeLicensePath))
                 Utilities.DownloadFile(cls.premakeLicenseUrl, premakeLicensePath)
