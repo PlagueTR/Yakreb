@@ -11,33 +11,68 @@ namespace Yakreb {
 
 	class WindowsWindow : public Window {
 		public:
-			WindowsWindow(const WindowProperties& properties);
+			WindowsWindow(const WindowSpecification& properties);
 			virtual ~WindowsWindow();
 
-			virtual void OnUpdate() override;
-
-			inline virtual uint32_t GetWidth() const override { return m_Data.Width; }
-			inline virtual uint32_t GetHeight() const override { return m_Data.Height; }
+			virtual void ProcessEvents() override;
+			virtual void SwapBuffers() override;
 
 			inline virtual void SetEventCallback(const EventCallbackFn& callback) override { m_Data.EventCallback = callback; }
 
-			void SetVSync(bool enabled) override;
-			bool IsVSync() const override;
+			virtual std::string GetTitle() const override { return m_Data.Title; }
+			virtual void SetTitle(const std::string& title) override;
 
-			inline void* GetNativeWindow() const override { return m_Window; }
+			inline virtual int GetXPosition() const override { return m_Data.PosX; }
+			inline virtual int GetYPosition() const override { return m_Data.PosY; }
+			virtual void SetPosition(const glm::vec2& position) override;
+			inline virtual glm::vec2 GetPosition() const override { return { m_Data.PosX, m_Data.PosY }; }
+
+			inline virtual uint32_t GetWidth() const override { return m_Data.Width; }
+			inline virtual uint32_t GetHeight() const override { return m_Data.Height; }
+			virtual void SetSize(const glm::vec2& size) override;
+			inline virtual glm::vec2 GetSize() const override { return { m_Data.Width, m_Data.Height }; }
+
+			virtual void SetFullscreen(bool fullscreen) override;
+			virtual bool IsFullscreen() const override { return m_Data.Fullscreen; }
+
+			virtual void SetResizable(bool resizable) override;
+			virtual bool IsResizable() const override { return m_Data.Resizable; }
+
+			virtual bool IsIconified() const override;
+			virtual bool IsMaximized() const override;
+			virtual void Iconify() override;
+			virtual void Restore() override;
+			virtual void Maximize() override;
+			virtual void Center() override;
+
+			virtual void SetVSync(bool enabled) override;
+			virtual bool IsVSync() const override { return m_Data.VSync; }
+
+			virtual inline void* GetNativeWindow() const override { return m_Window; }
 
 		private:
 			struct WindowData {
 				std::string Title;
 				uint32_t Width, Height;
-				RendererAPI::API API;
+
+				int MonitorPreference;
+
+				bool Decorated;
+
+				bool Resizable;
+				bool Fullscreen;
+				bool StartMaximized;
 
 				bool VSync;
+
+				int PosX, PosY;
+
+				RendererAPI::API API;
 
 				EventCallbackFn EventCallback;
 			};
 
-			virtual void Init(const WindowProperties& properties);
+			virtual void Init(const WindowSpecification& properties);
 			virtual void Shutdown();
 
 			static void GLFWErrorCallback(int error, const char* description);

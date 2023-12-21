@@ -1,10 +1,10 @@
 import sys
-import os
 import subprocess
 import importlib.util as importlib_util
 
+
 class PythonRequirements:
-    packages = ["requests"]
+    packages = ["requests", "colorama"]
 
     @classmethod
     def Validate(cls):
@@ -35,6 +35,7 @@ class PythonRequirements:
         print("Installing {0:s}...".format(package))
         subprocess.check_call([sys.executable, "-m", "pip", "install", package])
         return cls.__ValidatePackage(package)
+
 
 if __name__ == "__main__":
     PythonRequirements.Validate()

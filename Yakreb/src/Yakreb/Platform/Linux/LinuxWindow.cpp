@@ -4,41 +4,147 @@
 #include "Yakreb/Core/Events/ApplicationEvent.h"
 #include "Yakreb/Core/Events/KeyEvent.h"
 #include "Yakreb/Core/Events/MouseEvent.h"
+#include "Yakreb/Core/Events/ControllerEvent.h"
+
+#include "Yakreb/Platform/Linux/LinuxPhysicalScreen.h"
 
 #include "Yakreb/Platform/Renderer/OpenGL/OpenGLContext.h"
+
+#include "Yakreb/Core/Input/Input.h"
 
 #include <GLFW/glfw3.h>
 
 namespace Yakreb {
 
-	LinuxWindow::LinuxWindow(const WindowProperties& properties) {
-		Init(properties);
+	LinuxWindow::LinuxWindow(const WindowSpecification& specification) {
+		Init(specification);
 	}
 
 	LinuxWindow::~LinuxWindow() {
 		Shutdown();
 	}
 
-	void LinuxWindow::Init(const WindowProperties& properties) {
-		m_Data.Title = properties.Title;
-		m_Data.Width = properties.Width;
-		m_Data.Height = properties.Height;
-
-		YGE_CORE_INFO("Creating window - {0} ({1}, {2})", m_Data.Title, m_Data.Width, m_Data.Height);
+	void LinuxWindow::Init(const WindowSpecification& specification) {
+		m_Data.Title = specification.Title;
+		m_Data.Width = specification.Width;
+		m_Data.Height = specification.Height;
+		m_Data.MonitorPreference = specification.MonitorPreference;
+		m_Data.Decorated = specification.Decorated;
+		m_Data.Resizable = specification.Resizable;
+		m_Data.Fullscreen = specification.Fullscreen;
+		m_Data.StartMaximized = specification.StartMaximized;
+		m_Data.VSync = specification.VSync;
 
 		if (!s_GLFWWindowCount) {
+			glfwInitHint(GLFW_JOYSTICK_HAT_BUTTONS, GLFW_FALSE);
 
 			YGE_CORE_INFO("Initializing GLFW");
 			int success = glfwInit();
 			YGE_CORE_ASSERT(success, "Coult not initialize GLFW!");
 
 			glfwSetErrorCallback(LinuxWindow::GLFWErrorCallback);
+
+			int monitorCount;
+			GLFWmonitor** monitors = glfwGetMonitors(&monitorCount);
+			for (int i = 0; i < monitorCount; i++) {
+				LinuxPhysicalScreen* linuxScreen = new LinuxPhysicalScreen(i, monitors[i]);
+				PhysicalScreen::s_Screens.push_back(linuxScreen);
+				ScreenConnectedEvent event(*linuxScreen);
+				PhysicalScreen::EventCallback(event);
+			}
+
+			glfwSetMonitorCallback([](GLFWmonitor* monitor, int event) {
+				PhysicalScreen scr;
+				if (event == GLFW_CONNECTED) {
+					PhysicalScreen::s_Screens.clear();
+					int monitorCount;
+					GLFWmonitor** monitors = glfwGetMonitors(&monitorCount);
+					for (int i = 0; i < monitorCount; i++) {
+						LinuxPhysicalScreen* linuxScreen = new LinuxPhysicalScreen(i, monitors[i]);
+						PhysicalScreen::s_Screens.push_back(linuxScreen);
+						if (linuxScreen->m_Monitor == monitor) {
+							scr = *linuxScreen;
+						}
+					}
+					ScreenConnectedEvent event(scr);
+					PhysicalScreen::EventCallback(event);
+				}
+				else if (event == GLFW_DISCONNECTED) {
+					for (auto it = PhysicalScreen::s_Screens.begin();
+						it != PhysicalScreen::s_Screens.end(); it++) {
+						LinuxPhysicalScreen& linuxScreen = *static_cast<LinuxPhysicalScreen*>(*it);
+						if (linuxScreen.m_Monitor == monitor) {
+							scr = **it;
+							PhysicalScreen::s_Screens.erase(it);
+						}
+					}
+					ScreenDisconnectedEvent event(scr);
+					PhysicalScreen::EventCallback(event);
+				}
+			});
 		}
 
-		m_Window = glfwCreateWindow((int)m_Data.Width, (int)m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
-		
+		if (m_Data.Decorated)
+			glfwWindowHint(GLFW_DECORATED, GLFW_TRUE);
+		else
+			glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
+
+		switch (RendererAPI::GetAPI()) {
+			default:
+				YGE_CORE_ASSERT(false, CoreError::Renderer::YGE_NONE_RENDERER_API);
+				RendererAPI::SetAPI(RendererAPI::API::OpenGL);
+				[[fallthrough]];
+			case RendererAPI::API::OpenGL:
+				#ifdef YGE_DEBUG
+					glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+				#endif
+				break;
+		}
+
+		if (m_Data.Fullscreen) {
+			PhysicalScreen* screen = nullptr;
+			if ((m_Data.MonitorPreference == -1) ||
+				(m_Data.MonitorPreference >= PhysicalScreen::s_Screens.size())) {
+				for (PhysicalScreen* scr : PhysicalScreen::s_Screens) {
+					if (scr->IsPrimary()) {
+						screen = scr;
+						break;
+					}
+				}
+			}
+			else
+				screen = PhysicalScreen::s_Screens.at(m_Data.MonitorPreference);
+
+			if (screen == nullptr) {
+				YGE_CORE_FATAL("Could not find any monitors!");
+				return;
+			}
+
+			LinuxPhysicalScreen& linuxScreen = *static_cast<LinuxPhysicalScreen*>(screen);
+			GLFWmonitor* monitor = linuxScreen.m_Monitor;
+			int width = static_cast<int>(linuxScreen.m_Width);
+			int height = static_cast<int>(linuxScreen.m_Height);
+			int rbits = linuxScreen.m_RedBits;
+			int gbits = linuxScreen.m_GreenBits;
+			int bbits = linuxScreen.m_BlueBits;
+			int refresh = static_cast<int>(linuxScreen.m_RefreshRate);
+
+			glfwWindowHint(GLFW_RED_BITS, rbits);
+			glfwWindowHint(GLFW_GREEN_BITS, gbits);
+			glfwWindowHint(GLFW_BLUE_BITS, bbits);
+			glfwWindowHint(GLFW_REFRESH_RATE, refresh);
+
+			YGE_CORE_INFO("Creating fullscreen window - {0} ({1}, {2}){3}Hz", m_Data.Title, width, height, refresh);
+
+			m_Window = glfwCreateWindow(width, height, m_Data.Title.c_str(), monitor, nullptr);
+		}
+		else {
+			YGE_CORE_INFO("Creating window - {0} ({1}, {2})", m_Data.Title, m_Data.Width, m_Data.Height);
+
+			m_Window = glfwCreateWindow(static_cast<int>(m_Data.Width), static_cast<int>(m_Data.Height), m_Data.Title.c_str(), nullptr, nullptr);
+		}
+
 		s_GLFWWindowCount++;
-		glfwMakeContextCurrent(m_Window);
 
 		switch (RendererAPI::GetAPI()) {
 			default:
@@ -53,44 +159,99 @@ namespace Yakreb {
 
 		m_Context->Init();
 
+		if (glfwRawMouseMotionSupported()) {
+			YGE_CORE_DEBUG_INFO("Raw mouse input is supported. Enabling raw mouse motion.");
+			glfwSetInputMode(m_Window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
+		}
+		else {
+			YGE_CORE_DEBUG_INFO("Raw mouse input is not supported.");
+		}
+
 		glfwSetWindowUserPointer(m_Window, &m_Data);
-		//SetVSync(true);
-		SetVSync(false);
+
+		if (m_Data.Resizable)
+			glfwSetWindowAttrib(m_Window, GLFW_RESIZABLE, GLFW_TRUE);
+		else
+			glfwSetWindowAttrib(m_Window, GLFW_RESIZABLE, GLFW_FALSE);
+
+		if (m_Data.VSync)
+			glfwSwapInterval(1);
+		else
+			glfwSwapInterval(0);
+
+		if (specification.StartMaximized)
+			Maximize();
+		else
+			Center();
 
 		// GLFW callbacks
 
-		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height) {
-			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
-			data.Width = (uint32_t)width;
-			data.Height = (uint32_t)height;
+		glfwSetWindowPosCallback(m_Window, [](GLFWwindow* window, int posx, int posy) {
+			WindowData& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+			data.PosX = posx;
+			data.PosY = posy;
+		});
 
-			WindowResizeEvent event((uint32_t)width, (uint32_t)height);
+		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height) {
+			WindowData& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+			uint32_t w = static_cast<uint32_t>(width);
+			uint32_t h = static_cast<uint32_t>(height);
+
+			data.Width = w;
+			data.Height = h;
+
+			WindowResizedEvent event(w, h);
 			data.EventCallback(event);
 		});
 
+		glfwSetWindowFocusCallback(m_Window, [](GLFWwindow* window, int focused) {
+			WindowData& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+
+			if (focused) {
+				WindowFocusEvent event;
+				data.EventCallback(event);
+			}
+			else {
+				WindowLostFocusEvent event;
+				data.EventCallback(event);
+			}
+		});
+
+		glfwSetWindowIconifyCallback(m_Window, [](GLFWwindow* window, int iconified) {
+			WindowData& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+			if (iconified == GLFW_TRUE) {
+				WindowLostFocusEvent event;
+				data.EventCallback(event);
+			}
+		});
+
 		glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window) {
-			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+			WindowData& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
 
 			WindowCloseEvent event;
 			data.EventCallback(event);
 		});
 
 		glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
-			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+			WindowData& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
 
 			switch (action) {
 				case GLFW_PRESS: {
-					KeyPressedEvent event(static_cast<KeyCode>(key), 0);
+					KeyCode keycode = static_cast<KeyCode>(key);
+					Input::OnKeyPressed(keycode);
+					KeyPressedEvent event(keycode, false);
 					data.EventCallback(event);
 					break;
 				}
 				case GLFW_RELEASE: {
-					KeyReleasedEvent event(static_cast<KeyCode>(key));
+					KeyCode keycode = static_cast<KeyCode>(key);
+					Input::OnKeyReleased(keycode);
+					KeyReleasedEvent event(keycode);
 					data.EventCallback(event);
 					break;
 				}
 				case GLFW_REPEAT: {
-					KeyPressedEvent event(static_cast<KeyCode>(key), 1);
+					KeyPressedEvent event(static_cast<KeyCode>(key), true);
 					data.EventCallback(event);
 					break;
 				}
@@ -98,23 +259,27 @@ namespace Yakreb {
 		});
 
 		glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int key) {
-			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+			WindowData& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
 
 			KeyTypedEvent event(static_cast<KeyCode>(key));
 			data.EventCallback(event);
 		});
 
 		glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods) {
-			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+			WindowData& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
 
 			switch (action) {
 				case GLFW_PRESS: {
-					MouseButtonPressedEvent event(static_cast<ButtonCode>(button));
+					MouseButton mousebutton = static_cast<MouseButton>(button);
+					Input::OnMouseButtonPressed(mousebutton);
+					MouseButtonPressedEvent event(mousebutton);
 					data.EventCallback(event);
 					break;
 				}
 				case GLFW_RELEASE: {
-					MouseButtonReleasedEvent event(static_cast<ButtonCode>(button));
+					MouseButton mousebutton = static_cast<MouseButton>(button);
+					Input::OnMouseButtonReleased(mousebutton);
+					MouseButtonReleasedEvent event(mousebutton);
 					data.EventCallback(event);
 					break;
 				}
@@ -122,18 +287,28 @@ namespace Yakreb {
 		});
 
 		glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double xPosition, double yPosition) {
-			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
-
-			MouseMovedEvent event((float)xPosition, (float)yPosition);
+			WindowData& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+			float x = static_cast<float>(xPosition), y = static_cast<float>(yPosition);
+			Input::OnMouseMoved(x, y);
+			MouseMovedEvent event(x, y);
 			data.EventCallback(event);
 		});
 
 		glfwSetScrollCallback(m_Window, [](GLFWwindow* window, double xOffset, double yOffset) {
-			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+			WindowData& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
 
 			MouseScrolledEvent event((float)xOffset, (float)yOffset);
 			data.EventCallback(event);
 		});
+
+		// Make sure window position & size is still correct
+		{
+			glfwGetWindowPos(m_Window, &m_Data.PosX, &m_Data.PosY);
+			int width, height;
+			glfwGetWindowSize(m_Window, &width, &height);
+			m_Data.Width = static_cast<uint32_t>(width);
+			m_Data.Height = static_cast<uint32_t>(height);
+		}
 
 	}
 
@@ -150,18 +325,107 @@ namespace Yakreb {
 		YGE_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
 	}
 
-	void LinuxWindow::OnUpdate() {
+	void LinuxWindow::ProcessEvents() {
 		glfwPollEvents();
+	}
+
+	void LinuxWindow::SwapBuffers() {
 		m_Context->SwapBuffers();
+	}
+
+	void LinuxWindow::SetTitle(const std::string& title) {
+		glfwSetWindowTitle(m_Window, title.c_str());
+		m_Data.Title = title;
+	}
+
+	void LinuxWindow::SetPosition(const glm::vec2& position) {
+		int x = static_cast<int>(position.x);
+		int y = static_cast<int>(position.y);
+		glfwSetWindowPos(m_Window, x, y);
+		m_Data.PosX = x;
+		m_Data.PosY = y;
+	}
+
+	void LinuxWindow::SetSize(const glm::vec2& size) {
+		glfwSetWindowSize(m_Window, static_cast<int>(size.x), static_cast<int>(size.y));
+		m_Data.Width = static_cast<uint32_t>(size.x);
+		m_Data.Height = static_cast<uint32_t>(size.y);
+	}
+
+	void LinuxWindow::SetFullscreen(bool fullscreen) {
+		if (fullscreen) {
+			PhysicalScreen* screen = nullptr;
+			if ((m_Data.MonitorPreference == -1) ||
+				(m_Data.MonitorPreference >= PhysicalScreen::s_Screens.size())) {
+				for (PhysicalScreen* scr : PhysicalScreen::s_Screens) {
+					if (scr->IsPrimary()) {
+						screen = scr;
+						break;
+					}
+				}
+			}
+			else
+				screen = PhysicalScreen::s_Screens.at(m_Data.MonitorPreference);
+
+			if (screen == nullptr) {
+				YGE_CORE_FATAL("Could not find any monitors!");
+				return;
+			}
+
+			LinuxPhysicalScreen& linuxScreen = *static_cast<LinuxPhysicalScreen*>(screen);
+			GLFWmonitor* monitor = linuxScreen.m_Monitor;
+			int width = static_cast<int>(linuxScreen.m_Width);
+			int height = static_cast<int>(linuxScreen.m_Height);
+			int refresh = static_cast<int>(linuxScreen.m_RefreshRate);
+
+			glfwSetWindowMonitor(m_Window, monitor, 0, 0, width, height, refresh);
+
+			m_Data.Width = static_cast<uint32_t>(width);
+			m_Data.Height = static_cast<uint32_t>(height);
+
+		}
+		else {
+			glfwSetWindowMonitor(m_Window, nullptr, 0, 0, m_Data.Width, m_Data.Height, 0);
+			Center();
+		}
+		m_Data.Fullscreen = fullscreen;
+	}
+
+	void LinuxWindow::SetResizable(bool resizable) {
+		glfwSetWindowAttrib(m_Window, GLFW_RESIZABLE, resizable ? GLFW_TRUE : GLFW_FALSE);
+		m_Data.Resizable = resizable;
+	}
+
+	bool LinuxWindow::IsIconified() const {
+		return glfwGetWindowAttrib(m_Window, GLFW_ICONIFIED) == GLFW_TRUE;
+	}
+
+	bool LinuxWindow::IsMaximized() const {
+		return glfwGetWindowAttrib(m_Window, GLFW_MAXIMIZED) == GLFW_TRUE;
+	}
+
+	void LinuxWindow::Iconify() {
+		glfwIconifyWindow(m_Window);
+	}
+
+	void LinuxWindow::Restore() {
+		glfwRestoreWindow(m_Window);
+	}
+
+	void LinuxWindow::Maximize() {
+		glfwMaximizeWindow(m_Window);
+	}
+
+	void LinuxWindow::Center() {
+		const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+		int x = (mode->width - static_cast<int>(m_Data.Width)) / 2;
+		int y = (mode->height - static_cast<int>(m_Data.Height)) / 2;
+		glfwSetWindowPos(m_Window, x, y);
 	}
 
 	void LinuxWindow::SetVSync(bool enabled) {
 		glfwSwapInterval(enabled ? 1 : 0);
 		m_Data.VSync = enabled;
-	}
-
-	bool LinuxWindow::IsVSync() const {
-		return m_Data.VSync;
 	}
 
 }

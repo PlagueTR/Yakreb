@@ -11,7 +11,7 @@ namespace Yakreb {
 
 	uint8_t Window::s_GLFWWindowCount = 0;
 
-	Scope<Window> Window::Create(const WindowProperties& properties) {
+	Scope<Window> Window::Create(const WindowSpecification& properties) {
 
 		#ifdef YGE_PLATFORM_WINDOWS
 			return CreateScope<WindowsWindow>(properties);

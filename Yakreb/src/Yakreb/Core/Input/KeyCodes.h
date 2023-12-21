@@ -6,13 +6,6 @@
 
 namespace Yakreb {
 
-	namespace detail {
-		class Input {
-			public:
-				static char *unicodeBuffer;
-		};
-	}
-
 	typedef enum class KeyCode : uint16_t {
 		Space = 32,
 		Apostrophe = 39, /* ' */
@@ -143,167 +136,176 @@ namespace Yakreb {
 		RightControl = 345,
 		RightAlt = 346,
 		RightSuper = 347,
-		Menu = 348
+		Menu = 348,
+
+		Unknown = std::numeric_limits<uint16_t>::max()
 	} Key;
 
+	namespace detail::KeyCodes {
+		class Input {
+			public:
+				inline static char unicodeBuffer[5] = { '\0' };
+		};
+	}
+
 	static const char* GetUTF8(const unsigned int unicode) {
-		std::memset(detail::Input::unicodeBuffer, '\0', 5);
+		std::memset(detail::KeyCodes::Input::unicodeBuffer, '\0', 5);
 		if (unicode <= 0x7F) {
-			detail::Input::unicodeBuffer[0] = unicode;
+			detail::KeyCodes::Input::unicodeBuffer[0] = unicode;
 		}
 		else if (unicode <= 0x7FF) {
-			detail::Input::unicodeBuffer[0] = (unicode >> 6) + 192;
-			detail::Input::unicodeBuffer[1] = (unicode & 63) + 128;
+			detail::KeyCodes::Input::unicodeBuffer[0] = (unicode >> 6) + 192;
+			detail::KeyCodes::Input::unicodeBuffer[1] = (unicode & 63) + 128;
 		}
 		else if (0xd800 <= unicode && unicode <= 0xdfff) {} // Invalid block of utf8
 		else if (unicode <= 0xFFFF) {
-			detail::Input::unicodeBuffer[0] = (unicode >> 12) + 224;
-			detail::Input::unicodeBuffer[1] = ((unicode >> 6) & 63) + 128;
-			detail::Input::unicodeBuffer[2] = (unicode & 63) + 128;
+			detail::KeyCodes::Input::unicodeBuffer[0] = (unicode >> 12) + 224;
+			detail::KeyCodes::Input::unicodeBuffer[1] = ((unicode >> 6) & 63) + 128;
+			detail::KeyCodes::Input::unicodeBuffer[2] = (unicode & 63) + 128;
 		}
 		else if (unicode <= 0x10FFFF) {
-			detail::Input::unicodeBuffer[0] = (unicode >> 18) + 240;
-			detail::Input::unicodeBuffer[1] = ((unicode >> 12) & 63) + 128;
-			detail::Input::unicodeBuffer[2] = ((unicode >> 6) & 63) + 128;
-			detail::Input::unicodeBuffer[3] = (unicode & 63) + 128;
+			detail::KeyCodes::Input::unicodeBuffer[0] = (unicode >> 18) + 240;
+			detail::KeyCodes::Input::unicodeBuffer[1] = ((unicode >> 12) & 63) + 128;
+			detail::KeyCodes::Input::unicodeBuffer[2] = ((unicode >> 6) & 63) + 128;
+			detail::KeyCodes::Input::unicodeBuffer[3] = (unicode & 63) + 128;
 		}
-		return detail::Input::unicodeBuffer;
+		return detail::KeyCodes::Input::unicodeBuffer;
 	}
 
 	constexpr const char* GetKeyName(const KeyCode keycode) {
 		switch (keycode)
 		{
-		case KeyCode::Space:			return "Space";
-		case KeyCode::Apostrophe:		return "'";
-		case KeyCode::Comma:			return ",";
-		case KeyCode::Minus:			return "-";
-		case KeyCode::Period:			return ".";
-		case KeyCode::Slash:			return "/";
+			case KeyCode::Space:			return "Space";
+			case KeyCode::Apostrophe:		return "'";
+			case KeyCode::Comma:			return ",";
+			case KeyCode::Minus:			return "-";
+			case KeyCode::Period:			return ".";
+			case KeyCode::Slash:			return "/";
 
-		case KeyCode::D0:				return "0";
-		case KeyCode::D1:				return "1";
-		case KeyCode::D2:				return "2";
-		case KeyCode::D3:				return "3";
-		case KeyCode::D4:				return "4";
-		case KeyCode::D5:				return "5";
-		case KeyCode::D6:				return "6";
-		case KeyCode::D7:				return "7";
-		case KeyCode::D8:				return "8";
-		case KeyCode::D9:				return "9";
+			case KeyCode::D0:				return "0";
+			case KeyCode::D1:				return "1";
+			case KeyCode::D2:				return "2";
+			case KeyCode::D3:				return "3";
+			case KeyCode::D4:				return "4";
+			case KeyCode::D5:				return "5";
+			case KeyCode::D6:				return "6";
+			case KeyCode::D7:				return "7";
+			case KeyCode::D8:				return "8";
+			case KeyCode::D9:				return "9";
 
-		case KeyCode::Semicolon:		return ";";
-		case KeyCode::Equal:			return "=";
+			case KeyCode::Semicolon:		return ";";
+			case KeyCode::Equal:			return "=";
 
-		case KeyCode::A:				return "A";
-		case KeyCode::B:				return "B";
-		case KeyCode::C:				return "C";
-		case KeyCode::D:				return "D";
-		case KeyCode::E:				return "E";
-		case KeyCode::F:				return "F";
-		case KeyCode::G:				return "G";
-		case KeyCode::H:				return "H";
-		case KeyCode::I:				return "I";
-		case KeyCode::J:				return "J";
-		case KeyCode::K:				return "K";
-		case KeyCode::L:				return "L";
-		case KeyCode::M:				return "M";
-		case KeyCode::N:				return "N";
-		case KeyCode::O:				return "O";
-		case KeyCode::P:				return "P";
-		case KeyCode::Q:				return "Q";
-		case KeyCode::R:				return "R";
-		case KeyCode::S:				return "S";
-		case KeyCode::T:				return "T";
-		case KeyCode::U:				return "U";
-		case KeyCode::V:				return "V";
-		case KeyCode::W:				return "W";
-		case KeyCode::X:				return "X";
-		case KeyCode::Y:				return "Y";
-		case KeyCode::Z:				return "Z";
+			case KeyCode::A:				return "A";
+			case KeyCode::B:				return "B";
+			case KeyCode::C:				return "C";
+			case KeyCode::D:				return "D";
+			case KeyCode::E:				return "E";
+			case KeyCode::F:				return "F";
+			case KeyCode::G:				return "G";
+			case KeyCode::H:				return "H";
+			case KeyCode::I:				return "I";
+			case KeyCode::J:				return "J";
+			case KeyCode::K:				return "K";
+			case KeyCode::L:				return "L";
+			case KeyCode::M:				return "M";
+			case KeyCode::N:				return "N";
+			case KeyCode::O:				return "O";
+			case KeyCode::P:				return "P";
+			case KeyCode::Q:				return "Q";
+			case KeyCode::R:				return "R";
+			case KeyCode::S:				return "S";
+			case KeyCode::T:				return "T";
+			case KeyCode::U:				return "U";
+			case KeyCode::V:				return "V";
+			case KeyCode::W:				return "W";
+			case KeyCode::X:				return "X";
+			case KeyCode::Y:				return "Y";
+			case KeyCode::Z:				return "Z";
 
-		case KeyCode::LeftBracket:		return "[";
-		case KeyCode::Backslash:		return "\\";
-		case KeyCode::RightBracket:		return "]";
-		case KeyCode::GraveAccent:		return "`";
+			case KeyCode::LeftBracket:		return "[";
+			case KeyCode::Backslash:		return "\\";
+			case KeyCode::RightBracket:		return "]";
+			case KeyCode::GraveAccent:		return "`";
 
-		case KeyCode::World1:			return "NON US #1";
-		case KeyCode::World2:			return "NON US #2";
+			case KeyCode::World1:			return "NON US #1";
+			case KeyCode::World2:			return "NON US #2";
 
-		case KeyCode::Escape:			return "Esc";
-		case KeyCode::Enter:			return "Enter";
-		case KeyCode::Tab:				return "Tab";
-		case KeyCode::Backspace:		return "Backspace";
-		case KeyCode::Insert:			return "Insert";
-		case KeyCode::Delete:			return "Delete";
-		case KeyCode::Right:			return "Right";
-		case KeyCode::Left:				return "Left";
-		case KeyCode::Down:				return "Down";
-		case KeyCode::Up:				return "Up";
-		case KeyCode::PageUp:			return "Page up";
-		case KeyCode::PageDown:			return "Page down";
-		case KeyCode::Home:				return "Home";
-		case KeyCode::End:				return "End";
-		case KeyCode::CapsLock:			return "Caps lock";
-		case KeyCode::ScrollLock:		return "Scroll lock";
-		case KeyCode::NumLock:			return "Num lock";
-		case KeyCode::PrintScreen:		return "Print screen";
-		case KeyCode::Pause:			return "Pause";
-		case KeyCode::F1:				return "F1";
-		case KeyCode::F2:				return "F2";
-		case KeyCode::F3:				return "F3";
-		case KeyCode::F4:				return "F4";
-		case KeyCode::F5:				return "F5";
-		case KeyCode::F6:				return "F6";
-		case KeyCode::F7:				return "F7";
-		case KeyCode::F8:				return "F8";
-		case KeyCode::F9:				return "F9";
-		case KeyCode::F10:				return "F10";
-		case KeyCode::F11:				return "F11";
-		case KeyCode::F12:				return "F12";
-		case KeyCode::F13:				return "F13";
-		case KeyCode::F14:				return "F14";
-		case KeyCode::F15:				return "F15";
-		case KeyCode::F16:				return "F16";
-		case KeyCode::F17:				return "F17";
-		case KeyCode::F18:				return "F18";
-		case KeyCode::F19:				return "F19";
-		case KeyCode::F20:				return "F20";
-		case KeyCode::F21:				return "F21";
-		case KeyCode::F22:				return "F22";
-		case KeyCode::F23:				return "F23";
-		case KeyCode::F24:				return "F24";
-		case KeyCode::F25:				return "F25";
+			case KeyCode::Escape:			return "Esc";
+			case KeyCode::Enter:			return "Enter";
+			case KeyCode::Tab:				return "Tab";
+			case KeyCode::Backspace:		return "Backspace";
+			case KeyCode::Insert:			return "Insert";
+			case KeyCode::Delete:			return "Delete";
+			case KeyCode::Right:			return "Right";
+			case KeyCode::Left:				return "Left";
+			case KeyCode::Down:				return "Down";
+			case KeyCode::Up:				return "Up";
+			case KeyCode::PageUp:			return "Page up";
+			case KeyCode::PageDown:			return "Page down";
+			case KeyCode::Home:				return "Home";
+			case KeyCode::End:				return "End";
+			case KeyCode::CapsLock:			return "Caps lock";
+			case KeyCode::ScrollLock:		return "Scroll lock";
+			case KeyCode::NumLock:			return "Num lock";
+			case KeyCode::PrintScreen:		return "Print screen";
+			case KeyCode::Pause:			return "Pause";
+			case KeyCode::F1:				return "F1";
+			case KeyCode::F2:				return "F2";
+			case KeyCode::F3:				return "F3";
+			case KeyCode::F4:				return "F4";
+			case KeyCode::F5:				return "F5";
+			case KeyCode::F6:				return "F6";
+			case KeyCode::F7:				return "F7";
+			case KeyCode::F8:				return "F8";
+			case KeyCode::F9:				return "F9";
+			case KeyCode::F10:				return "F10";
+			case KeyCode::F11:				return "F11";
+			case KeyCode::F12:				return "F12";
+			case KeyCode::F13:				return "F13";
+			case KeyCode::F14:				return "F14";
+			case KeyCode::F15:				return "F15";
+			case KeyCode::F16:				return "F16";
+			case KeyCode::F17:				return "F17";
+			case KeyCode::F18:				return "F18";
+			case KeyCode::F19:				return "F19";
+			case KeyCode::F20:				return "F20";
+			case KeyCode::F21:				return "F21";
+			case KeyCode::F22:				return "F22";
+			case KeyCode::F23:				return "F23";
+			case KeyCode::F24:				return "F24";
+			case KeyCode::F25:				return "F25";
 
-		case KeyCode::KP0:				return "Num 0";
-		case KeyCode::KP1:				return "Num 1";
-		case KeyCode::KP2:				return "Num 2";
-		case KeyCode::KP3:				return "Num 3";
-		case KeyCode::KP4:				return "Num 4";
-		case KeyCode::KP5:				return "Num 5";
-		case KeyCode::KP6:				return "Num 6";
-		case KeyCode::KP7:				return "Num 7";
-		case KeyCode::KP8:				return "Num 8";
-		case KeyCode::KP9:				return "Num 9";
-		case KeyCode::KPDecimal:		return "Num .";
-		case KeyCode::KPDivide:			return "Num /";
-		case KeyCode::KPMultiply:		return "Num *";
-		case KeyCode::KPSubtract:		return "Num -";
-		case KeyCode::KPAdd:			return "Num +";
-		case KeyCode::KPEnter:			return "Num enter";
-		case KeyCode::KPEqual:			return "Num =";
+			case KeyCode::KP0:				return "Num 0";
+			case KeyCode::KP1:				return "Num 1";
+			case KeyCode::KP2:				return "Num 2";
+			case KeyCode::KP3:				return "Num 3";
+			case KeyCode::KP4:				return "Num 4";
+			case KeyCode::KP5:				return "Num 5";
+			case KeyCode::KP6:				return "Num 6";
+			case KeyCode::KP7:				return "Num 7";
+			case KeyCode::KP8:				return "Num 8";
+			case KeyCode::KP9:				return "Num 9";
+			case KeyCode::KPDecimal:		return "Num .";
+			case KeyCode::KPDivide:			return "Num /";
+			case KeyCode::KPMultiply:		return "Num *";
+			case KeyCode::KPSubtract:		return "Num -";
+			case KeyCode::KPAdd:			return "Num +";
+			case KeyCode::KPEnter:			return "Num enter";
+			case KeyCode::KPEqual:			return "Num =";
 
-		case KeyCode::LeftShift:		return "Left shift";
-		case KeyCode::LeftControl:		return "Left ctrl";
-		case KeyCode::LeftAlt:			return "Left alt";
-		case KeyCode::LeftSuper:		return "Left super";
-		case KeyCode::RightShift:		return "Right shift";
-		case KeyCode::RightControl:		return "Right ctrl";
-		case KeyCode::RightAlt:			return "Right alt";
-		case KeyCode::RightSuper:		return "Right super";
-		case KeyCode::Menu:				return "Menu";
+			case KeyCode::LeftShift:		return "Left shift";
+			case KeyCode::LeftControl:		return "Left ctrl";
+			case KeyCode::LeftAlt:			return "Left alt";
+			case KeyCode::LeftSuper:		return "Left super";
+			case KeyCode::RightShift:		return "Right shift";
+			case KeyCode::RightControl:		return "Right ctrl";
+			case KeyCode::RightAlt:			return "Right alt";
+			case KeyCode::RightSuper:		return "Right super";
+			case KeyCode::Menu:				return "Menu";
 		}
 
-		YGE_CORE_DEBUG_WARN("Unknown KeyCode ({})!", (int)keycode);
+		YGE_CORE_DEBUG_WARN("Unknown KeyCode ({})!", static_cast<int>(keycode));
 		return "";
 	}
 

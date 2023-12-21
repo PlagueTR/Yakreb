@@ -1,8 +1,6 @@
 #include <Yakreb.h>
 #include <Yakreb/EntryPoint.h>
 
-#include <imgui.h>
-
 class MyLayer : public Yakreb::Layer {
 	public:
 
@@ -68,44 +66,91 @@ class MyLayer : public Yakreb::Layer {
 			float deltaTime = Yakreb::GameTime::GetDeltaTime();
 
 			// Camera Movement
-			if (Yakreb::Input::IsKeyPressed(Yakreb::Key::W))
+			if (Yakreb::Input::IsKeyDown(Yakreb::Key::W))
 				m_OrthoCamera.SetPosition(m_OrthoCamera.GetPosition() + glm::vec3(0.0f, m_CameraMoveSpeed * deltaTime, 0.0f));
-			if (Yakreb::Input::IsKeyPressed(Yakreb::Key::S))
+			if (Yakreb::Input::IsKeyDown(Yakreb::Key::S))
 				m_OrthoCamera.SetPosition(m_OrthoCamera.GetPosition() - glm::vec3(0.0f, m_CameraMoveSpeed * deltaTime, 0.0f));
 
-			if (Yakreb::Input::IsKeyPressed(Yakreb::Key::A))
+			if (Yakreb::Input::IsKeyDown(Yakreb::Key::A))
 				m_OrthoCamera.SetPosition(m_OrthoCamera.GetPosition() - glm::vec3(m_CameraMoveSpeed * deltaTime, 0.0f, 0.0f));
-			if (Yakreb::Input::IsKeyPressed(Yakreb::Key::D))
+			if (Yakreb::Input::IsKeyDown(Yakreb::Key::D))
 				m_OrthoCamera.SetPosition(m_OrthoCamera.GetPosition() + glm::vec3(m_CameraMoveSpeed * deltaTime, 0.0f, 0.0f));
 
 			// Camera Rotation
-			if (Yakreb::Input::IsKeyPressed(Yakreb::Key::Q))
+			if (Yakreb::Input::IsKeyDown(Yakreb::Key::Q))
 				m_OrthoCamera.SetRotation(m_OrthoCamera.GetRotation() + m_CameraRotateSpeed * deltaTime);
-			if (Yakreb::Input::IsKeyPressed(Yakreb::Key::E))
+			if (Yakreb::Input::IsKeyDown(Yakreb::Key::E))
 				m_OrthoCamera.SetRotation(m_OrthoCamera.GetRotation() - m_CameraRotateSpeed * deltaTime);
 
 			// Camera Zoom
-			if (Yakreb::Input::IsKeyPressed(Yakreb::Key::KPSubtract))
+			if (Yakreb::Input::IsKeyDown(Yakreb::Key::KPSubtract))
 				m_OrthoCamera.SetZoom(m_OrthoCamera.GetZoom() + m_CameraZoomSpeed * deltaTime);
-			if (Yakreb::Input::IsKeyPressed(Yakreb::Key::KPAdd))
+			if (Yakreb::Input::IsKeyDown(Yakreb::Key::KPAdd))
 				m_OrthoCamera.SetZoom(m_OrthoCamera.GetZoom() - m_CameraZoomSpeed * deltaTime);
 
 			// Square Movement
-			if (Yakreb::Input::IsKeyPressed(Yakreb::Key::Up))
+			if (Yakreb::Input::IsKeyDown(Yakreb::Key::Up))
 				m_SquarePosition.y += m_SquareMoveSpeed * deltaTime;
-			if (Yakreb::Input::IsKeyPressed(Yakreb::Key::Down))
+			if (Yakreb::Input::IsKeyDown(Yakreb::Key::Down))
 				m_SquarePosition.y -= m_SquareMoveSpeed * deltaTime;
 
-			if (Yakreb::Input::IsKeyPressed(Yakreb::Key::Left))
+			if (Yakreb::Input::IsKeyDown(Yakreb::Key::Left))
 				m_SquarePosition.x -= m_SquareMoveSpeed * deltaTime;
-			if (Yakreb::Input::IsKeyPressed(Yakreb::Key::Right))
+			if (Yakreb::Input::IsKeyDown(Yakreb::Key::Right))
 				m_SquarePosition.x += m_SquareMoveSpeed * deltaTime;
 
 			// Square Rotation
-			if (Yakreb::Input::IsKeyPressed(Yakreb::Key::Z))
+			if (Yakreb::Input::IsKeyDown(Yakreb::Key::Z))
 				m_SquareRotation += m_SquareRotateSpeed * deltaTime;
-			if (Yakreb::Input::IsKeyPressed(Yakreb::Key::X))
+			if (Yakreb::Input::IsKeyDown(Yakreb::Key::X))
 				m_SquareRotation -= m_SquareRotateSpeed * deltaTime;
+
+			auto& controllers = Yakreb::Input::GetControllers();
+			m_ControllerPresent = (controllers.size() > 0) && (controllers.at(0).Type != Yakreb::ControllerType::Unmapped);
+
+			if (m_ControllerPresent) {
+
+				int controllerID = controllers.begin()->first;
+
+				// Camera Movement
+				float cameraY = -Yakreb::Input::GetControllerAxis(controllerID, Yakreb::ControllerAxis::LeftY);
+				if (cameraY != 0.0f)
+					m_OrthoCamera.SetPosition(m_OrthoCamera.GetPosition() + glm::vec3(0.0f, m_CameraMoveSpeed * deltaTime * cameraY, 0.0f));
+
+				float cameraX = Yakreb::Input::GetControllerAxis(controllerID, Yakreb::ControllerAxis::LeftX);
+				if (cameraX != 0.0f)
+					m_OrthoCamera.SetPosition(m_OrthoCamera.GetPosition() + glm::vec3(m_CameraMoveSpeed * deltaTime * cameraX, 0.0f, 0.0f));
+
+				// Camera Rotation
+				if (Yakreb::Input::IsControllerButtonDown(controllerID, Yakreb::ControllerButton::LeftBumper))
+					m_OrthoCamera.SetRotation(m_OrthoCamera.GetRotation() + m_CameraRotateSpeed * deltaTime);
+				if (Yakreb::Input::IsControllerButtonDown(controllerID, Yakreb::ControllerButton::RightBumper))
+					m_OrthoCamera.SetRotation(m_OrthoCamera.GetRotation() - m_CameraRotateSpeed * deltaTime);
+
+				// Camera Zoom
+				if (Yakreb::Input::IsControllerButtonDown(controllerID, Yakreb::ControllerButton::South))
+					m_OrthoCamera.SetZoom(m_OrthoCamera.GetZoom() + m_CameraZoomSpeed * deltaTime);
+				if (Yakreb::Input::IsControllerButtonDown(controllerID, Yakreb::ControllerButton::North))
+					m_OrthoCamera.SetZoom(m_OrthoCamera.GetZoom() - m_CameraZoomSpeed * deltaTime);
+
+				// Square Movement
+				if (Yakreb::Input::IsControllerButtonDown(controllerID, Yakreb::ControllerButton::DPadUp))
+					m_SquarePosition.y += m_SquareMoveSpeed * deltaTime;
+				if (Yakreb::Input::IsControllerButtonDown(controllerID, Yakreb::ControllerButton::DPadDown))
+					m_SquarePosition.y -= m_SquareMoveSpeed * deltaTime;
+
+				if (Yakreb::Input::IsControllerButtonDown(controllerID, Yakreb::ControllerButton::DPadLeft))
+					m_SquarePosition.x -= m_SquareMoveSpeed * deltaTime;
+				if (Yakreb::Input::IsControllerButtonDown(controllerID, Yakreb::ControllerButton::DPadRight))
+					m_SquarePosition.x += m_SquareMoveSpeed * deltaTime;
+
+				// Square Rotation
+				if (Yakreb::Input::IsControllerButtonDown(controllerID, Yakreb::ControllerButton::West))
+					m_SquareRotation += m_SquareRotateSpeed * deltaTime;
+				if (Yakreb::Input::IsControllerButtonDown(controllerID, Yakreb::ControllerButton::East))
+					m_SquareRotation -= m_SquareRotateSpeed * deltaTime;
+
+			}
 
 			m_SquareTransform = glm::rotate(glm::translate(glm::mat4(1.0f), m_SquarePosition), glm::radians(m_SquareRotation), glm::vec3(0.0f, 0.0f, 1.0f));
 
@@ -122,6 +167,7 @@ class MyLayer : public Yakreb::Layer {
 		}
 
 		void OnImGuiRender() override {
+			
 			Yakreb::AllocationStats globalMemoryStats = Yakreb::Allocator::GetGlobalAllocationStats();
 			Yakreb::AllocationStatsVec memoryStatsByCategories = Yakreb::Allocator::GetAllocationStatsVec();
 			ImGui::Begin("Memory Statistics");
@@ -141,6 +187,56 @@ class MyLayer : public Yakreb::Layer {
 				}
 			}
 			ImGui::End();
+
+			
+			ImGui::Begin("Controller Info");
+
+			const std::map<int, Yakreb::Controller>& controllers = Yakreb::Input::GetControllers();
+			if (controllers.size() == 0) {
+				ImGui::Text("No controllers detected");
+			}
+			else {
+				for (const std::pair<int, Yakreb::Controller>& kvp : controllers) {
+					if (ImGui::CollapsingHeader(fmt::format("Controller {} - {}", kvp.first, kvp.second.Name).c_str())) {
+						const Yakreb::Controller& controller = kvp.second;
+						ImGui::Text("  Controller type: %s", Yakreb::GetControllerTypeName(controller.Type));
+						if (controller.ButtonStates.size())
+							ImGui::Text("  Buttons:");
+						for (int i = 0; i < controller.ButtonStates.size(); i++) {
+							std::string state = Yakreb::GetButtonStateName(controller.ButtonStates.at(i));
+							if (controller.Type == Yakreb::ControllerType::Unmapped)
+								ImGui::Text("    %s", fmt::format("Button {:02} - {}", i, state).c_str());
+							else if (controller.Type == Yakreb::ControllerType::Generic)
+								ImGui::Text("    %s", fmt::format("{} - {}", Yakreb::GetGenericButtonName(static_cast<Yakreb::ControllerButton>(i)), state).c_str());
+							else {
+								const char* buttonName = Yakreb::GetButtonName(controller.Type, static_cast<Yakreb::ControllerButton>(i));
+								if (std::strlen(buttonName))
+									ImGui::Text("    %s", fmt::format("{} - {}", buttonName, state).c_str());
+							}
+						}
+						if (controller.AxisStates.size())
+							ImGui::Text("  Axes:");
+						for (int i = 0; i < controller.AxisStates.size(); i++) {
+							if (controller.Type == Yakreb::ControllerType::Unmapped)
+								ImGui::Text("    %s", fmt::format("Axis {:02} - {:.3}(dz: {:.3})", i, controller.AxisStates.at(i), controller.AxisDeadZones.at(i)).c_str());
+							else if (controller.Type == Yakreb::ControllerType::Generic)
+								ImGui::Text("    %s", fmt::format("{} - {:.3}(dz: {:.3})", Yakreb::GetGenericAxisName(static_cast<Yakreb::ControllerAxis>(i)), controller.AxisStates.at(i), controller.AxisDeadZones.at(i)).c_str());
+							else {
+								const char* axisName = Yakreb::GetAxisName(controller.Type, static_cast<Yakreb::ControllerAxis>(i));
+								if (std::strlen(axisName))
+									ImGui::Text("   %s", fmt::format("{} - {:.3}(dz: {:.3})", axisName, controller.AxisStates.at(i), controller.AxisDeadZones.at(i)).c_str());
+							}
+						}
+						if (controller.HatStates.size())
+							ImGui::Text("  Hats:");
+						for (int i = 0; i < controller.HatStates.size(); i++)
+							ImGui::Text("    %s", fmt::format("Hat {} - {}", i, Yakreb::GetHatStateName(static_cast<Yakreb::HatState>(controller.HatStates.at(i)))).c_str());
+					}
+				}
+			}
+
+			ImGui::End();
+
 		}
 
 		void OnEvent(Yakreb::Event& event) override {
@@ -166,6 +262,8 @@ class MyLayer : public Yakreb::Layer {
 		float m_CameraMoveSpeed = 2.0f;
 		float m_CameraRotateSpeed = 45.0f;
 		float m_CameraZoomSpeed = 1.0f;
+
+		bool m_ControllerPresent = false;
 
 };
 

@@ -10,7 +10,7 @@ workspace "Yakreb"
         "Dist"
     }
 
-startproject "Sandbox"
+    startproject "Sandbox"
 
     flags{
         "MultiProcessorCompile"

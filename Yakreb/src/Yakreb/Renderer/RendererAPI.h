@@ -11,12 +11,21 @@ namespace Yakreb {
 		public:
 			enum class API {
 				None = 0,
-				OpenGL = 1
+				OpenGL
+			};
+
+			struct DeviceInfo {
+				std::string Vendor;
+				std::string Device;
+				std::string Version;
 			};
 
 			virtual ~RendererAPI() = default;
 
 			static void Init() { s_Instance->InitImpl(); }
+			static void Shutdown() { s_Instance->ShutdownImpl(); }
+
+			static void LogRendererInfo();
 
 			inline static void SetClearColor(const glm::vec4& color) { s_Instance->SetClearColorImpl(color); }
 			inline static void Clear() { s_Instance->ClearImpl(); }
@@ -28,6 +37,7 @@ namespace Yakreb {
 
 		protected:
 			virtual void InitImpl() = 0;
+			virtual void ShutdownImpl() = 0;
 			
 			virtual void SetClearColorImpl(const glm::vec4& color) = 0;
 			virtual void ClearImpl() = 0;
@@ -36,6 +46,7 @@ namespace Yakreb {
 
 			static RendererAPI* s_Instance;
 			static API s_API;
+			static DeviceInfo s_DeviceInfo;
 
 	};
 

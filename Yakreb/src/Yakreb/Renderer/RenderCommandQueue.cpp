@@ -4,7 +4,7 @@
 namespace Yakreb {
 
 	RenderCommandQueue::RenderCommandQueue() : m_Capacity(s_InitialBufferSize) {
-		m_CommandBuffer = ygenew("RenderComamndQueue") byte[s_InitialBufferSize];
+		m_CommandBuffer = ygenew("RenderCommandQueue") byte[s_InitialBufferSize];
 		m_CommandBufferPtr = m_CommandBuffer;
 		std::memset(m_CommandBuffer, 0, s_InitialBufferSize);
 	}

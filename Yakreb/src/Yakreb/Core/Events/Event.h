@@ -12,24 +12,34 @@ namespace Yakreb {
 
 	enum class EventType {
 		None = 0,
-		WindowClose, WindowResize, WindowFocus, WindowLostFocus, WindowMoved,
-		AppTick, AppUpdate, AppRender,
+		// Application
+		ScreenConnected, ScreenDisconnected, 
+		WindowClosed, WindowResized, WindowFocus, WindowLostFocus,
+		// Input
 		KeyPressed, KeyReleased, KeyTyped,
-		MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled
+		MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled,
+		ControllerConnected, ControllerDisconnected, // no events for joystick button -  axis - hat state changes
+		// Future
+		AppTick, AppUpdate, AppRender,
+		NetworkConnected, NetworkDisconnected,
+		ClipboardCopy, ClipboardPaste
 	};
 
 	enum EventCategory {
 		None = 0,
-		EventCategoryApplication	= BIT(0),
-		EventCategoryInput			= BIT(1),
-		EventCategoryKeyboard		= BIT(2),
-		EventCategoryMouse			= BIT(3),
-		EventCategoryMouseButton	= BIT(4)
+		EventCategoryApplication    = BIT(0),
+		EventCategoryInput          = BIT(1),
+		EventCategoryKeyboard       = BIT(2),
+		EventCategoryMouse          = BIT(3),
+		EventCategoryMouseButton    = BIT(4),
+		EventCategoryController     = BIT(5),
+		EventCategoryNetwork        = BIT(6),
+		EventCategoryClipboard      = BIT(7)
 	};
 
 #define EVENT_CLASS_TYPE(type) static EventType GetStaticType() { return EventType::type; }\
-																virtual EventType GetEventType() const override { return GetStaticType(); }\
-																virtual const char *GetName() const override { return #type; }
+							   virtual EventType GetEventType() const override { return GetStaticType(); }\
+							   virtual const char *GetName() const override { return #type; }
 #define EVENT_CLASS_CATEGORY(category) virtual int GetCategoryFlags() const override { return category; }
 
 	class Event {

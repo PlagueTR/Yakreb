@@ -6,7 +6,14 @@
 namespace Yakreb {
 
 	void OpenGLRendererAPI::InitImpl() {
-		
+		s_DeviceInfo.Vendor = reinterpret_cast<const char*>(glGetString(GL_VENDOR));
+		s_DeviceInfo.Device = reinterpret_cast<const char*>(glGetString(GL_RENDERER));
+		s_DeviceInfo.Version = reinterpret_cast<const char*>(glGetString(GL_VERSION));
+		LogRendererInfo();
+	}
+
+	void OpenGLRendererAPI::ShutdownImpl() {
+
 	}
 
 	void OpenGLRendererAPI::SetClearColorImpl(const glm::vec4& color) {

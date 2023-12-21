@@ -130,7 +130,7 @@ namespace Yakreb {
 
 	#elif defined(YGE_COMPILER_GCC)
 
-		Yakreb::detail::Memory::Demangler::DemangledMap;
+		std::map<const char*, const char*> Yakreb::detail::Memory::Demangler::DemangledMap;
 
 		_GLIBCXX_NODISCARD void* operator new(size_t size) _GLIBCXX_THROW(std::bad_alloc) {
 			return Yakreb::Allocator::Allocate(size);

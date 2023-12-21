@@ -17,17 +17,17 @@ namespace Yakreb {
 
 	class  KeyPressedEvent : public KeyEvent {
 		public:
-			KeyPressedEvent(const KeyCode keycode, const uint16_t repeatCount) : KeyEvent(keycode), m_RepeatCount(repeatCount) {}
+			KeyPressedEvent(const KeyCode keycode, bool repeat) : KeyEvent(keycode), m_Repeat(repeat) {}
 
-			inline uint16_t GetRepeatCount() const { return m_RepeatCount; }
+			bool IsRepeat() const { return m_Repeat; }
 
 			virtual inline std::string ToString() const override {
-				return fmt::format("KeyPressedEvent: {} ({} repeats)", GetKeyName(m_KeyCode), m_RepeatCount);
+				return m_Repeat ? fmt::format("KeyPressedEvent: {}(Repeat)", GetKeyName(m_KeyCode)) : fmt::format("KeyPressedEvent: {}", GetKeyName(m_KeyCode));
 			}
 
 			EVENT_CLASS_TYPE(KeyPressed)
 		private:
-			uint16_t m_RepeatCount;
+			bool m_Repeat;
 	};
 
 	class  KeyReleasedEvent : public KeyEvent {

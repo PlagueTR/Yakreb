@@ -41,21 +41,21 @@ namespace Yakreb {
 
 	class MouseButtonEvent : public Event {
 		public:
-			inline ButtonCode GetMouseButton() const { return m_Button; }
+			inline MouseButton GetMouseButton() const { return m_Button; }
 
 			EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 		protected:
-			MouseButtonEvent(const ButtonCode button) : m_Button(button) {}
+			MouseButtonEvent(const MouseButton button) : m_Button(button) {}
 
-			ButtonCode m_Button;
+			MouseButton m_Button;
 	};
 
 	class MouseButtonPressedEvent : public MouseButtonEvent {
 		public:
-			MouseButtonPressedEvent(const ButtonCode button) : MouseButtonEvent(button) {}
+			MouseButtonPressedEvent(const MouseButton button) : MouseButtonEvent(button) {}
 
 			virtual inline std::string ToString() const override {
-				return fmt::format("MouseButtonPressedEvent: {}", GetButtonName(m_Button));
+				return fmt::format("MouseButtonPressedEvent: {}", GetMouseButtonName(m_Button));
 			}
 
 			EVENT_CLASS_TYPE(MouseButtonPressed)
@@ -63,10 +63,10 @@ namespace Yakreb {
 
 	class  MouseButtonReleasedEvent : public MouseButtonEvent {
 		public:
-			MouseButtonReleasedEvent(const ButtonCode button) : MouseButtonEvent(button) {}
+			MouseButtonReleasedEvent(const MouseButton button) : MouseButtonEvent(button) {}
 
 			virtual inline std::string ToString() const override {
-				return fmt::format("MouseButtonReleasedEvent: {}", GetButtonName(m_Button));
+				return fmt::format("MouseButtonReleasedEvent: {}", GetMouseButtonName(m_Button));
 			}
 
 			EVENT_CLASS_TYPE(MouseButtonReleased)

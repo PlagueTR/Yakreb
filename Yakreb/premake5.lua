@@ -27,6 +27,7 @@ project "Yakreb"
 
     includedirs{
         "src",
+        "vendor",
         "%{IncludeDir.spdlog}",
         "%{IncludeDir.GLFW}",
         "%{IncludeDir.glad}",
@@ -71,16 +72,16 @@ project "Yakreb"
         }
 
     filter "configurations:Debug"
-        defines "YGE_DEBUG"
+        defines {"YGE_DEBUG", "_DEBUG"}
         runtime "Debug"
         symbols "on"
     
     filter "configurations:Release"
-        defines "YGE_RELEASE"
+        defines {"YGE_RELEASE", "NDEBUG"}
         runtime "Release"
         optimize "on"
 
     filter "configurations:Dist"
-        defines "YGE_DIST"
+        defines {"YGE_DIST", "NDEBUG"}
         runtime "Release"
         optimize "on"

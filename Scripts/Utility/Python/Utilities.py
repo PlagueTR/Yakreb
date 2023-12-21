@@ -8,6 +8,21 @@ import urllib
 from zipfile import ZipFile
 from tarfile import TarFile
 
+import colorama
+from colorama import Back, Style
+
+colorama.init()
+
+
+def YesOrNo():
+    while True:
+        reply = str(input("[Y/N]: ")).lower().strip()
+        if reply[:1] == 'y':
+            return True
+        if reply[:1] == 'n':
+            return False
+
+
 def DownloadFile(url, filepath):
     filepath = os.path.abspath(filepath)
     os.makedirs(os.path.dirname(filepath), exist_ok=True)
@@ -18,18 +33,18 @@ def DownloadFile(url, filepath):
                 DownloadFile(url_option, filepath)
                 return
             except urllib.error.URLError as e:
-                print("URL Error encountered: {0:s}. Proceeding with backup...".format(e.reason))
+                print(f"{Style.BRIGHT}{Back.YELLOW}URL Error encountered: {e.reason}. Proceeding with backup...{Style.RESET_ALL}")
                 os.remove(filepath)
                 pass
             except urllib.error.HTTPError as e:
-                print("HTTP Error encountered: {0:s}. Proceeding with backup...".format(e.code))
+                print(f"{Style.BRIGHT}{Back.YELLOW}HTTP Error encountered: {e.code}. Proceeding with backup...{Style.RESET_ALL}")
                 os.remove(filepath)
                 pass
             except:
-                print("Unknown error. Proceeding with backup...")
+                print(f"{Style.BRIGHT}{Back.YELLOW}Unknown error. Proceeding with backup...{Style.RESET_ALL}")
                 os.remove(filepath)
                 pass
-        raise ValueError("Failed to download {0:s}".format(filepath))
+        raise ValueError(f"{Style.BRIGHT}{Back.RED}Failed to download {filepath}{Style.RESET_ALL}")
     if (not(type(url) is str)):
         raise TypeError("Argument 'url' must be of type list or string")
     with open(filepath, 'wb') as file:
@@ -64,11 +79,11 @@ def DownloadFile(url, filepath):
                 sys.stdout.flush()
     sys.stdout.write('\n')
 
+
 def UnzipFile(filepath, files=None, deleteZipFile=True):
     zipFilePath = os.path.abspath(filepath)
     zipFileLocation = os.path.dirname(zipFilePath)
     zipFileContent = dict()
-    zipFileContentSize = 0
     with ZipFile(zipFilePath, 'r') as zipFileFolder:
         for name in zipFileFolder.namelist():
             zipFileContent[name] = zipFileFolder.getinfo(name).file_size
@@ -122,12 +137,11 @@ def UnzipFile(filepath, files=None, deleteZipFile=True):
     if deleteZipFile:
         os.remove(zipFilePath)
 
-def UntarFile(filepath, compression=None, files=None, deleteTarFile=True):
+
+def UntarFile(filepath, files=None, deleteTarFile=True):
     tarFilePath = os.path.abspath(filepath)
     tarFileLocation = os.path.dirname(tarFilePath)
     tarFileContent = dict()
-    tarFileContentSize = 0
-    readmode = "r|" if compression is None else "r|" + compression
     with TarFile.open(tarFilePath, 'r') as tarFileFolder:
         for name in tarFileFolder.getnames():
             tarFileContent[name] = tarFileFolder.getmember(name).size

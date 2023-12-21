@@ -29,7 +29,7 @@ namespace Yakreb {
 			uint32_t m_CommandCount = 0;
 			bool m_ShouldShrink = false;
 
-			static const uint32_t s_InitialBufferSize = 1024;
+			inline static const uint32_t s_InitialBufferSize = 1024;
 
 	};
 

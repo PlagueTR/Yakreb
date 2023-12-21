@@ -15,6 +15,7 @@ namespace Yakreb {
 	glm::mat4 Renderer::s_CameraViewProjectionMatrix = glm::mat4(1.0f);
 
 	void Renderer::Init() {
+		RendererAPI::Init();
 		s_RenderCommandQueue = new RenderCommandQueue*[s_RenderCommandQueueCount];
 		for (uint32_t i = 0; i < s_RenderCommandQueueCount; i++)
 			s_RenderCommandQueue[i] = new RenderCommandQueue();
