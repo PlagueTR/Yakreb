@@ -68,16 +68,19 @@ project "Sandbox"
         }
 
     filter "configurations:Debug"
-        defines "YGE_DEBUG"
+        defines {"YGE_DEBUG", "_DEBUG"}
         runtime "Debug"
-        symbols "on"
+        optimize "Off"
+        symbols "On"
     
     filter "configurations:Release"
-        defines "YGE_RELEASE"
+        defines {"YGE_RELEASE", "NDEBUG"}
         runtime "Release"
-        optimize "on"
+        optimize "On"
+        symbols "Default"
 
     filter "configurations:Dist"
-        defines "YGE_DIST"
+        defines {"YGE_DIST", "NDEBUG"}
         runtime "Release"
-        optimize "on"
+        optimize "Speed"
+        symbols "Off"
